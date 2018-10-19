@@ -9,7 +9,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.example.vclab.moodlightshare.model.LightModel;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -18,6 +25,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     LinearLayoutManager mLayoutManager;
     RecyclerAdapter mAdapter;
 
+    DatabaseReference mDatabase;
+
+    String TestName = "김한섭";
+    String TestDescription = "김한섭의 조명";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,21 +41,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mLayoutManager = new LinearLayoutManager(this);
         mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 
-
+        // 데이터베이스 레퍼런스.
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
 
         // ArrayList 에 Item 객체(데이터) 넣기
-        ArrayList<Item> items = new ArrayList();
+
+        // 데이터 읽어 오기.
+
+        // receipe의 자식의 수 = 공유된 총 레시피 수 .
+        // 레시피의 자식의 자식에 sharePixel값을 가져와서 // 가공한 뒤에 뿌려주면..? 될려나...
+
+
+
+
         int[] test_a = {1,3};
         int[] test_b = {1,3};
         int[] test_c = {1,3};
 
+        ArrayList<Item> items = new ArrayList();
         items.add(new Item("1", "하나",2, test_a, test_b, test_c));
-
-
-        test_b[0] = 4;
-        test_b[1] = 5;
-
         items.add(new Item("2", "둘",2, test_a, test_b, test_c));
 
 
@@ -68,6 +84,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 // 조명 공유자 이름/
                 // 조명 내용 // 뭐 Array;;;
                 //
+                LightModel lightModel = new LightModel();
+                lightModel.ShareUserName = TestName;
+                lightModel.ShareLightDescription = TestDescription;
+                int[] test_a = {1,3};
+                int[] test_b = {1,3};
+                int[] test_c = {1,3};
+
+              //  List<Item> list = Arrays.asList(new Item("2", "둘", 2, test_a, test_b, test_c));
+
+                //lightModel.SharePixel = list;
+
+                String[] strs = {"1/2/24", "3/25/23", "43/42/16"};
+                // 1번 조명   2번 조명  3번 조명 -------->?
+
+                //List<String> list = Arrays.asList(new String[]{"alpha", "beta", "charlie"});
+                List<String> list = Arrays.asList(strs);
+                lightModel.SharePixel = list;
+
+                mDatabase.child("recipe").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(lightModel); // 데이터 쓰기.
+                // FirebaseAuth.getInstance().getCurrentUser().getUid()  userId;
+                // Time Stamp로 바꿔놓을 것.
+
 
                 Toast.makeText(getApplicationContext(),"공유",Toast.LENGTH_SHORT).show();
                 break;

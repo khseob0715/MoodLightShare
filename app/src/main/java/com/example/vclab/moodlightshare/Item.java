@@ -33,7 +33,4 @@ public class Item {
         return index;
     }
 
-    public PixelColor getPixelColor() {
-        return pixelColor[index];
-    }
 }
