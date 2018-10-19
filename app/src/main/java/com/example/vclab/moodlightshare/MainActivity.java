@@ -87,9 +87,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 LightModel lightModel = new LightModel();
                 lightModel.ShareUserName = TestName;
                 lightModel.ShareLightDescription = TestDescription;
-                int[] test_a = {1,3};
-                int[] test_b = {1,3};
-                int[] test_c = {1,3};
 
               //  List<Item> list = Arrays.asList(new Item("2", "둘", 2, test_a, test_b, test_c));
 
