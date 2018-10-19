@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 //
 
                 Toast.makeText(getApplicationContext(),"공유",Toast.LENGTH_SHORT).show();
-
+                break;
         }
     }
 }

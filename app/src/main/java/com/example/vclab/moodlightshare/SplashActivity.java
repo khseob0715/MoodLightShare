@@ -81,7 +81,7 @@ public class SplashActivity extends AppCompatActivity {
             // 기존에는 Handler를 이용해 2초 정도 지난 뒤에 전환되게 했다면,
             // 이제는 서버와 연결되어 있는 상태이므로 서버와 연결이 완료되어 값을 읽어 왔을 경우 splash 이미지가 넘어가는 형태이다.
 
-            startActivity(new Intent(this, MainActivity.class));
+            startActivity(new Intent(this, LoginActivity.class));
             finish();
         }
     }
