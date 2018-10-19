@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "348186176083",
+    "firebase_url": "https://moodlightshare.firebaseio.com",
+    "project_id": "moodlightshare",
+    "storage_bucket": "moodlightshare.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:348186176083:android:a6b4f0155b0ee6ad",
+        "android_client_info": {
+          "package_name": "com.example.vclab.moodlightshare"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "348186176083-74kefu8pm11gkgp3njsf0389ujbesci5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.vclab.moodlightshare",
+            "certificate_hash": "d752a02f9f14fd5803d0cbbe4baf262326096f31"
+          }
+        },
+        {
+          "client_id": "348186176083-n7hpppig3luk079v7r41s7p2vrlhdu4h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCmUz89jmYItzl5RRmXQwsYYfgiwXDUb0o"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "348186176083-n7hpppig3luk079v7r41s7p2vrlhdu4h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
