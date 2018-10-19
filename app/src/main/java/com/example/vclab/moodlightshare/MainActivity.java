@@ -26,10 +26,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         findViewById(R.id.MainActivity_ShareButton).setOnClickListener(this);
 
-
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerview);
         mLayoutManager = new LinearLayoutManager(this);
         mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+
+
+
+
         // ArrayList 에 Item 객체(데이터) 넣기
         ArrayList<Item> items = new ArrayList();
         int[] test_a = {1,3};
