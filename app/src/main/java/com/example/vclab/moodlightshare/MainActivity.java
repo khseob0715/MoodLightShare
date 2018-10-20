@@ -95,6 +95,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 public void onClick(View v) {
                     Toast.makeText(getApplicationContext(), String.format("%d 선택 %s", position + 1,lightModels.get(position).SharePixel.get(0)), Toast.LENGTH_LONG).show();
                 }
+
                 // lightModels.get(position).pixelColor[lightModels.get(position).index - 1].getG_color(),
             });
         }
