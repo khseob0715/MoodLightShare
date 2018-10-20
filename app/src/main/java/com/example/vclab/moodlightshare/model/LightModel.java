@@ -11,4 +11,12 @@ public class LightModel {
     public List<String> SharePixel;
 
 
+    public LightModel(){}
+
+    public LightModel(String ShareUserName, String ShareLightDescription, List<String> SharePixel){
+        this.ShareUserName = ShareUserName;
+        this.ShareLightDescription = ShareLightDescription;
+        this.SharePixel = SharePixel;
+    }
+
 }

@@ -1,18 +1,27 @@
 package com.example.vclab.moodlightshare;
 
+import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.vclab.moodlightshare.model.LightModel;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,9 +31,6 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     RecyclerView mRecyclerView;
-    LinearLayoutManager mLayoutManager;
-    RecyclerAdapter mAdapter;
-
     DatabaseReference mDatabase;
 
     String TestName = "김한섭";
@@ -35,46 +41,79 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+
         findViewById(R.id.MainActivity_ShareButton).setOnClickListener(this);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerview);
-        mLayoutManager = new LinearLayoutManager(this);
-        mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.setAdapter(new RecyclerAdapter());
 
-        // 데이터베이스 레퍼런스.
-        mDatabase = FirebaseDatabase.getInstance().getReference();
+    }
 
+    class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-        // ArrayList 에 Item 객체(데이터) 넣기
+        List<LightModel> lightModels;
 
-        // 데이터 읽어 오기.
+        public RecyclerAdapter() {
+            lightModels = new ArrayList<>();
+            FirebaseDatabase.getInstance().getReference().child("recipe").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    // 처음 넘어오는 데이터 // ArrayList 값.
+                    lightModels.clear();
+                    for(DataSnapshot snapshot :dataSnapshot.getChildren()){
+                        LightModel lightModel = snapshot.getValue(LightModel.class);
+                        lightModels.add(lightModel);
+                        Log.e("Tag", snapshot.child("ShareLightDescription").getValue(String.class).toString());
+                    }
+                    notifyDataSetChanged();
+                }
 
-        // receipe의 자식의 수 = 공유된 총 레시피 수 .
-        // 레시피의 자식의 자식에 sharePixel값을 가져와서 // 가공한 뒤에 뿌려주면..? 될려나...
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
+                }
+            });
+        }
 
+        @Override// 뷰 홀더 생성
+        public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recycler_view, parent, false);
 
+            return new ItemViewHolder(view);
+        }
 
-        int[] test_a = {1,3};
-        int[] test_b = {1,3};
-        int[] test_c = {1,3};
+        public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
+            // 해당 position 에 해당하는 데이터 결합
+            ((ItemViewHolder)holder).NameText.setText(lightModels.get(position).ShareUserName);
+            ((ItemViewHolder)holder).DescriptionText.setText(lightModels.get(position).ShareLightDescription);
 
-        ArrayList<Item> items = new ArrayList();
-        items.add(new Item("1", "하나",2, test_a, test_b, test_c));
-        items.add(new Item("2", "둘",2, test_a, test_b, test_c));
+            // 이벤트처리 : 생성된 List 중 선택된 목록번호를 Toast로 출력
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(getApplicationContext(), String.format("%d 선택 %s", position + 1,lightModels.get(position).SharePixel.get(0)), Toast.LENGTH_LONG).show();
+                }
+                // lightModels.get(position).pixelColor[lightModels.get(position).index - 1].getG_color(),
+            });
+        }
 
+        @Override
+        public int getItemCount() {
+            return lightModels.size();
+        }
 
+        public class ItemViewHolder extends RecyclerView.ViewHolder {
+            private TextView DescriptionText;
+            private TextView NameText;
 
-        // LinearLayout으로 설정
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        // Animation Defualt 설정
-        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        // Decoration 설정
-        // mRecyclerView.addItemDecoration(new RecyclerViewDecoration(this, RecyclerViewDecoration.VERTICAL_LIST));
-        // Adapter 생성
-        mAdapter = new RecyclerAdapter(items);
-        mRecyclerView.setAdapter(mAdapter);
-
+            public ItemViewHolder(@NonNull View itemView) {
+                super(itemView);
+                DescriptionText = (TextView) itemView.findViewById(R.id.DescriptionText);
+                NameText = (TextView) itemView.findViewById(R.id.NameText);
+            }
+        }
     }
 
     @Override
@@ -87,8 +126,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 LightModel lightModel = new LightModel();
                 lightModel.ShareUserName = TestName;
                 lightModel.ShareLightDescription = TestDescription;
-
-              //  List<Item> list = Arrays.asList(new Item("2", "둘", 2, test_a, test_b, test_c));
+                //  List<Item> list = Arrays.asList(new Item("2", "둘", 2, test_a, test_b, test_c));
 
                 //lightModel.SharePixel = list;
 
@@ -99,7 +137,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 List<String> list = Arrays.asList(strs);
                 lightModel.SharePixel = list;
 
-                mDatabase.child("recipe").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(lightModel); // 데이터 쓰기.
+                Long tsLong = System.currentTimeMillis()/1000;
+                String ts = tsLong.toString();
+                mDatabase.child("recipe").child(ts).setValue(lightModel); // 데이터 쓰기.
                 // FirebaseAuth.getInstance().getCurrentUser().getUid()  userId;
                 // Time Stamp로 바꿔놓을 것.
 
