@@ -120,29 +120,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.MainActivity_ShareButton:
-                // 조명 공유자 이름/
-                // 조명 내용 // 뭐 Array;;;
-                //
                 LightModel lightModel = new LightModel();
-                lightModel.ShareUserName = TestName;
-                lightModel.ShareLightDescription = TestDescription;
-                //  List<Item> list = Arrays.asList(new Item("2", "둘", 2, test_a, test_b, test_c));
 
-                //lightModel.SharePixel = list;
+                lightModel.ShareUserName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
+                lightModel.ShareLightDescription = TestDescription;
 
                 String[] strs = {"1/2/24", "3/25/23", "43/42/16"};
                 // 1번 조명   2번 조명  3번 조명 -------->?
 
-                //List<String> list = Arrays.asList(new String[]{"alpha", "beta", "charlie"});
                 List<String> list = Arrays.asList(strs);
                 lightModel.SharePixel = list;
 
                 Long tsLong = System.currentTimeMillis()/1000;
                 String ts = tsLong.toString();
+
                 mDatabase.child("recipe").child(ts).setValue(lightModel); // 데이터 쓰기.
                 // FirebaseAuth.getInstance().getCurrentUser().getUid()  userId;
-                // Time Stamp로 바꿔놓을 것.
-
 
                 Toast.makeText(getApplicationContext(),"공유",Toast.LENGTH_SHORT).show();
                 break;
