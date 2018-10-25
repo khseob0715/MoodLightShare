@@ -8,15 +8,41 @@
     android:layout_height="match_parent"
     tools:context=".LoginActivity">
 
-    <com.shobhitpuri.custombuttons.GoogleSignInButton
-        android:id="@+id/GoogleSignIN"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="30dp"
+        android:layout_height="match_parent"
         android:layout_weight="0"
-        android:gravity="center"
-        android:text="@string/google_sign_in"
-        app:isDarkTheme="false" />
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="401dp"
+            android:layout_weight="0"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="182dp"
+                android:orientation="vertical"></LinearLayout>
+
+            <ImageView
+                android:id="@+id/imageView6"
+                android:layout_width="match_parent"
+                android:layout_height="114dp"
+                app:srcCompat="@mipmap/mvml_more" />
+        </LinearLayout>
+
+        <com.shobhitpuri.custombuttons.GoogleSignInButton
+            android:id="@+id/GoogleSignIN"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="30dp"
+            android:layout_weight="0"
+            android:gravity="center"
+            android:text="@string/google_sign_in"
+            app:isDarkTheme="false" />
+
+    </LinearLayout>
 
 </LinearLayout>
