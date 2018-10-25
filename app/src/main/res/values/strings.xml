@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">MoodLightShare</string>
+    <string name="hex_formate">Hex: #000000</string>
+    <string name="rgb_formate">RGB: 0,0,0</string>
 </resources>
