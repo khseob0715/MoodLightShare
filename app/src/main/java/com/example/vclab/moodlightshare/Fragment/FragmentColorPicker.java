@@ -92,12 +92,8 @@ public class FragmentColorPicker extends Fragment {
             }
         });
 
-
         return view;
     }
-
-
-
 
     private int getColor(ImageView selectedImage,int evX, int evY){
         selectedImage.setDrawingCacheEnabled(true);
