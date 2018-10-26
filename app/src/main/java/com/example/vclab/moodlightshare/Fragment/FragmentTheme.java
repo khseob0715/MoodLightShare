@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TabHost;
 
 import com.example.vclab.moodlightshare.R;
 
@@ -18,6 +19,8 @@ public class FragmentTheme extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
     }
 
     @Nullable
@@ -25,6 +28,24 @@ public class FragmentTheme extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_theme,null);
+
+
+        TabHost tabHost1 = (TabHost) view.findViewById(R.id.tabHost1) ;
+        tabHost1.setup() ;
+
+        // 첫 번째 Tab. (탭 표시 텍스트:"TAB 1"), (페이지 뷰:"content1")
+        TabHost.TabSpec ts1 = tabHost1.newTabSpec("Tab Spec 1") ;
+        ts1.setContent(R.id.MoodTheme) ;
+        ts1.setIndicator("MoodTheme") ;
+        tabHost1.addTab(ts1)  ;
+
+        // 두 번째 Tab. (탭 표시 텍스트:"TAB 2"), (페이지 뷰:"content2")
+        TabHost.TabSpec ts2 = tabHost1.newTabSpec("Tab Spec 2") ;
+        ts2.setContent(R.id.AnimationTheme) ;
+        ts2.setIndicator("AnimationTheme") ;
+        tabHost1.addTab(ts2) ;
+
+
 
         return view;
     }

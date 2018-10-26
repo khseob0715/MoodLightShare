@@ -1,6 +1,201 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-</android.support.constraint.ConstraintLayout>
+    <TabHost
+        android:id="@+id/tabHost1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"> <!-- TabWidget의 id값이 반드시 "tabs"로 지정되어야 함. -->
+            <TabWidget
+                android:id="@android:id/tabs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" /> <!-- FrameLayout의 id값이 반드시 "tabcontent"로 지정되어야 함. -->
+            <FrameLayout
+                android:id="@android:id/tabcontent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"> <!-- 첫 번째 페이지. content1 -->
+
+                <ScrollView
+                    android:id="@+id/MoodTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <de.hdodenhof.circleimageview.CircleImageView
+                                xmlns:app="http://schemas.android.com/apk/res-auto"
+                                android:id="@+id/theme01"
+                                android:layout_width="160dp"
+                                android:layout_height="160dp"
+                                android:layout_margin="10dp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/theme01_image"
+                                app:civ_border_color="#b614b0"
+                                app:civ_border_width="3dp" />
+
+
+                            <TextView
+                                android:id="@+id/cmll_completed_per"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignBottom="@id/theme01"
+                                android:layout_alignLeft="@id/theme01"
+                                android:layout_alignRight="@id/theme01"
+                                android:layout_alignTop="@id/theme01"
+                                android:layout_gravity="center"
+                                android:gravity="center"
+                                android:padding="10dp"
+                                android:textSize="20dp"
+                                android:textStyle="bold"
+                                android:textColor="@android:color/white"
+                                android:text="적도의 석양" />
+
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <de.hdodenhof.circleimageview.CircleImageView
+                                xmlns:app="http://schemas.android.com/apk/res-auto"
+                                android:id="@+id/theme02"
+                                android:layout_width="160dp"
+                                android:layout_height="160dp"
+                                android:layout_margin="10dp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/theme01_image"
+                                app:civ_border_color="#b614b0"
+                                app:civ_border_width="3dp" />
+
+
+                            <TextView
+                                android:id="@+id/cmll_completed_per02"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignBottom="@id/theme02"
+                                android:layout_alignLeft="@id/theme02"
+                                android:layout_alignRight="@id/theme02"
+                                android:layout_alignTop="@id/theme02"
+                                android:layout_gravity="center"
+                                android:gravity="center"
+                                android:padding="10dp"
+                                android:textSize="20dp"
+                                android:textStyle="bold"
+                                android:textColor="@android:color/white"
+                                android:text="적도의 석양" />
+
+                        </RelativeLayout>
+
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <de.hdodenhof.circleimageview.CircleImageView
+                                xmlns:app="http://schemas.android.com/apk/res-auto"
+                                android:id="@+id/theme03"
+                                android:layout_width="160dp"
+                                android:layout_height="160dp"
+                                android:layout_margin="10dp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/theme01_image"
+                                app:civ_border_color="#b614b0"
+                                app:civ_border_width="3dp" />
+
+
+                            <TextView
+                                android:id="@+id/cmll_completed_per03"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignBottom="@id/theme03"
+                                android:layout_alignLeft="@id/theme03"
+                                android:layout_alignRight="@id/theme03"
+                                android:layout_alignTop="@id/theme03"
+                                android:layout_gravity="center"
+                                android:gravity="center"
+                                android:padding="10dp"
+                                android:textSize="20dp"
+                                android:textStyle="bold"
+                                android:textColor="@android:color/white"
+                                android:text="적도의 석양" />
+
+                        </RelativeLayout>
+
+
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <de.hdodenhof.circleimageview.CircleImageView
+                                xmlns:app="http://schemas.android.com/apk/res-auto"
+                                android:id="@+id/theme04"
+                                android:layout_width="160dp"
+                                android:layout_height="160dp"
+                                android:layout_margin="10dp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/theme01_image"
+                                app:civ_border_color="#b614b0"
+                                app:civ_border_width="3dp" />
+
+
+                            <TextView
+                                android:id="@+id/cmll_completed_per04"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignBottom="@id/theme04"
+                                android:layout_alignLeft="@id/theme04"
+                                android:layout_alignRight="@id/theme04"
+                                android:layout_alignTop="@id/theme04"
+                                android:layout_gravity="center"
+                                android:gravity="center"
+                                android:padding="10dp"
+                                android:textSize="20dp"
+                                android:textStyle="bold"
+                                android:textColor="@android:color/white"
+                                android:text="적도의 석양" />
+
+                        </RelativeLayout>
+
+
+
+                    </LinearLayout>
+
+                </ScrollView>
+
+                <!-- 두 번째 페이지. content2 -->
+                <ScrollView
+                    android:id="@+id/AnimationTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#009688"
+                        android:gravity="center"
+                        android:padding="8dp"
+                        android:text="TAB CONTENT 2" />
+                </ScrollView> <!-- 세 번째 페이지. content3 -->
+            </FrameLayout>
+        </LinearLayout>
+    </TabHost>
+
+
+</RelativeLayout>
