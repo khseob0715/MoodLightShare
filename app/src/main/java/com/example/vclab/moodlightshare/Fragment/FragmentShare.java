@@ -34,8 +34,6 @@ public class FragmentShare extends Fragment {
     RecyclerView mRecyclerView;
     DatabaseReference mDatabase;
 
-    String TestName = "김한섭";
-    String TestDescription = "김한섭의 조명";
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

@@ -83,7 +83,7 @@
                         android:background="@drawable/borderback"
                         android:gravity="center"
                         android:padding="5dp"
-                        android:text="수면"
+                        android:text="공부"
                         android:textColor="#ffffff"
                         android:textStyle="bold" />
 
@@ -107,7 +107,7 @@
                         android:background="@drawable/borderback"
                         android:gravity="center"
                         android:padding="5dp"
-                        android:text="수면"
+                        android:text="파티"
                         android:textColor="#ffffff"
                         android:textStyle="bold" />
                 </LinearLayout>

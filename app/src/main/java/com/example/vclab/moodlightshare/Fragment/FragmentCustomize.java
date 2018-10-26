@@ -1,17 +1,21 @@
 package com.example.vclab.moodlightshare.Fragment;
 
-import android.content.Context;
-import android.net.Uri;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.example.vclab.moodlightshare.R;
 
 public class FragmentCustomize extends Fragment {
+
+    public ImageView customize_selectedImage, customize_color_display;
+    public String customize_rgbcolor, customize_hexcolor;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -24,6 +28,50 @@ public class FragmentCustomize extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_customize,null);
 
+        customize_color_display =view.findViewById(R.id.customize_color_display);
+        customize_selectedImage =view.findViewById(R.id.customzie_spectrum_image);
+
+        customize_selectedImage.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                try {
+                    final int action = event.getAction();
+                    final int evX = (int) event.getX();
+                    final int evY = (int) event.getY();
+                    //색받아오기
+                    int touchColor = getColor(customize_selectedImage, evX, evY);
+                    //r,g,b 값 받아오기
+                    int r = (touchColor >> 16) & 0xFF;
+                    int g = (touchColor >> 8) & 0xFF;
+                    int b = (touchColor >> 0) & 0xFF;
+                    customize_rgbcolor = String.valueOf(r) + "," + String.valueOf(g) + "," + String.valueOf(b);
+
+                    //hex값 받아오기
+                    customize_hexcolor = Integer.toHexString(touchColor);
+                    if (customize_hexcolor.length() > 2) {
+                        customize_hexcolor = customize_hexcolor.substring(2, customize_hexcolor.length()); //alfa제거
+                    }
+                    if (action == event.ACTION_UP) {
+                        //터치이벤트 설정
+                        customize_color_display.setBackgroundColor(touchColor);
+
+                    }
+
+                }catch(Exception e) {
+
+                }
+                return true;
+            }
+        });
+
         return view;
+    }
+
+    private int getColor(ImageView selectedImage, int evX, int evY){
+        selectedImage.setDrawingCacheEnabled(true);
+        Bitmap bitmap=Bitmap.createBitmap(selectedImage.getDrawingCache());
+        selectedImage.setDrawingCacheEnabled(false);
+        return bitmap.getPixel(evX,evY);
     }
 }
