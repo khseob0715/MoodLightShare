@@ -1,4 +1,4 @@
-package com.example.vclab.moodlightshare;
+package com.example.vclab.moodlightshare.model;
 
 import android.util.Log;
 

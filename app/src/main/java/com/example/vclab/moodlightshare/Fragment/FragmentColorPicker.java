@@ -1,12 +1,17 @@
-package com.example.vclab.moodlightshare;
+package com.example.vclab.moodlightshare.Fragment;
 
-import android.app.Activity;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.example.vclab.moodlightshare.R;
 
 /**
  * Skeleton of an Android Things activity.
@@ -27,21 +32,30 @@ import android.widget.TextView;
  *
  * @see <a href="https://github.com/androidthings/contrib-drivers#readme">https://github.com/androidthings/contrib-drivers#readme</a>
  */
-public class ColourPicker extends Activity {
+public class FragmentColorPicker extends Fragment {
 
     public TextView hexValue,rgbValue;
     public ImageView selectedImage,color_display;
     public String rgbcolor,hexcolor;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_colour_picker);
+        // setContentView(R.layout.fragment_color_picker);
+    }
 
-        hexValue=findViewById(R.id.hexcolor);
-        rgbValue=findViewById(R.id.rgbcolor);
-        color_display=findViewById(R.id.color_display);
-        selectedImage=findViewById(R.id.seleted_img);
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+        View view = inflater.inflate(R.layout.fragment_color_picker,null);
+
+
+        hexValue=view.findViewById(R.id.hexcolor);
+        rgbValue=view.findViewById(R.id.rgbcolor);
+        color_display=view.findViewById(R.id.color_display);
+        selectedImage=view.findViewById(R.id.seleted_img);
 
         selectedImage.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -77,7 +91,13 @@ public class ColourPicker extends Activity {
                 return true;
             }
         });
+
+
+        return view;
     }
+
+
+
 
     private int getColor(ImageView selectedImage,int evX, int evY){
         selectedImage.setDrawingCacheEnabled(true);

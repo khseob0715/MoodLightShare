@@ -1,8 +1,5 @@
 package com.example.vclab.moodlightshare.model;
 
-import com.example.vclab.moodlightshare.Item;
-import com.example.vclab.moodlightshare.PixelColor;
-
 import java.util.List;
 
 public class LightModel {
