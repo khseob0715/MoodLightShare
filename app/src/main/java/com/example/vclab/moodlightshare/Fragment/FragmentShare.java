@@ -11,6 +11,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,6 +37,11 @@ public class FragmentShare extends Fragment {
     RecyclerView mRecyclerView;
     DatabaseReference mDatabase;
 
+    ProgressBar mProgressBar;
+
+    Animation slide_up;
+
+    public static int Once = 0;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -41,20 +49,20 @@ public class FragmentShare extends Fragment {
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
+        slide_up = AnimationUtils.loadAnimation(getContext(), R.anim.slide_up);
+
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_share,null);
+        View view = inflater.inflate(R.layout.fragment_share, null);
 
-
-
+        mProgressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.share_fragment_recyclerview);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(new ShareRecyclerAdapter());
-
 
         return view;
     }
@@ -71,12 +79,20 @@ public class FragmentShare extends Fragment {
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     // 처음 넘어오는 데이터 // ArrayList 값.
                     lightModels.clear();
-                    for(DataSnapshot snapshot :dataSnapshot.getChildren()){
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         LightModel lightModel = snapshot.getValue(LightModel.class);
                         lightModels.add(lightModel);
                         Log.e("Tag", snapshot.child("ShareLightDescription").getValue(String.class).toString());
                     }
                     notifyDataSetChanged();
+                    mRecyclerView.setVisibility(View.VISIBLE);
+                    if (Once == 0) {
+                        mRecyclerView.startAnimation(slide_up);
+                    }
+                    mProgressBar.setVisibility(View.GONE);
+
+                    Once = 1;
+
                 }
 
                 @Override
@@ -95,14 +111,14 @@ public class FragmentShare extends Fragment {
 
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
             // 해당 position 에 해당하는 데이터 결합
-            ((ShareRecyclerAdapter.ItemViewHolder)holder).NameText.setText(lightModels.get(position).ShareUserName);
-            ((ShareRecyclerAdapter.ItemViewHolder)holder).DescriptionText.setText(lightModels.get(position).ShareLightDescription);
+            ((ShareRecyclerAdapter.ItemViewHolder) holder).NameText.setText(lightModels.get(position).ShareUserName);
+            ((ShareRecyclerAdapter.ItemViewHolder) holder).DescriptionText.setText(lightModels.get(position).ShareLightDescription);
 
             // 이벤트처리 : 생성된 List 중 선택된 목록번호를 Toast로 출력
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(getContext(), String.format("%d 선택 %s", position + 1,lightModels.get(position).SharePixel.get(0)), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), String.format("%d 선택 %s", position + 1, lightModels.get(position).SharePixel.get(0)), Toast.LENGTH_LONG).show();
                 }
 
                 // lightModels.get(position).pixelColor[lightModels.get(position).index - 1].getG_color(),
