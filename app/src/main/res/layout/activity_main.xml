@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#000000">
 
     <FrameLayout
         android:id="@+id/content"
@@ -14,7 +15,7 @@
     <View
         android:id="@+id/ViewLine"
         android:layout_width="match_parent"
-        android:layout_height="5dp"
+        android:layout_height="1dp"
         android:layout_centerInParent="true"
         android:layout_above="@+id/buttonLinearLayout"
         android:background="#05fefa" />
@@ -34,7 +35,7 @@
             android:layout_height="60dp"
             android:layout_margin="5dp"
             android:layout_weight="1"
-            app:srcCompat="@drawable/icon01non" />
+            app:srcCompat="@drawable/homeicon" />
 
         <ImageView
             android:id="@+id/themeButton"
@@ -42,7 +43,7 @@
             android:layout_height="60dp"
             android:layout_margin="5dp"
             android:layout_weight="1"
-            app:srcCompat="@drawable/icon01non" />
+            app:srcCompat="@drawable/themeicon" />
 
         <ImageView
             android:id="@+id/customizeButton"
@@ -50,7 +51,7 @@
             android:layout_height="60dp"
             android:layout_margin="5dp"
             android:layout_weight="1"
-            app:srcCompat="@drawable/icon01non" />
+            app:srcCompat="@drawable/customicon" />
 
         <ImageView
             android:id="@+id/shareButton"
@@ -58,7 +59,7 @@
             android:layout_height="60dp"
             android:layout_margin="5dp"
             android:layout_weight="1"
-            app:srcCompat="@drawable/icon01non" />
+            app:srcCompat="@drawable/shareicon" />
 
         <ImageView
             android:id="@+id/userButton"
@@ -66,7 +67,7 @@
             android:layout_height="60dp"
             android:layout_margin="5dp"
             android:layout_weight="1"
-            app:srcCompat="@drawable/icon01non" />
+            app:srcCompat="@drawable/usericon" />
 
     </LinearLayout>
 

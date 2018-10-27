@@ -53,10 +53,10 @@
     <View
         android:id="@+id/ViewLine"
         android:layout_width="match_parent"
-        android:layout_height="2dp"
+        android:layout_height="1dp"
         android:layout_above="@+id/buttonLinearLayout"
         android:layout_centerInParent="true"
         android:layout_weight="0"
-        android:background="#05fefa" />
+        android:background="#e6e6e6" />
 
 </LinearLayout>

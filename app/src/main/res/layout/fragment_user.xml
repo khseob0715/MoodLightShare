@@ -14,7 +14,7 @@
 
         <LinearLayout
             android:id="@+id/Profile"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -159,9 +159,19 @@
 
             </LinearLayout>
 
-            <RelativeLayout
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical">
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
 
                 <ImageView
                     android:id="@+id/imageView4"
@@ -171,6 +181,7 @@
                     android:layout_centerVertical="true"
                     android:layout_gravity="center"
                     android:layout_marginStart="14dp"
+                    android:layout_weight="0"
                     android:src="@drawable/icon01non" />
 
                 <TextView
@@ -179,21 +190,22 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
                     android:layout_toEndOf="@+id/imageView4"
+                    android:layout_weight="1"
                     android:padding="10dp"
                     android:text="내가만든 조명"
                     android:textColor="#ffffff"
                     android:textSize="20dp"
                     android:textStyle="bold" />
+            </LinearLayout>
 
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/userRecyclerView"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_alignBottom="@+id/imageView4" />
-
-            </RelativeLayout>
-
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/userRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignBottom="@+id/imageView4" />
 
         </LinearLayout>
     </LinearLayout>
+
+
 </ScrollView>
