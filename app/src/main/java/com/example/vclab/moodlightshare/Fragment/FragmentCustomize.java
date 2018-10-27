@@ -8,8 +8,11 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.example.vclab.moodlightshare.Dialog.ShareDialog;
 import com.example.vclab.moodlightshare.R;
 
 public class FragmentCustomize extends Fragment {
@@ -17,6 +20,7 @@ public class FragmentCustomize extends Fragment {
     public ImageView customize_selectedImage, customize_color_display;
     public String customize_rgbcolor, customize_hexcolor;
 
+    public Button ShareButton;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,6 +32,18 @@ public class FragmentCustomize extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_customize,null);
 
+        ShareButton = view.findViewById(R.id.CustomizeShareButton);
+        ShareButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // 커스텀 다이얼로그를 생성한다. 사용자가 만든 클래스이다.
+                ShareDialog customDialog = new ShareDialog(getContext());
+
+                // 커스텀 다이얼로그를 호출한다.
+//                // 커스텀 다이얼로그의 결과를 출력할 TextView를 매개변수로 같이 넘겨준다.
+                 customDialog.callFunction();
+            }
+        });
         customize_color_display =view.findViewById(R.id.customize_color_display);
         customize_selectedImage =view.findViewById(R.id.customzie_spectrum_image);
 

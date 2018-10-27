@@ -39,7 +39,8 @@
                 android:text="조명에대한 설명"
                 android:textAlignment="viewStart"
                 android:textColor="#ffffff"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="match_parent"
