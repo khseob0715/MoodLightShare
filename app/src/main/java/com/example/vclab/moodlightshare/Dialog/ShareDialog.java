@@ -14,13 +14,24 @@ import android.widget.Toast;
 
 
 import com.example.vclab.moodlightshare.R;
+import com.example.vclab.moodlightshare.model.LightModel;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class ShareDialog {
 
     private Context context;
 
+
+    private DatabaseReference mDatabase;
+
     public ShareDialog(Context context) {
         this.context = context;
+        mDatabase = FirebaseDatabase.getInstance().getReference();
     }
 
     // 호출할 다이얼로그 함수를 정의한다.
@@ -40,7 +51,8 @@ public class ShareDialog {
 
         // 커스텀 다이얼로그의 각 위젯들을 정의한다.
         final EditText message = (EditText) dlg.findViewById(R.id.mesgase);
-        final Button okButton = (Button) dlg.findViewById(R.id.okButton);
+        final Button okButton = (Button) dlg.findViewById(R.id.dialog_okButton);
+        final Button shareButton = (Button) dlg.findViewById(R.id.dialog_shareButton);
         final Button cancelButton = (Button) dlg.findViewById(R.id.cancelButton);
 
         okButton.setOnClickListener(new View.OnClickListener() {
@@ -52,6 +64,29 @@ public class ShareDialog {
 
                 // 커스텀 다이얼로그를 종료한다.
                 dlg.dismiss();
+            }
+        });
+        shareButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                LightModel lightModel = new LightModel();
+
+                lightModel.ShareUserName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
+                lightModel.ShareLightDescription = message.getText().toString();
+
+                String[] strs = {"1/2/24", "3/25/23", "43/42/16"};
+                // 1번 조명   2번 조명  3번 조명 -------->?
+
+                List<String> list = Arrays.asList(strs);
+                lightModel.SharePixel = list;
+
+                Long tsLong = System.currentTimeMillis()/1000;
+                String ts = tsLong.toString();
+
+                mDatabase.child("recipe").child(ts).setValue(lightModel); // 데이터 쓰기.
+                // FirebaseAuth.getInstance().getCurrentUser().getUid()  userId;
+
+                Toast.makeText(context,"공유",Toast.LENGTH_SHORT).show();
             }
         });
         cancelButton.setOnClickListener(new View.OnClickListener() {
