@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -109,7 +110,7 @@ public class FragmentShare extends Fragment {
             return new ShareRecyclerAdapter.ItemViewHolder(view);
         }
 
-        public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
+        public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, final int position) {
             // 해당 position 에 해당하는 데이터 결합
             ((ShareRecyclerAdapter.ItemViewHolder) holder).NameText.setText(lightModels.get(position).ShareUserName);
             ((ShareRecyclerAdapter.ItemViewHolder) holder).DescriptionText.setText(lightModels.get(position).ShareLightDescription);
@@ -136,12 +137,26 @@ public class FragmentShare extends Fragment {
             private TextView DescriptionText;
             private TextView NameText;
             private TextView DateText;
+            private ImageView starButton;
+            private boolean star = false;
 
             public ItemViewHolder(@NonNull View itemView) {
                 super(itemView);
                 DescriptionText = (TextView) itemView.findViewById(R.id.DescriptionText);
                 NameText = (TextView) itemView.findViewById(R.id.NameText);
                 DateText = (TextView) itemView.findViewById(R.id.DateText);
+                starButton = (ImageView)itemView.findViewById(R.id.starButton);
+                starButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if(star) {
+                            starButton.setImageResource(android.R.drawable.btn_star_big_on);
+                        }else{
+                            starButton.setImageResource(android.R.drawable.btn_star_big_off);
+                        }
+                        star = !star;
+                    }
+                });
             }
         }
     }

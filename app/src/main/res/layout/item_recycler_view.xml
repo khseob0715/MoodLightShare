@@ -46,6 +46,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="0"
+                android:gravity="bottom"
                 android:orientation="horizontal">
 
                 <TextView
@@ -65,12 +66,13 @@
                     android:textColor="#ffffff"
                     android:text="TextView" />
 
-                <TextView
-                    android:id="@+id/ReNumText"
+                <ImageView
+                    android:id="@+id/starButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="TextView" />
+                    app:srcCompat="@android:drawable/btn_star_big_off" />
+
             </LinearLayout>
 
         </LinearLayout>
