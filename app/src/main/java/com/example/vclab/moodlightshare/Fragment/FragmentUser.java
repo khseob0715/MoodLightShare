@@ -1,16 +1,20 @@
 package com.example.vclab.moodlightshare.Fragment;
 
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -33,6 +37,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.gun0912.tedpermission.PermissionListener;
+import com.gun0912.tedpermission.TedPermission;
 
 import org.w3c.dom.Text;
 
@@ -40,9 +46,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.hdodenhof.circleimageview.CircleImageView;
+import javax.xml.transform.Result;
 
-import static android.support.v4.provider.FontsContractCompat.FontRequestCallback.RESULT_OK;
+import de.hdodenhof.circleimageview.CircleImageView;
+import gun0912.tedbottompicker.TedBottomPicker;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -78,12 +85,30 @@ public class FragmentUser extends Fragment {
         UserName = (TextView) view.findViewById(R.id.fragment_user_userName);
         UserId = (TextView) view.findViewById(R.id.fragment_user_userId);
 
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            requestPermissions(new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+            requestPermissions(new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+        }
+
         profileImage = (CircleImageView) view.findViewById(R.id.profile_image);
         profileImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-              //  loadImageFromGallery(profileImage);
+                TedBottomPicker bottomSheetDialogFragment = new TedBottomPicker.Builder(getContext())
+                        .setOnImageSelectedListener(new TedBottomPicker.OnImageSelectedListener() {
+                            @Override
+                            public void onImageSelected(Uri uri) {
+                                profileImage.setImageURI(uri);
+                            }
+                        })
+                        .create();
+
+                bottomSheetDialogFragment.show(getActivity().getSupportFragmentManager());
+
+
             }
+
         });
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
