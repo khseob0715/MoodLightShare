@@ -1,7 +1,15 @@
 package com.example.vclab.moodlightshare.Fragment;
 
 
+import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.annotation.Nullable;
@@ -23,11 +31,18 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import org.w3c.dom.Text;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
+
+import static android.support.v4.provider.FontsContractCompat.FontRequestCallback.RESULT_OK;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -38,7 +53,11 @@ public class FragmentUser extends Fragment {
     RecyclerView mRecyclerView;
     DatabaseReference mDatabase;
 
+    StorageReference mStoragedRef;
+
     TextView UserName, UserId;
+    CircleImageView profileImage;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -46,6 +65,7 @@ public class FragmentUser extends Fragment {
 
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
+        mStoragedRef = FirebaseStorage.getInstance().getReference();
 
     }
 
@@ -53,10 +73,18 @@ public class FragmentUser extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_user,null);
+        View view = inflater.inflate(R.layout.fragment_user, null);
 
-        UserName = (TextView)view.findViewById(R.id.fragment_user_userName);
-        UserId = (TextView)view.findViewById(R.id.fragment_user_userId);
+        UserName = (TextView) view.findViewById(R.id.fragment_user_userName);
+        UserId = (TextView) view.findViewById(R.id.fragment_user_userId);
+
+        profileImage = (CircleImageView) view.findViewById(R.id.profile_image);
+        profileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+              //  loadImageFromGallery(profileImage);
+            }
+        });
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -82,9 +110,9 @@ public class FragmentUser extends Fragment {
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     // 처음 넘어오는 데이터 // ArrayList 값.
                     lightModels.clear();
-                    for(DataSnapshot snapshot :dataSnapshot.getChildren()){
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         LightModel lightModel = snapshot.getValue(LightModel.class);
-                        if(snapshot.child("ShareUserUid").getValue(String.class).toString().equals(UserUid)) {
+                        if (snapshot.child("ShareUserUid").getValue(String.class).toString().equals(UserUid)) {
                             lightModels.add(lightModel);
                         }
                         Log.e("Tag", snapshot.child("ShareLightDescription").getValue(String.class).toString());
@@ -108,14 +136,14 @@ public class FragmentUser extends Fragment {
 
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
             // 해당 position 에 해당하는 데이터 결합
-            ((ShareRecyclerAdapter.ItemViewHolder)holder).NameText.setText(lightModels.get(position).ShareUserName);
-            ((ShareRecyclerAdapter.ItemViewHolder)holder).DescriptionText.setText(lightModels.get(position).ShareLightDescription);
+            ((ShareRecyclerAdapter.ItemViewHolder) holder).NameText.setText(lightModels.get(position).ShareUserName);
+            ((ShareRecyclerAdapter.ItemViewHolder) holder).DescriptionText.setText(lightModels.get(position).ShareLightDescription);
 
             // 이벤트처리 : 생성된 List 중 선택된 목록번호를 Toast로 출력
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(getContext(), String.format("%d 선택 %s", position + 1,lightModels.get(position).SharePixel.get(0)), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), String.format("%d 선택 %s", position + 1, lightModels.get(position).SharePixel.get(0)), Toast.LENGTH_LONG).show();
                 }
 
                 // lightModels.get(position).pixelColor[lightModels.get(position).index - 1].getG_color(),

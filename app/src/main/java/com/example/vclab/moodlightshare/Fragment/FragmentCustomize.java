@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.example.vclab.moodlightshare.Dialog.ShareDialog;
 import com.example.vclab.moodlightshare.R;
@@ -21,9 +20,13 @@ public class FragmentCustomize extends Fragment {
     public String customize_rgbcolor, customize_hexcolor;
 
     public Button ShareButton;
+
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
     }
 
     @Nullable

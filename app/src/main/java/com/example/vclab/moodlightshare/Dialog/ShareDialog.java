@@ -85,7 +85,7 @@ public class ShareDialog {
 
                 lightModel.ShareDate = f.format(date);
                 lightModel.ShareUserUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
+                lightModel.bShare = false;
                 mDatabase.child("recipe").child(ts).setValue(lightModel); // 데이터 쓰기.
 
                 // 커스텀 다이얼로그를 종료한다.
@@ -119,6 +119,7 @@ public class ShareDialog {
 
                 lightModel.ShareDate = f.format(date);
                 lightModel.ShareUserUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                lightModel.bShare = true;
 
                 mDatabase.child("recipe").child(ts).setValue(lightModel); // 데이터 쓰기.
                 // FirebaseAuth.getInstance().getCurrentUser().getUid()  userId;
