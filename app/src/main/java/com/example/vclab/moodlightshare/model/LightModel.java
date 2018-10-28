@@ -7,15 +7,17 @@ public class LightModel {
     public String ShareLightDescription;  // 공유된 조명 설명 & 이름 등등
     public List<String> SharePixel;
     public String ShareDate;
+    public String ShareUserUid;
 
 
     public LightModel(){}
 
-    public LightModel(String ShareUserName, String ShareLightDescription, List<String> SharePixel, String ShareDate){
+    public LightModel(String ShareUserName, String ShareLightDescription, List<String> SharePixel, String ShareDate, String ShareUserUid){
         this.ShareUserName = ShareUserName;
         this.ShareLightDescription = ShareLightDescription;
         this.SharePixel = SharePixel;
         this.ShareDate = ShareDate;
+        this.ShareUserUid = ShareUserUid;
     }
 
 }

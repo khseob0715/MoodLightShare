@@ -61,9 +61,32 @@ public class ShareDialog {
         okButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // '확인' 버튼 클릭시 메인 액티비티에서 설정한 main_label에
-                // 커스텀 다이얼로그에서 입력한 메시지를 대입한다.
-                Toast.makeText(context, "\"" +  message.getText().toString() + "\" 을 입력하였습니다.", Toast.LENGTH_SHORT).show();
+                LightModel lightModel = new LightModel();
+
+                lightModel.ShareUserName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
+
+                if(message.getText().toString().equals("")){
+                    lightModel.ShareLightDescription = lightModel.ShareUserName.toString() +"의 조명";
+                }else {
+                    lightModel.ShareLightDescription = message.getText().toString();
+                }
+
+                String[] strs = {"1/2/24", "3/25/23", "43/42/16"};
+                // 1번 조명   2번 조명  3번 조명 -------->?
+
+                List<String> list = Arrays.asList(strs);
+                lightModel.SharePixel = list;
+
+                Long tsLong = System.currentTimeMillis();
+                Date date = new Date(tsLong);
+                String ts = tsLong.toString();
+
+                SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
+
+                lightModel.ShareDate = f.format(date);
+                lightModel.ShareUserUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+                mDatabase.child("recipe").child(ts).setValue(lightModel); // 데이터 쓰기.
 
                 // 커스텀 다이얼로그를 종료한다.
                 dlg.dismiss();
@@ -95,6 +118,8 @@ public class ShareDialog {
                 SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
 
                 lightModel.ShareDate = f.format(date);
+                lightModel.ShareUserUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
                 mDatabase.child("recipe").child(ts).setValue(lightModel); // 데이터 쓰기.
                 // FirebaseAuth.getInstance().getCurrentUser().getUid()  userId;
 

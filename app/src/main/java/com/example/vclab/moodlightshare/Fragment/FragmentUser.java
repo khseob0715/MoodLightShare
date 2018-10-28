@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.example.vclab.moodlightshare.R;
 import com.example.vclab.moodlightshare.model.LightModel;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -60,6 +61,7 @@ public class FragmentUser extends Fragment {
     class ShareRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         List<LightModel> lightModels;
+        String UserUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         public ShareRecyclerAdapter() {
             lightModels = new ArrayList<>();
@@ -70,7 +72,9 @@ public class FragmentUser extends Fragment {
                     lightModels.clear();
                     for(DataSnapshot snapshot :dataSnapshot.getChildren()){
                         LightModel lightModel = snapshot.getValue(LightModel.class);
-                        lightModels.add(lightModel);
+                        if(snapshot.child("ShareUserUid").getValue(String.class).toString().equals(UserUid)) {
+                            lightModels.add(lightModel);
+                        }
                         Log.e("Tag", snapshot.child("ShareLightDescription").getValue(String.class).toString());
                     }
                     notifyDataSetChanged();
