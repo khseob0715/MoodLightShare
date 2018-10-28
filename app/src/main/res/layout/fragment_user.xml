@@ -22,15 +22,31 @@
             android:layout_gravity="center"
             android:orientation="horizontal">
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/profile_image"
+            <RelativeLayout
+                android:id="@+id/profile_relativelayout"
                 android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:layout_gravity="center"
-                android:src="@drawable/icon01non"
-                app:civ_border_color="#b614b0"
-                app:civ_border_width="3dp" />
+                android:layout_height="85dp">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/profile_image"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/icon01non"
+                    app:civ_border_color="#cdfff6"
+                    app:civ_border_width="3dp" />
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentEnd="true"
+                    android:src="@drawable/gallery" />
+
+
+            </RelativeLayout>
 
             <TextView
                 android:id="@+id/fragment_user_userName"
