@@ -72,7 +72,12 @@ public class ShareDialog {
                 LightModel lightModel = new LightModel();
 
                 lightModel.ShareUserName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
-                lightModel.ShareLightDescription = message.getText().toString();
+
+                if(message.getText().toString().equals("")){
+                    lightModel.ShareLightDescription = lightModel.ShareUserName.toString() +"의 조명";
+                }else {
+                    lightModel.ShareLightDescription = message.getText().toString();
+                }
 
                 String[] strs = {"1/2/24", "3/25/23", "43/42/16"};
                 // 1번 조명   2번 조명  3번 조명 -------->?
@@ -87,6 +92,7 @@ public class ShareDialog {
                 // FirebaseAuth.getInstance().getCurrentUser().getUid()  userId;
 
                 Toast.makeText(context,"공유",Toast.LENGTH_SHORT).show();
+                dlg.dismiss();
             }
         });
         cancelButton.setOnClickListener(new View.OnClickListener() {
