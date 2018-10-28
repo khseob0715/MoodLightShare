@@ -113,6 +113,8 @@ public class FragmentShare extends Fragment {
             // 해당 position 에 해당하는 데이터 결합
             ((ShareRecyclerAdapter.ItemViewHolder) holder).NameText.setText(lightModels.get(position).ShareUserName);
             ((ShareRecyclerAdapter.ItemViewHolder) holder).DescriptionText.setText(lightModels.get(position).ShareLightDescription);
+            ((ShareRecyclerAdapter.ItemViewHolder) holder).DateText.setText(lightModels.get(position).ShareDate);
+
 
             // 이벤트처리 : 생성된 List 중 선택된 목록번호를 Toast로 출력
             holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -133,11 +135,13 @@ public class FragmentShare extends Fragment {
         public class ItemViewHolder extends RecyclerView.ViewHolder {
             private TextView DescriptionText;
             private TextView NameText;
+            private TextView DateText;
 
             public ItemViewHolder(@NonNull View itemView) {
                 super(itemView);
                 DescriptionText = (TextView) itemView.findViewById(R.id.DescriptionText);
                 NameText = (TextView) itemView.findViewById(R.id.NameText);
+                DateText = (TextView) itemView.findViewById(R.id.DateText);
             }
         }
     }

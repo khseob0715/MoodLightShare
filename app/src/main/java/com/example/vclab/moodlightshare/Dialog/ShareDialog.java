@@ -19,6 +19,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.sql.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.List;
 
@@ -85,9 +88,13 @@ public class ShareDialog {
                 List<String> list = Arrays.asList(strs);
                 lightModel.SharePixel = list;
 
-                Long tsLong = System.currentTimeMillis()/1000;
+                Long tsLong = System.currentTimeMillis();
+                Date date = new Date(tsLong);
                 String ts = tsLong.toString();
 
+                SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
+
+                lightModel.ShareDate = f.format(date);
                 mDatabase.child("recipe").child(ts).setValue(lightModel); // 데이터 쓰기.
                 // FirebaseAuth.getInstance().getCurrentUser().getUid()  userId;
 
