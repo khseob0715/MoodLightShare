@@ -19,14 +19,23 @@ import com.example.vclab.moodlightshare.Fragment.FragmentCustomize;
 import com.example.vclab.moodlightshare.Fragment.FragmentShare;
 import com.example.vclab.moodlightshare.Fragment.FragmentTheme;
 import com.example.vclab.moodlightshare.Fragment.FragmentUser;
+import com.example.vclab.moodlightshare.model.LightModel;
+import com.example.vclab.moodlightshare.model.UserModel;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -114,20 +123,42 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        mStoragedRef = FirebaseStorage.getInstance().getReference();
-        mStoragedRef.child("images/"+UserUid+"/"+"c9e0523d18294f8e48d5a6727d57b5f8.jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+//        mStoragedRef = FirebaseStorage.getInstance().getReference();
+//        mStoragedRef.child("images/"+UserUid+"/"+"c9e0523d18294f8e48d5a6727d57b5f8.jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+//            @Override
+//            public void onSuccess(Uri uri) {
+//                // Got the download URL for 'users/me/profile.png'
+//                Log.e("s","sd");
+//                Log.e("uri",uri.toString());
+//                profileUri = uri;
+//            }
+//        }).addOnFailureListener(new OnFailureListener() {
+//            @Override
+//            public void onFailure(@NonNull Exception exception) {
+//                // Handle any errors
+//                Log.e("s","sda");
+//            }
+//        });
+
+        FirebaseDatabase.getInstance().getReference().child("users").addValueEventListener(new ValueEventListener() {
             @Override
-            public void onSuccess(Uri uri) {
-                // Got the download URL for 'users/me/profile.png'
-                Log.e("s","sd");
-                Log.e("uri",uri.toString());
-                profileUri = uri;
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // 처음 넘어오는 데이터 // ArrayList 값.
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    if (snapshot.child("uid").getValue(String.class).equals(UserUid)) {
+                        Uri url = Uri.parse(snapshot.child("profileImageUrl").getValue(String.class).toString());
+                        profileUri = url;
+                        break;
+                    }else{
+                        Log.e("Tag","ssss");
+                    }
+                    profileUri = Uri.parse("https://firebasestorage.googleapis.com/v0/b/moodlightshare.appspot.com/o/images%2Ficon01non.png?alt=media&token=db74f55c-ef39-482f-84c0-63cb8ef81496");
+                }
             }
-        }).addOnFailureListener(new OnFailureListener() {
+
             @Override
-            public void onFailure(@NonNull Exception exception) {
-                // Handle any errors
-                Log.e("s","sda");
+            public void onCancelled(DatabaseError databaseError) {
+
             }
         });
     }

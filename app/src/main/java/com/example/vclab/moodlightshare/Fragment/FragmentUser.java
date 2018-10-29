@@ -29,6 +29,7 @@ import android.widget.Toast;
 import com.example.vclab.moodlightshare.MainActivity;
 import com.example.vclab.moodlightshare.R;
 import com.example.vclab.moodlightshare.model.LightModel;
+import com.example.vclab.moodlightshare.model.UserModel;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -130,9 +131,13 @@ public class FragmentUser extends Fragment {
                                     }
                                 }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                                     @Override
-                                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                    public void onSuccess(UploadTask.TaskSnapshot task) {
                                         // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
-                                        // ...
+                                        UserModel userModel = new UserModel();
+                                        userModel.uid = UserUid;
+                                        userModel.profileImageUrl = task.getDownloadUrl().toString();
+
+                                        mDatabase.child("users").child(UserUid).setValue(userModel); // 데이터 쓰기..
                                     }
                                 });
                             }
