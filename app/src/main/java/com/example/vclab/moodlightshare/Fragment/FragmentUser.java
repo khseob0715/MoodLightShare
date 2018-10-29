@@ -28,6 +28,8 @@ import android.widget.Toast;
 
 import com.example.vclab.moodlightshare.R;
 import com.example.vclab.moodlightshare.model.LightModel;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -37,6 +39,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 
@@ -100,13 +103,27 @@ public class FragmentUser extends Fragment {
                             @Override
                             public void onImageSelected(Uri uri) {
                                 profileImage.setImageURI(uri);
+                                StorageReference riversRef = mStoragedRef.child("images/"+uri.getLastPathSegment());
+
+
+                                // Register observers to listen for when the download is done or if it fails
+                                riversRef.putFile(uri).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception exception) {
+                                        // Handle unsuccessful uploads
+                                    }
+                                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                    @Override
+                                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                        // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
+                                        // ...
+                                    }
+                                });
                             }
                         })
                         .create();
 
                 bottomSheetDialogFragment.show(getActivity().getSupportFragmentManager());
-
-
             }
 
         });

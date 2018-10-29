@@ -82,7 +82,9 @@ public class FragmentShare extends Fragment {
                     lightModels.clear();
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         LightModel lightModel = snapshot.getValue(LightModel.class);
-                        lightModels.add(lightModel);
+                        if (snapshot.child("bShare").getValue(Boolean.class)) { // 사용자가 공유하기로 한 것만 보여줌.
+                            lightModels.add(lightModel);
+                        }
                         Log.e("Tag", snapshot.child("ShareLightDescription").getValue(String.class).toString());
                     }
                     notifyDataSetChanged();
