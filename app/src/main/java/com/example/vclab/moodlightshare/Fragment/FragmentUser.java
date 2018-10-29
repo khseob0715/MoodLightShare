@@ -26,6 +26,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.vclab.moodlightshare.MainActivity;
 import com.example.vclab.moodlightshare.R;
 import com.example.vclab.moodlightshare.model.LightModel;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -37,15 +38,23 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
+import com.squareup.picasso.Picasso;
 
 import org.w3c.dom.Text;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,6 +69,7 @@ import gun0912.tedbottompicker.TedBottomPicker;
 public class FragmentUser extends Fragment {
 
 
+    private static final String TAG = "FragmentUser";
     RecyclerView mRecyclerView;
     DatabaseReference mDatabase;
 
@@ -67,8 +77,9 @@ public class FragmentUser extends Fragment {
 
     TextView UserName, UserId;
     CircleImageView profileImage;
+    String UserUid;
 
-
+    String uirl;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,7 +87,7 @@ public class FragmentUser extends Fragment {
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mStoragedRef = FirebaseStorage.getInstance().getReference();
-
+        UserUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
     }
 
     @Nullable
@@ -95,6 +106,11 @@ public class FragmentUser extends Fragment {
         }
 
         profileImage = (CircleImageView) view.findViewById(R.id.profile_image);
+
+       // profileImage.setImageURI(MainActivity.profileUri);
+        Picasso.get().load(MainActivity.profileUri).into(profileImage);
+
+
         profileImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -103,8 +119,8 @@ public class FragmentUser extends Fragment {
                             @Override
                             public void onImageSelected(Uri uri) {
                                 profileImage.setImageURI(uri);
-                                StorageReference riversRef = mStoragedRef.child("images/"+uri.getLastPathSegment());
-
+                                Log.e("uri",uri.toString());
+                                StorageReference riversRef = mStoragedRef.child("images/" + UserUid + "/" +uri.getLastPathSegment());
 
                                 // Register observers to listen for when the download is done or if it fails
                                 riversRef.putFile(uri).addOnFailureListener(new OnFailureListener() {
@@ -143,7 +159,7 @@ public class FragmentUser extends Fragment {
     class ShareRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         List<LightModel> lightModels;
-        String UserUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
 
         public ShareRecyclerAdapter() {
             lightModels = new ArrayList<>();

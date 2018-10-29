@@ -1,11 +1,14 @@
 package com.example.vclab.moodlightshare;
 
 import android.content.Intent;
+import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,6 +19,14 @@ import com.example.vclab.moodlightshare.Fragment.FragmentCustomize;
 import com.example.vclab.moodlightshare.Fragment.FragmentShare;
 import com.example.vclab.moodlightshare.Fragment.FragmentTheme;
 import com.example.vclab.moodlightshare.Fragment.FragmentUser;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
+import java.io.File;
+import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -26,6 +37,14 @@ public class MainActivity extends AppCompatActivity {
 
     int Current_Fragment_Index = 1;
     int Select_Fragment_Index;
+
+
+    public static Uri profileUri;
+    StorageReference mStoragedRef;
+
+    String UserUid;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,6 +103,33 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+
+        UserUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        File localFile = null;
+        try {
+            localFile = File.createTempFile("images", "jpg");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        mStoragedRef = FirebaseStorage.getInstance().getReference();
+        mStoragedRef.child("images/"+UserUid+"/"+"c9e0523d18294f8e48d5a6727d57b5f8.jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                // Got the download URL for 'users/me/profile.png'
+                Log.e("s","sd");
+                Log.e("uri",uri.toString());
+                profileUri = uri;
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle any errors
+                Log.e("s","sda");
+            }
+        });
     }
 
     private void Button_Image_Change(int current_Fragment_Index, int select_Fragment_Index){
