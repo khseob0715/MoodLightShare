@@ -4,6 +4,8 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -13,6 +15,7 @@ import android.widget.ImageView;
 
 import com.example.vclab.moodlightshare.Dialog.ShareDialog;
 import com.example.vclab.moodlightshare.R;
+import com.example.vclab.moodlightshare.fragments.DrawFragment;
 
 public class FragmentCustomize extends Fragment {
 
@@ -20,12 +23,17 @@ public class FragmentCustomize extends Fragment {
     public String customize_rgbcolor, customize_hexcolor;
 
     public Button ShareButton;
-
+    FragmentManager fragmentManager;
+    FragmentTransaction fragmentTransaction;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        fragmentManager = getFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.customize_framelayout, new DrawFragment());
+        fragmentTransaction.commit();
 
     }
 
@@ -47,6 +55,7 @@ public class FragmentCustomize extends Fragment {
                  customDialog.callFunction();
             }
         });
+
         customize_color_display =view.findViewById(R.id.customize_color_display);
         customize_selectedImage =view.findViewById(R.id.customzie_spectrum_image);
 

@@ -43,6 +43,11 @@ dependencies {
     implementation 'gun0912.ted:tedbottompicker:1.2.6'
     implementation 'gun0912.ted:tedpermission:2.2.2'
     implementation 'de.hdodenhof:circleimageview:2.2.0'
+
+    // dotpicker
+    implementation 'com.jaredrummler:colorpicker:1.0.1'
+    implementation "android.arch.persistence.room:runtime:1.0.0"
+    annotationProcessor "android.arch.persistence.room:compiler:1.0.0"
 }
 
 

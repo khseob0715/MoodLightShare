@@ -121,13 +121,12 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         super.onCreate(savedInstanceState);
         setupActionBar();
 
-        setContentView(R.layout.activity_setting);
-//        Intent intent = getIntent();
-//        if (intent.getStringArrayExtra(EXTRA_SHOW_FRAGMENT) == null) {
-//            getIntent().putExtra(EXTRA_SHOW_FRAGMENT, DataSyncPreferenceFragment.class.getName());
-//        }
+        Intent intent = getIntent();
+        if (intent.getStringArrayExtra(EXTRA_SHOW_FRAGMENT) == null) {
+            getIntent().putExtra(EXTRA_SHOW_FRAGMENT, DataSyncPreferenceFragment.class.getName());
+        }
 
-//        super.onCreate(savedInstanceState);
+        super.onCreate(savedInstanceState);
     }
 
     @Override

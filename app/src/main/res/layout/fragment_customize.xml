@@ -10,75 +10,61 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
         android:text="Button" />
 
+
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:foregroundGravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:gravity="center"
-        android:layout_above="@+id/CustomizeShareButton"
-        android:orientation="vertical">
+        android:orientation="horizontal">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <Space
+            android:id="@+id/space2"
+            android:layout_width="5dp"
+            android:layout_height="30dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignTop="@+id/customize_color_display"
+            android:layout_weight="0" />
+
+        <ImageView
+            android:id="@+id/customize_color_display"
+            android:layout_width="60dp"
+            android:layout_height="43dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
             android:layout_gravity="center"
-            android:gravity="center"
-            android:orientation="horizontal">
+            android:layout_weight="0"
+            android:background="#000000"
+            android:foregroundGravity="center" />
 
-            <Space
-                android:id="@+id/space2"
-                android:layout_width="5dp"
-                android:layout_height="30dp"
-                android:layout_alignParentStart="true"
-                android:layout_alignTop="@+id/customize_color_display"
-                android:layout_weight="0" />
+        <Space
+            android:id="@+id/space"
+            android:layout_width="5dp"
+            android:layout_height="30dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignTop="@+id/customize_color_display"
+            android:layout_weight="0" />
 
-            <ImageView
-                android:id="@+id/customize_color_display"
-                android:layout_width="60dp"
-                android:layout_height="43dp"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentStart="true"
-                android:layout_gravity="center"
-                android:layout_weight="0"
-                android:background="#000000"
-                android:foregroundGravity="center" />
-
-            <Space
-                android:id="@+id/space"
-                android:layout_width="5dp"
-                android:layout_height="30dp"
-                android:layout_alignParentStart="true"
-                android:layout_alignTop="@+id/customize_color_display"
-                android:layout_weight="0" />
-
-            <ImageView
-                android:id="@+id/customzie_spectrum_image"
-                android:layout_width="300dp"
-                android:layout_height="60dp"
-                android:layout_alignParentBottom="true"
-                android:layout_toEndOf="@+id/space"
-                android:layout_weight="0"
-                android:src="@drawable/line_spectrum" />
+        <ImageView
+            android:id="@+id/customzie_spectrum_image"
+            android:layout_width="300dp"
+            android:layout_height="60dp"
+            android:layout_alignParentBottom="true"
+            android:layout_toEndOf="@+id/space"
+            android:layout_weight="0"
+            android:src="@drawable/line_spectrum" />
 
         </LinearLayout>
 
-        <HorizontalScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="0">
+    <FrameLayout
+        android:id="@+id/customize_framelayout"
+        android:layout_above="@+id/CustomizeShareButton"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-            </LinearLayout>
-        </HorizontalScrollView>
-
-    </LinearLayout>
+    </FrameLayout>
 
 </RelativeLayout>

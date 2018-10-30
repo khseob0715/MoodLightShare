@@ -1,74 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#000000">
+    android:layout_height="match_parent">
 
-    <FrameLayout
-        android:id="@+id/content"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/ViewLine"/>
+    <fragment android:id="@+id/drawfragment"
+        android:name="net.tuurlievens.dotpict.fragments.DrawFragment"
+        android:layout_height="fill_parent"
+        android:layout_width="fill_parent"
+        tools:layout="@layout/fragment_draw" />
 
-    <View
-        android:id="@+id/ViewLine"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_centerInParent="true"
-        android:layout_above="@+id/buttonLinearLayout"
-        android:background="#b6feff" />
+    <RelativeLayout
+        android:id="@+id/savesparent"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="#ffffff"
+        android:visibility="gone">
 
-    <LinearLayout
-        android:id="@+id/buttonLinearLayout"
-        android:gravity="center"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:orientation="horizontal">
+        <fragment
+            android:id="@+id/savesfragment"
+            android:name="com.example.vclab.moodlightshare.fragments.SavesFragment"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_margin="10dp"
+            tools:layout="@layout/fragment_saves" />
 
         <ImageView
-            android:id="@+id/mainButton"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_margin="5dp"
-            android:layout_weight="1"
-            app:srcCompat="@drawable/homeicon" />
+            android:id="@+id/closebutton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="25dp"
+            android:padding="10dp"
+            android:src="@drawable/ic_clear_black_24dp" />
 
-        <ImageView
-            android:id="@+id/themeButton"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_margin="5dp"
-            android:layout_weight="1"
-            app:srcCompat="@drawable/themeicon" />
+    </RelativeLayout>
 
-        <ImageView
-            android:id="@+id/customizeButton"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_margin="5dp"
-            android:layout_weight="1"
-            app:srcCompat="@drawable/customicon" />
-
-        <ImageView
-            android:id="@+id/shareButton"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_margin="5dp"
-            android:layout_weight="1"
-            app:srcCompat="@drawable/shareicon" />
-
-        <ImageView
-            android:id="@+id/userButton"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_margin="5dp"
-            android:layout_weight="1"
-            app:srcCompat="@drawable/usericon" />
-
-    </LinearLayout>
-
-</RelativeLayout>
+</FrameLayout>
