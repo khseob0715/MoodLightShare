@@ -115,7 +115,7 @@ public class ShareDialog {
                 Long tsLong = System.currentTimeMillis();
                 Date date = new Date(tsLong);
                 String ts = tsLong.toString();
-
+                lightModel.timestamp  = ts;
                 SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
 
                 lightModel.ShareDate = f.format(date);

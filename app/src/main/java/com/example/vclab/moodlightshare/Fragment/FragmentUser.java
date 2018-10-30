@@ -26,6 +26,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -83,7 +84,9 @@ public class FragmentUser extends Fragment {
     CircleImageView profileImage;
     String UserUid;
 
-    String uirl;
+    ProgressBar progressBar;
+
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,6 +95,7 @@ public class FragmentUser extends Fragment {
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mStoragedRef = FirebaseStorage.getInstance().getReference();
         UserUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
     }
 
     @Nullable
@@ -102,7 +106,7 @@ public class FragmentUser extends Fragment {
 
         UserName = (TextView) view.findViewById(R.id.fragment_user_userName);
         UserId = (TextView) view.findViewById(R.id.fragment_user_userId);
-
+        progressBar = (ProgressBar)view.findViewById(R.id.userProfile_progressbar);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             requestPermissions(new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
@@ -110,7 +114,20 @@ public class FragmentUser extends Fragment {
         }
 
         profileImage = (CircleImageView) view.findViewById(R.id.profile_image);
-        Picasso.get().load(MainActivity.profileUri).into(profileImage);
+
+        Picasso.get().load(MainActivity.profileUri).into(profileImage, new com.squareup.picasso.Callback() {
+            @Override
+            public void onSuccess() {
+                progressBar.setVisibility(View.GONE);
+                profileImage.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onError(Exception e) {
+
+            }
+        });
+
 
         profileImage.setOnClickListener(new View.OnClickListener() {
             @Override

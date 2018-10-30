@@ -123,23 +123,6 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-//        mStoragedRef = FirebaseStorage.getInstance().getReference();
-//        mStoragedRef.child("images/"+UserUid+"/"+"c9e0523d18294f8e48d5a6727d57b5f8.jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-//            @Override
-//            public void onSuccess(Uri uri) {
-//                // Got the download URL for 'users/me/profile.png'
-//                Log.e("s","sd");
-//                Log.e("uri",uri.toString());
-//                profileUri = uri;
-//            }
-//        }).addOnFailureListener(new OnFailureListener() {
-//            @Override
-//            public void onFailure(@NonNull Exception exception) {
-//                // Handle any errors
-//                Log.e("s","sda");
-//            }
-//        });
-
         FirebaseDatabase.getInstance().getReference().child("users").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

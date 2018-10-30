@@ -123,7 +123,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
         Intent intent = getIntent();
         if (intent.getStringArrayExtra(EXTRA_SHOW_FRAGMENT) == null) {
-            getIntent().putExtra(EXTRA_SHOW_FRAGMENT, GeneralPreferenceFragment.class.getName());
+            getIntent().putExtra(EXTRA_SHOW_FRAGMENT, DataSyncPreferenceFragment.class.getName());
         }
 
         super.onCreate(savedInstanceState);
