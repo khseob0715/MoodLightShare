@@ -80,12 +80,13 @@ public class ShareDialog {
                 Long tsLong = System.currentTimeMillis();
                 Date date = new Date(tsLong);
                 String ts = tsLong.toString();
-
+                lightModel.timestamp  = ts;
                 SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
 
                 lightModel.ShareDate = f.format(date);
                 lightModel.ShareUserUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
                 lightModel.bShare = false;
+
                 mDatabase.child("recipe").child(ts).setValue(lightModel); // 데이터 쓰기.
 
                 // 커스텀 다이얼로그를 종료한다.

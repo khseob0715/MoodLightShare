@@ -23,6 +23,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -107,10 +108,7 @@ public class FragmentUser extends Fragment {
         }
 
         profileImage = (CircleImageView) view.findViewById(R.id.profile_image);
-
-       // profileImage.setImageURI(MainActivity.profileUri);
         Picasso.get().load(MainActivity.profileUri).into(profileImage);
-
 
         profileImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -174,9 +172,11 @@ public class FragmentUser extends Fragment {
                     // 처음 넘어오는 데이터 // ArrayList 값.
                     lightModels.clear();
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+
                         LightModel lightModel = snapshot.getValue(LightModel.class);
                         if (snapshot.child("ShareUserUid").getValue(String.class).toString().equals(UserUid)) {
                             lightModels.add(lightModel);
+
                         }
                         Log.e("Tag", snapshot.child("ShareLightDescription").getValue(String.class).toString());
                     }
@@ -192,15 +192,16 @@ public class FragmentUser extends Fragment {
 
         @Override// 뷰 홀더 생성
         public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recycler_view, parent, false);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.user_item_recycler_view, parent, false);
 
             return new ShareRecyclerAdapter.ItemViewHolder(view);
         }
 
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
             // 해당 position 에 해당하는 데이터 결합
-            ((ShareRecyclerAdapter.ItemViewHolder) holder).NameText.setText(lightModels.get(position).ShareUserName);
             ((ShareRecyclerAdapter.ItemViewHolder) holder).DescriptionText.setText(lightModels.get(position).ShareLightDescription);
+            ((ShareRecyclerAdapter.ItemViewHolder) holder).DateText.setText(lightModels.get(position).ShareDate);
+
 
             // 이벤트처리 : 생성된 List 중 선택된 목록번호를 Toast로 출력
             holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -211,6 +212,15 @@ public class FragmentUser extends Fragment {
 
                 // lightModels.get(position).pixelColor[lightModels.get(position).index - 1].getG_color(),
             });
+
+            ((ItemViewHolder) holder).DeleteLightButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // 데이터 베이스 삭제 넣기.
+                    Toast.makeText(getContext(), "delete", Toast.LENGTH_LONG).show();
+                    FirebaseDatabase.getInstance().getReference().child("recipe").child(lightModels.get(position).timestamp).removeValue();
+                }
+            });
         }
 
         @Override
@@ -220,12 +230,16 @@ public class FragmentUser extends Fragment {
 
         public class ItemViewHolder extends RecyclerView.ViewHolder {
             private TextView DescriptionText;
-            private TextView NameText;
+            private TextView DateText;
+            private ImageView DeleteLightButton;
 
             public ItemViewHolder(@NonNull View itemView) {
                 super(itemView);
                 DescriptionText = (TextView) itemView.findViewById(R.id.DescriptionText);
-                NameText = (TextView) itemView.findViewById(R.id.NameText);
+                DateText = (TextView) itemView.findViewById(R.id.DateText);
+
+                DeleteLightButton = (ImageView)itemView.findViewById(R.id.Delete_Light_button);
+
             }
         }
     }
