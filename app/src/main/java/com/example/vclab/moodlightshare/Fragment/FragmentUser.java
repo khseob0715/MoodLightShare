@@ -2,6 +2,8 @@ package com.example.vclab.moodlightshare.Fragment;
 
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -201,6 +203,9 @@ public class FragmentUser extends Fragment {
             // 해당 position 에 해당하는 데이터 결합
             ((ShareRecyclerAdapter.ItemViewHolder) holder).DescriptionText.setText(lightModels.get(position).ShareLightDescription);
             ((ShareRecyclerAdapter.ItemViewHolder) holder).DateText.setText(lightModels.get(position).ShareDate);
+            if(!lightModels.get(position).bShare){
+                ((ItemViewHolder) holder).ShareYesNO.setText("미 공유");
+            }
 
 
             // 이벤트처리 : 생성된 List 중 선택된 목록번호를 Toast로 출력
@@ -217,8 +222,23 @@ public class FragmentUser extends Fragment {
                 @Override
                 public void onClick(View view) {
                     // 데이터 베이스 삭제 넣기.
-                    Toast.makeText(getContext(), "delete", Toast.LENGTH_LONG).show();
-                    FirebaseDatabase.getInstance().getReference().child("recipe").child(lightModels.get(position).timestamp).removeValue();
+                    AlertDialog.Builder alterDialogBuilder = new AlertDialog.Builder(getContext());
+                    alterDialogBuilder.setTitle("커스터마이징 조명 삭제")
+                            .setMessage("조명을 삭제하시겠습니까?")
+                            .setPositiveButton("삭제", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    FirebaseDatabase.getInstance().getReference().child("recipe").child(lightModels.get(position).timestamp).removeValue();
+                                }
+                            })
+                            .setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.cancel();
+                                }
+                            })
+                            .create()
+                            .show();
                 }
             });
         }
@@ -232,6 +252,7 @@ public class FragmentUser extends Fragment {
             private TextView DescriptionText;
             private TextView DateText;
             private ImageView DeleteLightButton;
+            private TextView ShareYesNO;
 
             public ItemViewHolder(@NonNull View itemView) {
                 super(itemView);
@@ -239,6 +260,7 @@ public class FragmentUser extends Fragment {
                 DateText = (TextView) itemView.findViewById(R.id.DateText);
 
                 DeleteLightButton = (ImageView)itemView.findViewById(R.id.Delete_Light_button);
+                ShareYesNO = (TextView)itemView.findViewById(R.id.ShareYesNO);
 
             }
         }
