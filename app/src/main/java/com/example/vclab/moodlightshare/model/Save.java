@@ -1,4 +1,4 @@
-package com.example.vclab.moodlightshare.models;
+package com.example.vclab.moodlightshare.model;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;

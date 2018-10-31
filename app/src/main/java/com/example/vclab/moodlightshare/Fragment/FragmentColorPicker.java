@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -82,6 +83,8 @@ public class FragmentColorPicker extends Fragment {
                     if (action == event.ACTION_UP) {
                         //터치이벤트 설정
                         color_display.setBackgroundColor(touchColor);
+                        Log.e("Draw","colorpicker" + touchColor +" " +  color_display.getDrawingCacheBackgroundColor());
+
                         hexValue.setText("HEX:   " + hexcolor);
                     }
 

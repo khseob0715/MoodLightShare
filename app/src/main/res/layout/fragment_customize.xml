@@ -5,6 +5,94 @@
     android:layout_height="match_parent"
     tools:context="com.example.vclab.moodlightshare.Fragment.FragmentCustomize">
 
+    <LinearLayout
+        android:id="@+id/buttonlist"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/CustomizeShareButton"
+        android:orientation="horizontal">
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/brushButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="2dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="2dp"
+            android:layout_weight="0"
+            android:clickable="true"
+            app:fabSize="mini"
+            app:srcCompat="@drawable/ic_brush_white_24dp" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/pickerButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="2dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="2dp"
+            android:layout_weight="0"
+            android:clickable="true"
+            app:fabSize="mini"
+            app:srcCompat="@drawable/ic_colorize_white_24dp" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fillButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="2dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="2dp"
+            android:layout_weight="0"
+            android:clickable="true"
+            app:fabSize="mini"
+            app:srcCompat="@drawable/ic_format_color_fill_white_24dp" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/cameraButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="2dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="2dp"
+            android:layout_weight="0"
+            android:clickable="true"
+            app:fabSize="mini"
+            app:srcCompat="@drawable/ic_photo_camera_white_24dp" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/clearButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="2dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="2dp"
+            android:layout_weight="0"
+            android:clickable="true"
+            app:fabSize="mini"
+            app:srcCompat="@drawable/ic_clear_white_24dp" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/saveButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="2dp"
+            android:layout_weight="0"
+            android:clickable="true"
+            app:fabSize="mini"
+            app:srcCompat="@drawable/ic_save_white_24dp" />
+
+
+    </LinearLayout>
+
     <Button
         android:id="@+id/CustomizeShareButton"
         android:layout_width="wrap_content"
@@ -21,36 +109,9 @@
         android:gravity="center"
         android:orientation="horizontal">
 
-        <Space
-            android:id="@+id/space2"
-            android:layout_width="5dp"
-            android:layout_height="30dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignTop="@+id/customize_color_display"
-            android:layout_weight="0" />
-
-        <ImageView
-            android:id="@+id/customize_color_display"
-            android:layout_width="60dp"
-            android:layout_height="43dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true"
-            android:layout_gravity="center"
-            android:layout_weight="0"
-            android:background="#000000"
-            android:foregroundGravity="center" />
-
-        <Space
-            android:id="@+id/space"
-            android:layout_width="5dp"
-            android:layout_height="30dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignTop="@+id/customize_color_display"
-            android:layout_weight="0" />
-
         <ImageView
             android:id="@+id/customzie_spectrum_image"
-            android:layout_width="300dp"
+            android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_alignParentBottom="true"
             android:layout_toEndOf="@+id/space"

@@ -15,7 +15,7 @@ import com.example.vclab.moodlightshare.R;
 import com.example.vclab.moodlightshare.fragments.DimensionDialogFragment;
 import com.example.vclab.moodlightshare.fragments.DrawFragment;
 import com.example.vclab.moodlightshare.fragments.SavesFragment;
-import com.example.vclab.moodlightshare.models.Save;
+import com.example.vclab.moodlightshare.model.Save;
 import com.example.vclab.moodlightshare.persistency.*;
 import com.example.vclab.moodlightshare.views.CanvasView;
 

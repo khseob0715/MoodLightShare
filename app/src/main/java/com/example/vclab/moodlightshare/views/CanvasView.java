@@ -82,6 +82,12 @@ public class CanvasView extends LinearLayout {
                 button.setBackgroundColor(color);
     }
 
+    public void fill_white(int white_color) {
+        for (TextView[] row : pixels)
+            for (TextView button : row)
+                button.setBackgroundColor(white_color);
+    }
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         List<View> pixels = findPixels(event);

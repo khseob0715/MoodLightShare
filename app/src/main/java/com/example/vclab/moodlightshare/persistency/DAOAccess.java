@@ -6,7 +6,7 @@ import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
 
-import com.example.vclab.moodlightshare.models.Save;
+import com.example.vclab.moodlightshare.model.Save;
 
 
 import java.util.List;

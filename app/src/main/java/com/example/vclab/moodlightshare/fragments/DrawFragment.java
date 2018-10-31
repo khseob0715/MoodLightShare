@@ -19,6 +19,7 @@ import android.support.v4.graphics.ColorUtils;
 import android.support.v7.app.AlertDialog;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -36,7 +37,7 @@ import android.widget.Toast;
 import com.jaredrummler.android.colorpicker.ColorPickerDialog;
 
 import com.example.vclab.moodlightshare.R;
-import com.example.vclab.moodlightshare.models.Save;
+import com.example.vclab.moodlightshare.model.Save;
 import com.example.vclab.moodlightshare.views.CanvasView;
 
 import java.util.List;
@@ -48,12 +49,12 @@ public class DrawFragment extends Fragment {
     private boolean pickingColor = false;
     private ViewGroup body;
     private ViewGroup buttonlist;
-    private ViewGroup scrolllist;
     private ProgressBar progressbar;
     private CanvasView canvas = null;
     private DrawFragmentListener mListener;
     private Bundle tempSavedInstanceState = null;
 
+    private String Tag = "DrawFragmenmt";
     public DrawFragment() {}
 
     @Override
@@ -94,9 +95,11 @@ public class DrawFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_draw, container, false);
+
         body = view.findViewById(R.id.body);
         buttonlist = view.findViewById(R.id.buttonlist);
         progressbar = view.findViewById(R.id.progress);
+
         return view;
     }
 
@@ -106,6 +109,11 @@ public class DrawFragment extends Fragment {
         tempSavedInstanceState = savedInstanceState;
     }
 
+
+    public void setColor(int color) {
+        if (canvas != null)
+            canvas.color = color;
+    }
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -139,140 +147,7 @@ public class DrawFragment extends Fragment {
             });
         }
 
-        // open color picker, source: https://github.com/jaredrummler/ColorPicker
-        view.findViewById(R.id.colorButton).setOnClickListener(new FloatingActionButton.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ColorPickerDialog.newBuilder().setAllowPresets(true).setColor(canvas.getColor()).show(getActivity());
 
-            }
-        });
-
-        // show other floating action buttons on drag
-        view.findViewById(R.id.colorButton).setOnLongClickListener(new FloatingActionButton.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-
-                return true;
-            }
-        });
-
-        // fill canvas on button click
-        view.findViewById(R.id.pickerButton).setOnClickListener(new FloatingActionButton.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                pickingColor = true;
-                Toast.makeText(getActivity(), R.string.colorpickermessage, Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        // fill canvas on button click
-        view.findViewById(R.id.fillButton).setOnClickListener(new FloatingActionButton.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                canvas.fill();
-
-            }
-        });
-
-        // reset canvas on button click
-        view.findViewById(R.id.clearButton).setOnClickListener(new FloatingActionButton.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                mListener.onCanvasResetted();
-            }
-        });
-
-        // save button
-        view.findViewById(R.id.saveButton).setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
-                dialog.setTitle(R.string.save);
-
-                final EditText input = new EditText(getContext());
-                input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
-                input.setHint(R.string.savename);
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                params.setMarginStart(60);
-                params.setMarginEnd(60);
-                input.setLayoutParams(params);
-                dialog.setView(input);
-
-                dialog.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (!TextUtils.isEmpty(input.getText())) {
-                            Save save = new Save(input.getText().toString(), canvas.toString());
-                            mListener.onCanvasSaved(save);
-                        } else {
-                            Toast.makeText(getActivity(), R.string.invalidsavename, Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-                dialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-                dialog.show();
-            }
-        });
-
-        view.findViewById(R.id.saveButton).setOnLongClickListener(new FloatingActionButton.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                mListener.openSaves();
-
-                return true;
-            }
-        });
-
-        view.findViewById(R.id.cameraButton).setOnClickListener(new FloatingActionButton.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
-                    startActivityForResult(takePictureIntent, 2);
-                }
-            }
-        });
-
-
-
-        view.findViewById(R.id.brushButton).setOnClickListener(new FloatingActionButton.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
-                dialog.setTitle(R.string.brushsize);
-
-                final SeekBar input = new SeekBar(getContext());
-                input.setMax(17);
-                input.setProgress(canvas.brushSize-1);
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                params.setMarginStart(100);
-                input.setLayoutParams(params);
-                dialog.setView(input);
-
-                dialog.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        canvas.brushSize = input.getProgress()+1;
-                    }
-                });
-                dialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-                dialog.show();
-            }
-        });
 
     }
 
@@ -301,7 +176,7 @@ public class DrawFragment extends Fragment {
 
             // add checkbox
             final CheckBox checkbox = new CheckBox(getContext());
-            checkbox.setText(R.string.frontcamera);
+         //   checkbox.setText(R.string.frontcamera);
             checkbox.setLayoutParams(params);
             ll.addView(checkbox);
 
@@ -409,7 +284,6 @@ public class DrawFragment extends Fragment {
                         progressbar.setVisibility(View.INVISIBLE);
                         body.addView(canvas, 0);
 
-
                         // center canvas
                         RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) canvas.getLayoutParams();
                         layoutParams.height = RelativeLayout.LayoutParams.WRAP_CONTENT;
@@ -451,15 +325,7 @@ public class DrawFragment extends Fragment {
         tempSavedInstanceState = null;
     }
 
-    public void setColor(int color) {
-        if (canvas != null)
-            canvas.color = color;
-        if (getView() != null) {
-            getView().findViewById(R.id.colorButton).setBackgroundTintList(ColorStateList.valueOf(color));
-            for (int i = 0; i < buttonlist.getChildCount(); i++)
-                buttonlist.getChildAt(i).setBackgroundTintList(ColorStateList.valueOf(color));
-        }
-    }
+
 
     public interface DrawFragmentListener {
         void onCanvasResetted();

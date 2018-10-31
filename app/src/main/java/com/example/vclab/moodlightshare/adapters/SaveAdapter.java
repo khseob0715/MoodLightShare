@@ -12,7 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.vclab.moodlightshare.R;
-import com.example.vclab.moodlightshare.models.Save;
+import com.example.vclab.moodlightshare.model.Save;
 import com.example.vclab.moodlightshare.persistency.*;
 
 import java.util.ArrayList;
