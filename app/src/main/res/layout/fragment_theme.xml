@@ -48,8 +48,8 @@
                                 android:layout_margin="10dp"
                                 android:layout_gravity="center"
                                 android:src="@drawable/theme01_image"
-                                app:civ_border_color="#b614b0"
-                                app:civ_border_width="3dp" />
+                                app:civ_border_color="#f7763f"
+                                app:civ_border_width="2dp" />
 
 
                             <TextView
@@ -81,9 +81,9 @@
                                 android:layout_height="160dp"
                                 android:layout_margin="10dp"
                                 android:layout_gravity="center"
-                                android:src="@drawable/theme01_image"
-                                app:civ_border_color="#b614b0"
-                                app:civ_border_width="3dp" />
+                                android:src="@drawable/theme02_image"
+                                app:civ_border_color="#ffffff"
+                                app:civ_border_width="2dp" />
 
 
                             <TextView
@@ -96,7 +96,7 @@
                                 android:layout_gravity="center"
                                 android:gravity="center"
                                 android:padding="10dp"
-                                android:text="적도의 석양"
+                                android:text="북극 오로라"
                                 android:textColor="@android:color/white"
                                 android:textSize="20dp"
                                 android:textStyle="bold" />
@@ -115,7 +115,7 @@
                                 android:layout_height="160dp"
                                 android:layout_margin="10dp"
                                 android:layout_gravity="center"
-                                android:src="@drawable/theme01_image"
+                                android:src="@drawable/theme03_image"
                                 app:civ_border_color="#b614b0"
                                 app:civ_border_width="3dp" />
 
@@ -130,7 +130,7 @@
                                 android:layout_gravity="center"
                                 android:gravity="center"
                                 android:padding="10dp"
-                                android:text="적도의 석양"
+                                android:text="봄에 피는 꽃"
                                 android:textColor="@android:color/white"
                                 android:textSize="20dp"
                                 android:textStyle="bold" />
