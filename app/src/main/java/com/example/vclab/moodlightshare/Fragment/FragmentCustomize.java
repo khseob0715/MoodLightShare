@@ -42,7 +42,7 @@ public class FragmentCustomize extends Fragment {
     public ImageView customize_selectedImage;
     public String customize_rgbcolor, customize_hexcolor;
 
-    public Button ShareButton;
+
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
 
@@ -79,19 +79,6 @@ public class FragmentCustomize extends Fragment {
         for (int i = 0; i < buttonlist.getChildCount(); i++)
             buttonlist.getChildAt(i).setBackgroundTintList(ColorStateList.valueOf(-2414079));
 
-
-        ShareButton = view.findViewById(R.id.CustomizeShareButton);
-        ShareButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // 커스텀 다이얼로그를 생성한다. 사용자가 만든 클래스이다.
-                ShareDialog customDialog = new ShareDialog(getContext());
-
-                // 커스텀 다이얼로그를 호출한다.
-//                // 커스텀 다이얼로그의 결과를 출력할 TextView를 매개변수로 같이 넘겨준다.
-                 customDialog.callFunction();
-            }
-        });
 
 
 
@@ -150,7 +137,6 @@ public class FragmentCustomize extends Fragment {
                             int tempBrushSize = canvasView.brushSize;
                             canvasView.brushSize = 1;
                             List<View> pixels = canvasView.findPixels(motionEvent);
-//                            setColor( ((ColorDrawable) pixels.get(0).getBackground()).getColor() );
                             canvasView.color = ((ColorDrawable) pixels.get(0).getBackground()).getColor();
                             for (int i = 0; i < buttonlist.getChildCount(); i++)
                                 buttonlist.getChildAt(i).setBackgroundTintList(ColorStateList.valueOf(canvasView.color));
@@ -179,7 +165,6 @@ public class FragmentCustomize extends Fragment {
         view.findViewById(R.id.clearButton).setOnClickListener(new FloatingActionButton.OnClickListener() {
             @Override
             public void onClick(View view) {
-          //      mListener.onCanvasResetted();
                 canvasView = drawFragment.getCanvas();
                 canvasView.fill_white(0);
             }
@@ -190,49 +175,46 @@ public class FragmentCustomize extends Fragment {
             @Override
             public void onClick(View view) {
 
-                AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
-                dialog.setTitle(R.string.save);
+//                AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
+//                dialog.setTitle(R.string.save);
+//
+//                final EditText input = new EditText(getContext());
+//                input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+//                input.setHint(R.string.savename);
+//                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+//                params.setMarginStart(60);
+//                params.setMarginEnd(60);
+//                input.setLayoutParams(params);
+//                dialog.setView(input);
+//
+//                dialog.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        if (!TextUtils.isEmpty(input.getText())) {
+//                    //        Save save = new Save(input.getText().toString(), canvas.toString());
+//            //                mListener.onCanvasSaved(save);
+//                        } else {
+//                            Toast.makeText(getActivity(), R.string.invalidsavename, Toast.LENGTH_SHORT).show();
+//                        }
+//                    }
+//                });
+//                dialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        dialog.dismiss();
+//                    }
+//                });
+//                dialog.show();
 
-                final EditText input = new EditText(getContext());
-                input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
-                input.setHint(R.string.savename);
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                params.setMarginStart(60);
-                params.setMarginEnd(60);
-                input.setLayoutParams(params);
-                dialog.setView(input);
+                ShareDialog customDialog = new ShareDialog(getContext());
 
-                dialog.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (!TextUtils.isEmpty(input.getText())) {
-                    //        Save save = new Save(input.getText().toString(), canvas.toString());
-            //                mListener.onCanvasSaved(save);
-                        } else {
-                            Toast.makeText(getActivity(), R.string.invalidsavename, Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-                dialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-                dialog.show();
+                // 커스텀 다이얼로그를 호출한다.
+//                // 커스텀 다이얼로그의 결과를 출력할 TextView를 매개변수로 같이 넘겨준다.
+                customDialog.callFunction();
+
             }
         });
 
-
-//        view.findViewById(R.id.cameraButton).setOnClickListener(new FloatingActionButton.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//                if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
-//                    startActivityForResult(takePictureIntent, 2);
-//                }
-//            }
-//        });
 
         view.findViewById(R.id.brushButton).setOnClickListener(new FloatingActionButton.OnClickListener() {
             @Override
@@ -243,7 +225,7 @@ public class FragmentCustomize extends Fragment {
 
                 final SeekBar input = new SeekBar(getContext());
                 input.setMax(17);
-              //  input.setProgress(canvas.brushSize-1);
+                input.setProgress(drawFragment.getCanvas().brushSize-1);
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 params.setMarginStart(100);
                 input.setLayoutParams(params);
@@ -252,7 +234,7 @@ public class FragmentCustomize extends Fragment {
                 dialog.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-               //         canvas.brushSize = input.getProgress()+1;
+                        drawFragment.getCanvas().brushSize = input.getProgress()+1;
                     }
                 });
                 dialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
