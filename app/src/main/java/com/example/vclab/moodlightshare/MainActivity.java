@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.example.vclab.moodlightshare.Bluno.BLUNOActivity;
 import com.example.vclab.moodlightshare.Fragment.FragmentColorPicker;
 import com.example.vclab.moodlightshare.Fragment.FragmentCustomize;
 import com.example.vclab.moodlightshare.Fragment.FragmentShare;
@@ -44,11 +45,13 @@ public class MainActivity extends AppCompatActivity {
 
     String UserUid;
 
-
+    BLUNOActivity blunoActivity;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_frame_activity);
+
+        blunoActivity = new BLUNOActivity();
 
         // fragment를 불러오는 소스코드.
         fragmentManager = getSupportFragmentManager();
