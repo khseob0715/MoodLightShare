@@ -37,7 +37,7 @@ public abstract class BlunoLibrary extends Activity {
 
 	
 //	public BlunoLibrary(Context theContext) {
-//		
+//
 //		mainContext=theContext;
 //	}
 	
@@ -79,7 +79,7 @@ public abstract class BlunoLibrary extends Activity {
 	private BluetoothAdapter mBluetoothAdapter;
 	private boolean mScanning =false;
 
-	AlertDialog mScanDeviceDialog;
+	public AlertDialog mScanDeviceDialog;
     private String mDeviceName;
     private String mDeviceAddress;
 
@@ -344,7 +344,7 @@ public abstract class BlunoLibrary extends Activity {
         }
     };
 	
-    void buttonScanOnClickProcess()
+    public void buttonScanOnClickProcess()
     {
     	switch (mConnectionState) {
 		case isNull:
@@ -385,7 +385,7 @@ public abstract class BlunoLibrary extends Activity {
     	
     }
     
-	void scanLeDevice(final boolean enable) {
+	public void scanLeDevice(final boolean enable) {
 		if (enable) {
 			// Stops scanning after a pre-defined scan period.
 
@@ -509,7 +509,7 @@ public abstract class BlunoLibrary extends Activity {
         intentFilter.addAction(BluetoothLeService.ACTION_DATA_AVAILABLE);
         return intentFilter;
     }
-	
+
 	private class LeDeviceListAdapter extends BaseAdapter {
 		private ArrayList<BluetoothDevice> mLeDevices;
 		private LayoutInflater mInflator;

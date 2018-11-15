@@ -2,7 +2,7 @@ package com.example.vclab.moodlightshare.Bluno;
 
 public class PlainProtocol {
 	
-	PlainProtocol(){
+	public PlainProtocol(){
 		mReceivedframe=new StringBuffer(MaxFrameBufferLenth);
 		mSendingFrame=new StringBuffer(MaxFrameBufferLenth);
 		  receivedCommand="";
@@ -239,7 +239,7 @@ public class PlainProtocol {
 	  
 //	  private boolean isFrameExist=false;
 
-	  boolean available(){
+	  public boolean available(){
 		  int semicolonIndex;
 		  boolean isFrameValid=false;
 
