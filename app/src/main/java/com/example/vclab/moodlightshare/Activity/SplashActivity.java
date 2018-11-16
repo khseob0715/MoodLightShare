@@ -1,4 +1,4 @@
-package com.example.vclab.moodlightshare;
+package com.example.vclab.moodlightshare.Activity;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -7,9 +7,10 @@ import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.WindowManager;
 import android.widget.LinearLayout;
 
+import com.example.vclab.moodlightshare.BuildConfig;
+import com.example.vclab.moodlightshare.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;

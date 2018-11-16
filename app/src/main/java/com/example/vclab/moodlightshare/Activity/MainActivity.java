@@ -1,16 +1,12 @@
-package com.example.vclab.moodlightshare;
+package com.example.vclab.moodlightshare.Activity;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Handler;
-import android.os.Message;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -19,9 +15,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.vclab.moodlightshare.Bluno.BLUNOActivity;
@@ -34,6 +28,7 @@ import com.example.vclab.moodlightshare.Fragment.FragmentCustomize;
 import com.example.vclab.moodlightshare.Fragment.FragmentShare;
 import com.example.vclab.moodlightshare.Fragment.FragmentTheme;
 import com.example.vclab.moodlightshare.Fragment.FragmentUser;
+import com.example.vclab.moodlightshare.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -63,15 +58,10 @@ public class MainActivity extends AppCompatActivity {
     BLUNOActivity blunoActivity;
     BlunoLibrary blunoLibrary;
 
-
-
-
     /**
      * Local Bluetooth adapter
      */
     private BluetoothAdapter mBluetoothAdapter = null;
-
-
 
     private static final int REQUEST_CONNECT_DEVICE_SECURE = 1;
     private static final int REQUEST_CONNECT_DEVICE_INSECURE = 2;

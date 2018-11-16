@@ -6,7 +6,7 @@
     android:id="@+id/splashactivity_linearlayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SplashActivity"
+    tools:context=".Activity.SplashActivity"
     android:background="@drawable/first_background">
 
 

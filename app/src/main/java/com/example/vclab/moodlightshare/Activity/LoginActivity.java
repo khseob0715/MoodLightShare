@@ -1,4 +1,4 @@
-package com.example.vclab.moodlightshare;
+package com.example.vclab.moodlightshare.Activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.vclab.moodlightshare.R;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;

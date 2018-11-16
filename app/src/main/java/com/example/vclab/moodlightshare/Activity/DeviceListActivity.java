@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.vclab.moodlightshare;
+package com.example.vclab.moodlightshare.Activity;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
@@ -34,6 +34,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 
+import com.example.vclab.moodlightshare.R;
 
 import java.util.Set;
 
