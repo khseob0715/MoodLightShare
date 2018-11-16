@@ -1,6 +1,5 @@
 package com.example.vclab.moodlightshare.Fragment;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
@@ -12,15 +11,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
-import android.text.InputType;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
@@ -28,12 +24,8 @@ import android.widget.Toast;
 
 import com.example.vclab.moodlightshare.Dialog.ShareDialog;
 import com.example.vclab.moodlightshare.R;
-import com.example.vclab.moodlightshare.fragments.DrawFragment;
-import com.example.vclab.moodlightshare.model.Save;
 import com.example.vclab.moodlightshare.views.CanvasView;
 
-
-import com.jaredrummler.android.colorpicker.ColorPickerDialog;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.example.vclab.moodlightshare.activities;
+package com.example.vclab.moodlightshare.Activity;
 
 import android.arch.persistence.room.Room;
 import android.content.Intent;
@@ -12,16 +12,16 @@ import android.widget.Toast;
 import com.jaredrummler.android.colorpicker.ColorPickerDialogListener;
 
 import com.example.vclab.moodlightshare.R;
-import com.example.vclab.moodlightshare.fragments.DimensionDialogFragment;
-import com.example.vclab.moodlightshare.fragments.DrawFragment;
-import com.example.vclab.moodlightshare.fragments.SavesFragment;
+import com.example.vclab.moodlightshare.Fragment.DimensionDialogFragment;
+import com.example.vclab.moodlightshare.Fragment.DrawFragment;
+import com.example.vclab.moodlightshare.Fragment.SavesFragment;
 import com.example.vclab.moodlightshare.model.Save;
 import com.example.vclab.moodlightshare.persistency.*;
 import com.example.vclab.moodlightshare.views.CanvasView;
 
 // TODO: fix fragments
 
-public class MainActivity extends FragmentActivity implements DimensionDialogFragment.DimensionDialogListener, DrawFragment.DrawFragmentListener, SavesFragment.SavesFragmentListener, ColorPickerDialogListener {
+public class TemplateActivity extends FragmentActivity implements DimensionDialogFragment.DimensionDialogListener, DrawFragment.DrawFragmentListener, SavesFragment.SavesFragmentListener, ColorPickerDialogListener {
 
     private boolean dualpane = false;
     private DrawFragment drawfragment;
@@ -94,7 +94,7 @@ public class MainActivity extends FragmentActivity implements DimensionDialogFra
         // save new drawing to file on savename dialog positive click
         this.savesfragment.addSave(save);
         String message = getString(R.string.savedmessage) + (!dualpane ? "\n"+getString(R.string.longpresssavemessage) : "");
-        Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
+        Toast.makeText(TemplateActivity.this, message, Toast.LENGTH_SHORT).show();
     }
 
 

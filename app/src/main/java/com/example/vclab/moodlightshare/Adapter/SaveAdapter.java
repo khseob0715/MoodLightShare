@@ -1,4 +1,4 @@
-package com.example.vclab.moodlightshare.adapters;
+package com.example.vclab.moodlightshare.Adapter;
 
 import android.arch.persistence.room.Room;
 import android.content.Context;

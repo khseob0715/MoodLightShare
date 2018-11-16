@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:layout_gravity="center_horizontal"
     android:orientation="horizontal"
-    tools:context="com.example.vclab.moodlightshare.fragments.DrawFragment"
+    tools:context="com.example.vclab.moodlightshare.Fragment.DrawFragment"
     tools:layout_editor_absoluteX="0"
     tools:layout_editor_absoluteY="0">
 

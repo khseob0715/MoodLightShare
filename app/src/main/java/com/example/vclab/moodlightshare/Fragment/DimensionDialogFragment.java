@@ -1,4 +1,4 @@
-package com.example.vclab.moodlightshare.fragments;
+package com.example.vclab.moodlightshare.Fragment;
 
 import android.app.Dialog;
 import android.content.Context;

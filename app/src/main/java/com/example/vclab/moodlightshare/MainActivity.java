@@ -1,5 +1,6 @@
 package com.example.vclab.moodlightshare;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -7,7 +8,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -16,10 +19,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.vclab.moodlightshare.Bluno.BLUNOActivity;
 import com.example.vclab.moodlightshare.Bluno.BleCmd;
+import com.example.vclab.moodlightshare.Bluno.BluetoothLeService;
 import com.example.vclab.moodlightshare.Bluno.BlunoLibrary;
 import com.example.vclab.moodlightshare.Bluno.PlainProtocol;
 import com.example.vclab.moodlightshare.Fragment.FragmentColorPicker;
@@ -56,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
     BLUNOActivity blunoActivity;
     BlunoLibrary blunoLibrary;
 
-    private static final int REQUEST_ENABLE_BT = 3;
+
 
 
     /**
@@ -64,6 +71,13 @@ public class MainActivity extends AppCompatActivity {
      */
     private BluetoothAdapter mBluetoothAdapter = null;
 
+
+
+    private static final int REQUEST_CONNECT_DEVICE_SECURE = 1;
+    private static final int REQUEST_CONNECT_DEVICE_INSECURE = 2;
+    private static final int REQUEST_ENABLE_BT = 3;
+
+    private BluetoothLeService mChatService = null;
 
     //bluno instance
 
@@ -345,19 +359,76 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.secure_connect_scan) {
-            //startActivity(new Intent(this, SettingsActivity.class));
 
-            //blunoLibrary.mScanDeviceDialog.show();
-            AlertDialog mUserListDialog;
-            final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Select User");
-            mUserListDialog = builder.create();
-            mUserListDialog.show();
+            Intent serverIntent = new Intent(getApplicationContext(), DeviceListActivity.class);
+            startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE_SECURE);
+
+//            AlertDialog mUserListDialog;
+//            final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//            builder.setTitle("Select User");
+//            mUserListDialog = builder.create();
+//            mUserListDialog.show();
 
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case REQUEST_CONNECT_DEVICE_SECURE:
+                // When DeviceListActivity returns with a device to connect
+                if (resultCode == Activity.RESULT_OK) {
+                    Log.e("ssss","xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+                    connectDevice(data, true);
+                }
+                break;
+            case REQUEST_CONNECT_DEVICE_INSECURE:
+                // When DeviceListActivity returns with a device to connect
+                if (resultCode == Activity.RESULT_OK) {
+                    connectDevice(data, false);
+                }
+                break;
+            case REQUEST_ENABLE_BT:
+                // When the request to enable Bluetooth returns
+                if (resultCode == Activity.RESULT_OK) {
+                    // Bluetooth is now enabled, so set up a chat session
+                     setupChat();
+                } else {
+                    // User did not enable Bluetooth or an error occurred
+                    Toast.makeText(getApplicationContext(), R.string.bt_not_enabled_leaving,
+                            Toast.LENGTH_SHORT).show();
+                    this.finish();
+                }
+        }
+    }
+
+    private void connectDevice(Intent data, boolean secure) {
+        // Get the device MAC address
+        String address = data.getExtras().getString(DeviceListActivity.EXTRA_DEVICE_ADDRESS);
+        // Get the BluetoothDevice object
+        BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
+        // Attempt to connect to the device
+        //mChatService.connect(device, secure);
+
+        setupChat();
+        mChatService.connect(address);
+    }
+
+
+
+    private void setupChat() {
+
+        // Initialize the send button with a listener that for click events
+        // 보낼 것 모으고
+
+        // Initialize the BluetoothChatService to perform bluetooth connections
+        // 보내기.
+        mChatService = new BluetoothLeService();
+
+        // Initialize the buffer for outgoing messages
+        // 보낸거 비우고
     }
 
 }

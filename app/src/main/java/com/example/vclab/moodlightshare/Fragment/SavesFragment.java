@@ -1,4 +1,4 @@
-package com.example.vclab.moodlightshare.fragments;
+package com.example.vclab.moodlightshare.Fragment;
 
 import android.arch.persistence.room.Room;
 import android.content.Context;
@@ -13,7 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.vclab.moodlightshare.R;
-import com.example.vclab.moodlightshare.adapters.SaveAdapter;
+import com.example.vclab.moodlightshare.Adapter.SaveAdapter;
 import com.example.vclab.moodlightshare.model.Save;
 import com.example.vclab.moodlightshare.persistency.*;
 
