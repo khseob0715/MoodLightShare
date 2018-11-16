@@ -13,10 +13,12 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
+<!--android:theme="@android:style/Theme.Holo.Dialog"-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="wrap_content">
+
     <TextView android:id="@+id/device_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -24,7 +24,7 @@ import java.util.List;
 
 public class BLUNOActivity extends BlunoLibrary {
 
-	public final static String TAG = DeviceControlActivity.class.getSimpleName();
+	public final static String TAG = "BLUNOActivity";
 
 	private connectionStateEnum mConnectionState = connectionStateEnum.isNull;
 	private PlainProtocol mPlainProtocol = new PlainProtocol();
@@ -147,6 +147,7 @@ public class BLUNOActivity extends BlunoLibrary {
 		//set the Baudrate of the Serial port
 		serialBegin(115200);
 
+		Log.e(TAG,"onCreate");
 		onCreateProcess();
 	}
 

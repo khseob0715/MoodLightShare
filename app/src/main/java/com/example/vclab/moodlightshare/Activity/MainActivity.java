@@ -1,14 +1,21 @@
 package com.example.vclab.moodlightshare.Activity;
 
+import android.Manifest;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -38,9 +45,15 @@ import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BlunoLibrary{
 
+    private static final String TAG = "MainActivity";
+    private static final int REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS = 1001;
     ImageView mainButton, themeButton, customizeButton, shareButton, userButton;
 
     FragmentManager fragmentManager;
@@ -58,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
     BLUNOActivity blunoActivity;
     BlunoLibrary blunoLibrary;
 
+    private boolean log_print = true;
     /**
      * Local Bluetooth adapter
      */
@@ -80,6 +94,9 @@ public class MainActivity extends AppCompatActivity {
     public static final int KnobMode = 2;
     private byte Modestates = LEDMode;
 
+
+    public int color_r, color_b, color_g;
+
     private static Handler receivedHandler = new Handler();
     private Runnable PotentiometerRunnable = new Runnable() {
         @Override
@@ -87,7 +104,9 @@ public class MainActivity extends AppCompatActivity {
             if (Modestates == KnobMode) {
 
                 blunoLibrary.serialSend(mPlainProtocol.write(BleCmd.Knob));
-                System.out.println("update BleCmdReadPotentiometer");
+                if(log_print) {
+                    System.out.println("update BleCmdReadPotentiometer");
+                }
             }
             receivedHandler.postDelayed(PotentiometerRunnable, 50);
         }
@@ -119,6 +138,7 @@ public class MainActivity extends AppCompatActivity {
     };
 
 
+
     @Override
     public void onStart() {
         super.onStart();
@@ -127,7 +147,6 @@ public class MainActivity extends AppCompatActivity {
         if (!mBluetoothAdapter.isEnabled()) {
             Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
-
         }
     }
 
@@ -136,66 +155,18 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_frame_activity);
 
+        if (Build.VERSION.SDK_INT >= 23) {
+            // Marshmallow+ Permission APIs
+            fuckMarshMallow();
+        }
+
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
-        blunoActivity = new BLUNOActivity();
-        blunoLibrary = new BlunoLibrary() {
-            @Override
-            public void onConectionStateChange(connectionStateEnum theconnectionStateEnum) {
-                mConnectionState = theconnectionStateEnum;
-                switch (mConnectionState) {
-                    case isScanning:
-                        break;
-                    case isConnected:
-                        switch (Modestates) {
-                            case LEDMode:
-                                receivedHandler.post(colorRunnable);
-                                break;
-                            case RockerMode:
-                                break;
-                            case KnobMode:
-                                receivedHandler.post(PotentiometerRunnable);
-                                break;
-                            default:
-                                break;
-                        }
-                        break;
-                    case isConnecting:
-                        break;
-                    case isToScan:
-                        receivedHandler.removeCallbacks(colorRunnable);
-                        receivedHandler.removeCallbacks(PotentiometerRunnable);
-                        break;
-                    default:
-                        break;
-                }
-            }
+        serialBegin(115200);
 
-            @Override
-            public void onSerialReceived(String theString) {
-                System.out.println("displayData " + theString);
-
-                mPlainProtocol.mReceivedframe.append(theString);
-                System.out.print("mPlainProtocol.mReceivedframe:");
-                System.out.println(mPlainProtocol.mReceivedframe.toString());
-
-                while (mPlainProtocol.available()) {
-                    System.out.print("receivedCommand:");
-                    System.out.println(mPlainProtocol.receivedCommand);
-
-                    if (mPlainProtocol.receivedCommand.equals(BleCmd.Rocker)) {
-                        if (Modestates == RockerMode) {
-                            System.out.println("received Rocker");
-                        }
-                    } else if (mPlainProtocol.receivedCommand.equals(BleCmd.Knob)) {
-                        System.out.println("received Knob");
-                        float pgPos = mPlainProtocol.receivedContent[0] / 3.75f;//Adjust display value to the angle
-                    }
-                }
-            }
+        onCreateProcess();
 
 
-        };
 
         // fragment를 불러오는 소스코드.
         fragmentManager = getSupportFragmentManager();
@@ -250,8 +221,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-
         UserUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         File localFile = null;
@@ -283,6 +252,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+
+    public void colorChange(){
+        Log.e("Tag","sdadasa");
+        serialSend(mPlainProtocol.write(BleCmd.RGBLed,color_r,color_g,color_b));
+    }
+
 
     private void Button_Image_Change(int current_Fragment_Index, int select_Fragment_Index){
         switch (current_Fragment_Index){
@@ -321,8 +297,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
-
     private void Fragment_Change(Fragment changeFragment){
         fragmentTransaction = fragmentManager.beginTransaction();
 
@@ -335,7 +309,6 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.replace(R.id.content, changeFragment);
         fragmentTransaction.commit();
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -350,8 +323,10 @@ public class MainActivity extends AppCompatActivity {
 
         if (id == R.id.secure_connect_scan) {
 
-            Intent serverIntent = new Intent(getApplicationContext(), DeviceListActivity.class);
-            startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE_SECURE);
+            buttonScanOnClickProcess();
+
+//            Intent serverIntent = new Intent(getApplicationContext(), DeviceListActivity.class);
+//            startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE_SECURE);
 
 //            AlertDialog mUserListDialog;
 //            final AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -370,7 +345,9 @@ public class MainActivity extends AppCompatActivity {
             case REQUEST_CONNECT_DEVICE_SECURE:
                 // When DeviceListActivity returns with a device to connect
                 if (resultCode == Activity.RESULT_OK) {
-                    Log.e("ssss","xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+                    if(log_print) {
+                        Log.e(TAG, "onActivityResult resultCode Activity Result_OK");
+                    }
                     connectDevice(data, true);
                 }
                 break;
@@ -397,10 +374,18 @@ public class MainActivity extends AppCompatActivity {
     private void connectDevice(Intent data, boolean secure) {
         // Get the device MAC address
         String address = data.getExtras().getString(DeviceListActivity.EXTRA_DEVICE_ADDRESS);
+        if(log_print) {
+            Log.w(TAG, "connectDevice " + this.getComponentName() + address);
+        }
         // Get the BluetoothDevice object
         BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
         // Attempt to connect to the device
         //mChatService.connect(device, secure);
+        if(mBluetoothAdapter == null){
+            if(log_print) {
+                Log.e(TAG, "mBluetoothAdapter null");
+            }
+        }
 
         setupChat();
         mChatService.connect(address);
@@ -409,9 +394,9 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void setupChat() {
-
         // Initialize the send button with a listener that for click events
         // 보낼 것 모으고
+
 
         // Initialize the BluetoothChatService to perform bluetooth connections
         // 보내기.
@@ -419,6 +404,163 @@ public class MainActivity extends AppCompatActivity {
 
         // Initialize the buffer for outgoing messages
         // 보낸거 비우고
+    }
+
+    @Override
+    public void onConectionStateChange(connectionStateEnum theConnectionState) {
+
+        mConnectionState=theConnectionState;
+        switch (mConnectionState) {
+            case isScanning:
+                break;
+            case isConnected:
+                switch (Modestates) {
+                    case LEDMode:
+                        receivedHandler.post(colorRunnable);
+                        break;
+                    case RockerMode:
+                        break;
+                    case KnobMode:
+                        receivedHandler.post(PotentiometerRunnable);
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            case isConnecting:
+                break;
+            case isToScan:
+                receivedHandler.removeCallbacks(colorRunnable);
+                receivedHandler.removeCallbacks(PotentiometerRunnable);
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void onSerialReceived(String theString) {
+        System.out.println("displayData "+theString);
+
+        mPlainProtocol.mReceivedframe.append(theString) ;
+        System.out.print("mPlainProtocol.mReceivedframe:");
+        System.out.println(mPlainProtocol.mReceivedframe.toString());
+
+        while(mPlainProtocol.available())
+        {
+            System.out.print("receivedCommand:");
+            System.out.println(mPlainProtocol.receivedCommand);
+
+            if(mPlainProtocol.receivedCommand.equals(BleCmd.Rocker))
+            {
+                if(Modestates == RockerMode)
+                {
+                    System.out.println("received Rocker");
+
+                    Log.e(getLocalClassName(), "Unkown joystick state: " + mPlainProtocol.receivedContent[0]);
+                }
+            }
+            else if(mPlainProtocol.receivedCommand.equals(BleCmd.Knob)){
+                System.out.println("received Knob");
+                float pgPos = mPlainProtocol.receivedContent[0] / 3.75f;//Adjust display value to the angle
+
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS: {
+                Map<String, Integer> perms = new HashMap<String, Integer>();
+                // Initial
+                perms.put(Manifest.permission.ACCESS_FINE_LOCATION, PackageManager.PERMISSION_GRANTED);
+
+
+                // Fill with results
+                for (int i = 0; i < permissions.length; i++)
+                    perms.put(permissions[i], grantResults[i]);
+
+                // Check for ACCESS_FINE_LOCATION
+                if (perms.get(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+
+                        ) {
+                    // All Permissions Granted
+
+                    // Permission Denied
+                    Toast.makeText(this, "All Permission GRANTED !! Thank You :)", Toast.LENGTH_SHORT)
+                            .show();
+
+
+                } else {
+                    // Permission Denied
+                    Toast.makeText(this, "One or More Permissions are DENIED Exiting App :(", Toast.LENGTH_SHORT)
+                            .show();
+
+                    finish();
+                }
+            }
+            break;
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
+
+
+    @TargetApi(Build.VERSION_CODES.M)
+    private void fuckMarshMallow() {
+        List<String> permissionsNeeded = new ArrayList<String>();
+
+        final List<String> permissionsList = new ArrayList<String>();
+        if (!addPermission(permissionsList, Manifest.permission.ACCESS_FINE_LOCATION))
+            permissionsNeeded.add("Show Location");
+
+        if (permissionsList.size() > 0) {
+            if (permissionsNeeded.size() > 0) {
+
+                // Need Rationale
+                String message = "App need access to " + permissionsNeeded.get(0);
+
+                for (int i = 1; i < permissionsNeeded.size(); i++)
+                    message = message + ", " + permissionsNeeded.get(i);
+
+                showMessageOKCancel(message,
+                        new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                requestPermissions(permissionsList.toArray(new String[permissionsList.size()]),
+                                        REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS);
+                            }
+                        });
+                return;
+            }
+            requestPermissions(permissionsList.toArray(new String[permissionsList.size()]),
+                    REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS);
+            return;
+        }
+
+    }
+
+    private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
+        new AlertDialog.Builder(this)
+                .setMessage(message)
+                .setPositiveButton("OK", okListener)
+                .setNegativeButton("Cancel", null)
+                .create()
+                .show();
+    }
+
+    @TargetApi(Build.VERSION_CODES.M)
+    private boolean addPermission(List<String> permissionsList, String permission) {
+
+        if (checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) {
+            permissionsList.add(permission);
+            // Check for Rationale Option
+            if (!shouldShowRequestPermissionRationale(permission))
+                return false;
+        }
+        return true;
     }
 
 }

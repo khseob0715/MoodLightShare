@@ -20,10 +20,13 @@ import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -34,6 +37,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 
+import com.example.vclab.moodlightshare.Bluno.BluetoothLeService;
 import com.example.vclab.moodlightshare.R;
 
 import java.util.Set;
@@ -65,6 +69,32 @@ public class DeviceListActivity extends Activity {
      * Newly discovered devices
      */
     private ArrayAdapter<String> mNewDevicesArrayAdapter;
+
+    // bluno
+    private BluetoothLeService mBluetoothLeService;
+    private String mDeviceAddress;
+
+    // Code to manage Service lifecycle.
+    private final ServiceConnection mServiceConnection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder service) {
+            System.out.println("mServiceConnection onServiceConnected");
+            mBluetoothLeService = ((BluetoothLeService.LocalBinder) service).getService();
+            if (!mBluetoothLeService.initialize()) {
+                Log.e(TAG, "Unable to initialize Bluetooth");
+                finish();
+            }
+            // Automatically connects to the device upon successful start-up initialization.
+            mBluetoothLeService.connect(mDeviceAddress);
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+            System.out.println("mServiceConnection onServiceDisconnected");
+            mBluetoothLeService = null;
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,6 +156,9 @@ public class DeviceListActivity extends Activity {
             String noDevices = getResources().getText(R.string.none_paired).toString();
             pairedDevicesArrayAdapter.add(noDevices);
         }
+
+//        Intent gattServiceIntent = new Intent(this, BluetoothLeService.class);
+//        bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
     }
 
     @Override

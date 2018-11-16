@@ -302,7 +302,7 @@ public class BluetoothLeService extends Service {
     }
 
     public class LocalBinder extends Binder {
-        BluetoothLeService getService() {
+        public BluetoothLeService getService() {
             return BluetoothLeService.this;
         }
     }
@@ -361,10 +361,13 @@ public class BluetoothLeService extends Service {
      */
     public boolean connect(final String address) {
     	System.out.println("BluetoothLeService connect"+address+mBluetoothGatt);
-        Log.e("ssss","xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+        Log.e(TAG,"BluetoothLeService connect call");
 
         if (mBluetoothAdapter == null || address == null) {
             Log.w(TAG, "BluetoothAdapter not initialized or unspecified address.");
+            if(mBluetoothAdapter == null){
+                Log.e(TAG, "mBluetoothAdapter is null");
+            }
             return false;
         }
 

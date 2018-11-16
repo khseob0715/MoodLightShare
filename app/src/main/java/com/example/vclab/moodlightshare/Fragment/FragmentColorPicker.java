@@ -12,6 +12,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.vclab.moodlightshare.Activity.MainActivity;
+import com.example.vclab.moodlightshare.Bluno.BleCmd;
+import com.example.vclab.moodlightshare.Bluno.BlunoLibrary;
 import com.example.vclab.moodlightshare.R;
 
 /**
@@ -39,10 +42,12 @@ public class FragmentColorPicker extends Fragment {
     public ImageView selectedImage,color_display;
     public String rgbcolor,hexcolor;
 
+    MainActivity mainActivity = new MainActivity();
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // setContentView(R.layout.fragment_color_picker);
+
     }
 
 
@@ -72,8 +77,15 @@ public class FragmentColorPicker extends Fragment {
                     int r = (touchColor >> 16) & 0xFF;
                     int g = (touchColor >> 8) & 0xFF;
                     int b = (touchColor >> 0) & 0xFF;
+
                     rgbcolor = String.valueOf(r) + "," + String.valueOf(g) + "," + String.valueOf(b);
                     rgbValue.setText("RGB:     " + rgbcolor);
+
+                    mainActivity.color_r = r;
+                    mainActivity.color_g = g;
+                    mainActivity.color_b = b;
+
+                    mainActivity.colorChange();
 
                     //hex값 받아오기
                     hexcolor = Integer.toHexString(touchColor);
