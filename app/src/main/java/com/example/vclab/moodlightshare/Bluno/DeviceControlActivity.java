@@ -168,7 +168,9 @@ public class DeviceControlActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.gatt_services_characteristics);
-        System.out.println("DeviceControlActivity onCreate");
+
+//        System.out.println("DeviceControlActivity onCreate");
+
         final Intent intent = getIntent();
         mDeviceName = intent.getStringExtra(EXTRAS_DEVICE_NAME);
         mDeviceAddress = intent.getStringExtra(EXTRAS_DEVICE_ADDRESS);
@@ -182,6 +184,7 @@ public class DeviceControlActivity extends Activity {
 
 //        getActionBar().setTitle(mDeviceName);
 //        getActionBar().setDisplayHomeAsUpEnabled(true);
+
         Intent gattServiceIntent = new Intent(this, BluetoothLeService.class);
         bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
     }
@@ -191,6 +194,7 @@ public class DeviceControlActivity extends Activity {
         super.onResume();
         System.out.println("DeviceControlActivity onResume");
         registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
+
         if (mBluetoothLeService != null) {
             final boolean result = mBluetoothLeService.connect(mDeviceAddress);
             Log.d(TAG, "Connect request result=" + result);
@@ -210,34 +214,6 @@ public class DeviceControlActivity extends Activity {
         mBluetoothLeService = null;
     }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.gatt_services, menu);
-//        if (mConnected) {
-//            menu.findItem(R.id.menu_connect).setVisible(false);
-//            menu.findItem(R.id.menu_disconnect).setVisible(true);
-//        } else {
-//            menu.findItem(R.id.menu_connect).setVisible(true);
-//            menu.findItem(R.id.menu_disconnect).setVisible(false);
-//        }
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        switch(item.getItemId()) {
-//            case R.id.menu_connect:
-//                mBluetoothLeService.connect(mDeviceAddress);
-//                return true;
-//            case R.id.menu_disconnect:
-//                mBluetoothLeService.disconnect();
-//                return true;
-//            case android.R.id.home:
-//                onBackPressed();
-//                return true;
-//        }
-//        return super.onOptionsItemSelected(item);
-//    }
 
     private void updateConnectionState(final int resourceId) {
         runOnUiThread(new Runnable() {

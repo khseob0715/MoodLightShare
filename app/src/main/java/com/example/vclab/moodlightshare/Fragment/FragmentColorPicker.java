@@ -59,12 +59,10 @@ public class FragmentColorPicker extends Fragment {
 
     private TextView textView;
     private AlphaTileView alphaTileView;
-    MainActivity mainActivity = new MainActivity();
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // setContentView(R.layout.fragment_color_picker);
-
     }
 
 
@@ -73,56 +71,6 @@ public class FragmentColorPicker extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_color_picker,null);
-
-//
-//        hexValue=view.findViewById(R.id.hexcolor);
-//        rgbValue=view.findViewById(R.id.rgbcolor);
-//        color_display=view.findViewById(R.id.color_display);
-//        selectedImage=view.findViewById(R.id.seleted_img);
-//
-//        selectedImage.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//
-//                try {
-//                    final int action = event.getAction();
-//                    final int evX = (int) event.getX();
-//                    final int evY = (int) event.getY();
-//                    //색받아오기
-//                    int touchColor = getColor(selectedImage, evX, evY);
-//                    //r,g,b 값 받아오기
-//                    int r = (touchColor >> 16) & 0xFF;
-//                    int g = (touchColor >> 8) & 0xFF;
-//                    int b = (touchColor >> 0) & 0xFF;
-//
-//                    rgbcolor = String.valueOf(r) + "," + String.valueOf(g) + "," + String.valueOf(b);
-//                    rgbValue.setText("RGB:     " + rgbcolor);
-//
-//                    mainActivity.color_r = r;
-//                    mainActivity.color_g = g;
-//                    mainActivity.color_b = b;
-//
-//                    mainActivity.colorChange();
-//
-//                    //hex값 받아오기
-//                    hexcolor = Integer.toHexString(touchColor);
-//                    if (hexcolor.length() > 2) {
-//                        hexcolor = hexcolor.substring(2, hexcolor.length()); //alfa제거
-//                    }
-//                    if (action == event.ACTION_UP) {
-//                        //터치이벤트 설정
-//                        color_display.setBackgroundColor(touchColor);
-//                        Log.e("Draw","colorpicker" + touchColor +" " +  color_display.getDrawingCacheBackgroundColor());
-//
-//                        hexValue.setText("HEX:   " + hexcolor);
-//                    }
-//
-//                }catch(Exception e) {
-//
-//                }
-//                return true;
-//            }
-//        });
 
         textView = view.findViewById(R.id.textView);
         alphaTileView = view.findViewById(R.id.alphaTileView);
@@ -134,16 +82,18 @@ public class FragmentColorPicker extends Fragment {
             public void onColorSelected(ColorEnvelope envelope, boolean fromUser) {
                 setLayoutColor(envelope);
 
-
-
                 int[] argb = envelope.getArgb();
 
-                mainActivity.color_r = argb[1];
-                mainActivity.color_g = argb[2];
-                mainActivity.color_b = argb[3];
+//                mainActivity.color_r = argb[1];
+//                mainActivity.color_g = argb[2];
+//                mainActivity.color_b = argb[3];
 
                // Toast.makeText(getContext(), ""+argb[0] + " " + argb[1] +" " + argb[2] +" " + argb[3] ,Toast.LENGTH_SHORT).show();
-                mainActivity.colorChange();
+//                mainActivity.colorChange();
+                    MainActivity.color_r =argb[1];
+                MainActivity.color_g =argb[2];
+                MainActivity.color_b =argb[3];
+                MainActivity.colorChange();
             }
         });
 

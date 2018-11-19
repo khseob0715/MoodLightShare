@@ -2,10 +2,7 @@ package com.example.vclab.moodlightshare.Activity;
 
 import android.Manifest;
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -16,7 +13,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -25,7 +21,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.example.vclab.moodlightshare.Bluno.BLUNOActivity;
+
 import com.example.vclab.moodlightshare.Bluno.BleCmd;
 import com.example.vclab.moodlightshare.Bluno.BluetoothLeService;
 import com.example.vclab.moodlightshare.Bluno.BlunoLibrary;
@@ -64,12 +60,8 @@ public class MainActivity extends BlunoLibrary{
 
 
     public static Uri profileUri;
-    StorageReference mStoragedRef;
 
     String UserUid;
-
-    BLUNOActivity blunoActivity;
-    BlunoLibrary blunoLibrary;
 
     private boolean log_print = true;
     /**
@@ -85,7 +77,7 @@ public class MainActivity extends BlunoLibrary{
 
     //bluno instance
 
-    private boolean isColorChange = false;
+    public static boolean isColorChange = true;
 
     private PlainProtocol mPlainProtocol = new PlainProtocol();
 
@@ -95,22 +87,10 @@ public class MainActivity extends BlunoLibrary{
     private byte Modestates = LEDMode;
 
 
-    public int color_r, color_b, color_g;
+    public static int color_r = 255, color_b = 255, color_g = 255;
 
     private static Handler receivedHandler = new Handler();
-    private Runnable PotentiometerRunnable = new Runnable() {
-        @Override
-        public void run() {
-            if (Modestates == KnobMode) {
 
-                blunoLibrary.serialSend(mPlainProtocol.write(BleCmd.Knob));
-                if(log_print) {
-                    System.out.println("update BleCmdReadPotentiometer");
-                }
-            }
-            receivedHandler.postDelayed(PotentiometerRunnable, 50);
-        }
-    };
 
 
     private boolean isLastSwitchOn = false;
@@ -118,22 +98,29 @@ public class MainActivity extends BlunoLibrary{
 
         @Override
         public void run() {
+
             if (Modestates == LEDMode) {
+                //Log.e("colorRunnable", "Modestates == Led Mode");
                 if (true) {
+                  //  Log.e("colorRunnable", "is true");
                     if (isColorChange || (isLastSwitchOn == false)) {
-                        blunoLibrary.serialSend(mPlainProtocol.write(BleCmd.RGBLed,0,255,0));
+                        Log.e("colorRunnable", "isColorChange = true || isLastSwitchOn = false");
+                        serialSend(mPlainProtocol.write(BleCmd.RGBLed,color_r,color_g,color_b));
                     }
                     isColorChange = false;
                     isLastSwitchOn = true;
+
                 } else {
                     if (isLastSwitchOn) {
-                        blunoLibrary.serialSend(mPlainProtocol.write(BleCmd.RGBLed, 0, 0, 0));
+                        Log.e("colorRunnable", "isLastSwitchOn is true");
+                        serialSend(mPlainProtocol.write(BleCmd.RGBLed, 0, 0, 0));
                     }
                     isLastSwitchOn = false;
                 }
             }
-//			System.out.println("update color");
+
             receivedHandler.postDelayed(colorRunnable, 50);
+            //Log.e("colorRunnable", "postdelay");
         }
     };
 
@@ -157,7 +144,7 @@ public class MainActivity extends BlunoLibrary{
 
         if (Build.VERSION.SDK_INT >= 23) {
             // Marshmallow+ Permission APIs
-            fuckMarshMallow();
+            MarshMallow();
         }
 
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -165,8 +152,6 @@ public class MainActivity extends BlunoLibrary{
         serialBegin(115200);
 
         onCreateProcess();
-
-
 
         // fragment를 불러오는 소스코드.
         fragmentManager = getSupportFragmentManager();
@@ -240,7 +225,7 @@ public class MainActivity extends BlunoLibrary{
                         profileUri = url;
                         break;
                     }else{
-                        Log.e("Tag","ssss");
+                        Log.e("MainActivity","have not data");
                     }
                     profileUri = Uri.parse("https://firebasestorage.googleapis.com/v0/b/moodlightshare.appspot.com/o/images%2Ficon01non.png?alt=media&token=db74f55c-ef39-482f-84c0-63cb8ef81496");
                 }
@@ -254,9 +239,15 @@ public class MainActivity extends BlunoLibrary{
     }
 
 
-    public void colorChange(){
-        Log.e("Tag","sdadasa");
-        serialSend(mPlainProtocol.write(BleCmd.RGBLed,color_r,color_g,color_b));
+    public static void colorChange(){
+//        Log.e("ColorChange","colorChange");
+//
+//        Log.e("Tlqkf", mConnectionState.toString());
+        isColorChange = true;
+
+//        receivedHandler.post(colorRunnable);
+//        receivedHandler.removeCallbacks(PotentiometerRunnable);
+        //serialSend(mPlainProtocol.write(BleCmd.RGBLed,color_r,color_g,color_b));
     }
 
 
@@ -325,91 +316,83 @@ public class MainActivity extends BlunoLibrary{
 
             buttonScanOnClickProcess();
 
-//            Intent serverIntent = new Intent(getApplicationContext(), DeviceListActivity.class);
-//            startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE_SECURE);
-
-//            AlertDialog mUserListDialog;
-//            final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//            builder.setTitle("Select User");
-//            mUserListDialog = builder.create();
-//            mUserListDialog.show();
-
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case REQUEST_CONNECT_DEVICE_SECURE:
-                // When DeviceListActivity returns with a device to connect
-                if (resultCode == Activity.RESULT_OK) {
-                    if(log_print) {
-                        Log.e(TAG, "onActivityResult resultCode Activity Result_OK");
-                    }
-                    connectDevice(data, true);
-                }
-                break;
-            case REQUEST_CONNECT_DEVICE_INSECURE:
-                // When DeviceListActivity returns with a device to connect
-                if (resultCode == Activity.RESULT_OK) {
-                    connectDevice(data, false);
-                }
-                break;
-            case REQUEST_ENABLE_BT:
-                // When the request to enable Bluetooth returns
-                if (resultCode == Activity.RESULT_OK) {
-                    // Bluetooth is now enabled, so set up a chat session
-                     setupChat();
-                } else {
-                    // User did not enable Bluetooth or an error occurred
-                    Toast.makeText(getApplicationContext(), R.string.bt_not_enabled_leaving,
-                            Toast.LENGTH_SHORT).show();
-                    this.finish();
-                }
-        }
-    }
-
-    private void connectDevice(Intent data, boolean secure) {
-        // Get the device MAC address
-        String address = data.getExtras().getString(DeviceListActivity.EXTRA_DEVICE_ADDRESS);
-        if(log_print) {
-            Log.w(TAG, "connectDevice " + this.getComponentName() + address);
-        }
-        // Get the BluetoothDevice object
-        BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
-        // Attempt to connect to the device
-        //mChatService.connect(device, secure);
-        if(mBluetoothAdapter == null){
-            if(log_print) {
-                Log.e(TAG, "mBluetoothAdapter null");
-            }
-        }
-
-        setupChat();
-        mChatService.connect(address);
-    }
-
-
-
-    private void setupChat() {
-        // Initialize the send button with a listener that for click events
-        // 보낼 것 모으고
-
-
-        // Initialize the BluetoothChatService to perform bluetooth connections
-        // 보내기.
-        mChatService = new BluetoothLeService();
-
-        // Initialize the buffer for outgoing messages
-        // 보낸거 비우고
-    }
+//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        switch (requestCode) {
+//            case REQUEST_CONNECT_DEVICE_SECURE:
+//                // When DeviceListActivity returns with a device to connect
+//                if (resultCode == Activity.RESULT_OK) {
+//                    if(log_print) {
+//                        Log.e(TAG, "onActivityResult resultCode Activity Result_OK");
+//                    }
+//                    connectDevice(data, true);
+//                }
+//                break;
+//            case REQUEST_CONNECT_DEVICE_INSECURE:
+//                // When DeviceListActivity returns with a device to connect
+//                if (resultCode == Activity.RESULT_OK) {
+//                    connectDevice(data, false);
+//                }
+//                break;
+//            case REQUEST_ENABLE_BT:
+//                // When the request to enable Bluetooth returns
+//                if (resultCode == Activity.RESULT_OK) {
+//                    // Bluetooth is now enabled, so set up a chat session
+//                     setupChat();
+//                } else {
+//                    // User did not enable Bluetooth or an error occurred
+//                    Toast.makeText(getApplicationContext(), R.string.bt_not_enabled_leaving,
+//                            Toast.LENGTH_SHORT).show();
+//                    this.finish();
+//                }
+//        }
+//    }
+//
+//    private void connectDevice(Intent data, boolean secure) {
+//        // Get the device MAC address
+//        String address = data.getExtras().getString(DeviceListActivity.EXTRA_DEVICE_ADDRESS);
+//        if(log_print) {
+//            Log.w(TAG, "connectDevice " + this.getComponentName() + address);
+//        }
+//        // Get the BluetoothDevice object
+//        BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
+//        // Attempt to connect to the device
+//        //mChatService.connect(device, secure);
+//        if(mBluetoothAdapter == null){
+//            if(log_print) {
+//                Log.e(TAG, "mBluetoothAdapter null");
+//            }
+//        }
+//
+//        setupChat();
+//        mChatService.connect(address);
+//    }
+//
+//
+//
+//    private void setupChat() {
+//        // Initialize the send button with a listener that for click events
+//        // 보낼 것 모으고
+//
+//
+//        // Initialize the BluetoothChatService to perform bluetooth connections
+//        // 보내기.
+//        mChatService = new BluetoothLeService();
+//
+//        // Initialize the buffer for outgoing messages
+//        // 보낸거 비우고
+//    }
 
     @Override
     public void onConectionStateChange(connectionStateEnum theConnectionState) {
 
         mConnectionState=theConnectionState;
+
         switch (mConnectionState) {
             case isScanning:
                 break;
@@ -419,19 +402,25 @@ public class MainActivity extends BlunoLibrary{
                         receivedHandler.post(colorRunnable);
                         break;
                     case RockerMode:
+
                         break;
                     case KnobMode:
-                        receivedHandler.post(PotentiometerRunnable);
                         break;
                     default:
                         break;
                 }
                 break;
             case isConnecting:
+                Toast.makeText(this, "isconnecting", Toast.LENGTH_SHORT).show();
                 break;
             case isToScan:
-                receivedHandler.removeCallbacks(colorRunnable);
-                receivedHandler.removeCallbacks(PotentiometerRunnable);
+           //     receivedHandler.removeCallbacks(colorRunnable);
+
+                Log.e("Tlqkf","adssdasdsssssssssssssssssss");
+
+                Log.e("Tlqkf", mConnectionState.toString());
+
+                Toast.makeText(this, "isToScan", Toast.LENGTH_SHORT).show();
                 break;
             default:
                 break;
@@ -508,7 +497,7 @@ public class MainActivity extends BlunoLibrary{
 
 
     @TargetApi(Build.VERSION_CODES.M)
-    private void fuckMarshMallow() {
+    private void MarshMallow() {
         List<String> permissionsNeeded = new ArrayList<String>();
 
         final List<String> permissionsList = new ArrayList<String>();
@@ -562,5 +551,40 @@ public class MainActivity extends BlunoLibrary{
         }
         return true;
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // User chose not to enable Bluetooth.
+        onActivityResultProcess(requestCode, resultCode, data);
+
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        System.out.println("BLUNOActivity onPause");
+        receivedHandler.removeCallbacks(colorRunnable);
+        onPauseProcess();
+    }
+
+    protected void onStop() {
+        super.onStop();
+        onStopProcess();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        onDestroyProcess();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        System.out.println("BlUNOActivity onResume");
+        onResumeProcess();
+    }
+
 
 }
