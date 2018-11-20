@@ -26,6 +26,8 @@ import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener;
 import com.skydoves.colorpickerview.sliders.AlphaSlideBar;
 import com.skydoves.colorpickerview.sliders.BrightnessSlideBar;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 /**
  * Skeleton of an Android Things activity.
  * <p>
@@ -60,6 +62,7 @@ public class FragmentColorPicker extends Fragment {
     private TextView textView;
     private AlphaTileView alphaTileView;
 
+    private CircleImageView CircleImageView_Button01;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,6 +74,24 @@ public class FragmentColorPicker extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_color_picker,null);
+
+        CircleImageView_Button01 = (CircleImageView)view.findViewById(R.id.circlebutton);
+        CircleImageView_Button01.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                // OnOff;
+               MainActivity.isLastSwitchOn = !MainActivity.isLastSwitchOn;
+               Toast.makeText(getContext(),"click " + MainActivity.isLastSwitchOn, Toast.LENGTH_SHORT).show();
+
+               if(MainActivity.isLastSwitchOn){
+                   CircleImageView_Button01.setImageResource(R.drawable.bulb);
+               }else{
+                   CircleImageView_Button01.setImageResource(R.drawable.bulb_black);
+               }
+
+            }
+        });
 
         textView = view.findViewById(R.id.textView);
         alphaTileView = view.findViewById(R.id.alphaTileView);
@@ -84,13 +105,7 @@ public class FragmentColorPicker extends Fragment {
 
                 int[] argb = envelope.getArgb();
 
-//                mainActivity.color_r = argb[1];
-//                mainActivity.color_g = argb[2];
-//                mainActivity.color_b = argb[3];
-
-               // Toast.makeText(getContext(), ""+argb[0] + " " + argb[1] +" " + argb[2] +" " + argb[3] ,Toast.LENGTH_SHORT).show();
-//                mainActivity.colorChange();
-                    MainActivity.color_r =argb[1];
+                MainActivity.color_r =argb[1];
                 MainActivity.color_g =argb[2];
                 MainActivity.color_b =argb[3];
                 MainActivity.colorChange();

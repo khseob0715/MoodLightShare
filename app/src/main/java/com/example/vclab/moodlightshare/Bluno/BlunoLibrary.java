@@ -42,7 +42,7 @@ public abstract class BlunoLibrary extends AppCompatActivity {
 	public abstract void onSerialReceived(String theString);
 
 	public void serialSend(String theString){
-       // Log.e(TAG,mConnectionState.toString());
+        Log.e(TAG, mConnectionState.toString());
 
 		if (mConnectionState == connectionStateEnum.isConnected) {
 			mSCharacteristic.setValue(theString);
@@ -104,8 +104,7 @@ public abstract class BlunoLibrary extends AppCompatActivity {
 		@Override
 		public void run() {
         	if(mConnectionState== connectionStateEnum.isConnecting)
-			mConnectionState= connectionStateEnum.isToScan;
-        	Log.e("Tlqkf","mConnectingOverTimeRunnable");
+			mConnectionState = connectionStateEnum.isToScan;
 			onConectionStateChange(mConnectionState);
 			mBluetoothLeService.close();
 		}};
@@ -128,8 +127,6 @@ public abstract class BlunoLibrary extends AppCompatActivity {
     {
     	if(!initiate())
 		{
-//			Toast.makeText(mainContext, R.string.error_bluetooth_not_supported,
-//					Toast.LENGTH_SHORT).show();
 			((Activity) mainContext).finish();
 		}
 		
@@ -152,10 +149,6 @@ public abstract class BlunoLibrary extends AppCompatActivity {
                             return;
                         scanLeDevice(false);
 
-//                        System.out.println("onListItemClick " + device.getName().toString());
-//
-//                        System.out.println("Device Name:"+device.getName() + "   " + "Device Name:" + device.getAddress());
-
                         mDeviceName=device.getName().toString();
                         mDeviceAddress=device.getAddress().toString();
 
@@ -165,9 +158,6 @@ public abstract class BlunoLibrary extends AppCompatActivity {
                             onConectionStateChange(mConnectionState);
                         }
                         else{
-//                            if(mBluetoothLeService == null){
-//                                Log.e(TAG,"167 line, mBluetoothLeService is null");
-//                            }
                             if (mBluetoothLeService.connect(mDeviceAddress)) {
                                 Toast.makeText(getApplicationContext(), "Connect request success", Toast.LENGTH_SHORT).show();
                                 mConnectionState=connectionStateEnum.isConnecting;
@@ -301,7 +291,6 @@ public abstract class BlunoLibrary extends AppCompatActivity {
             System.out.println("mGattUpdateReceiver->onReceive->action="+action);
             Log.e("TAG", "300 calling?");
 
-
             if (BluetoothLeService.ACTION_GATT_CONNECTED.equals(action)) {
                 mConnected = true;
             	mHandler.removeCallbacks(mConnectingOverTimeRunnable);
@@ -311,14 +300,11 @@ public abstract class BlunoLibrary extends AppCompatActivity {
                 mConnectionState = connectionStateEnum.isToScan;
                 onConectionStateChange(mConnectionState);
             	mHandler.removeCallbacks(mDisonnectingOverTimeRunnable);
-            	mBluetoothLeService.close();
 
+            	mBluetoothLeService.close();
             } else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
                 // Show all the supported services and characteristics on the user interface.
-            	for (BluetoothGattService gattService : mBluetoothLeService.getSupportedGattServices()) {
-//            		System.out.println("ACTION_GATT_SERVICES_DISCOVERED  "+
-//            				gattService.getUuid().toString());
-            	}
+
             	getGattServices(mBluetoothLeService.getSupportedGattServices());
 
             } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
@@ -349,14 +335,10 @@ public abstract class BlunoLibrary extends AppCompatActivity {
             	
             
             	System.out.println("displayData "+intent.getStringExtra(BluetoothLeService.EXTRA_DATA));
-            	
-//            	mPlainProtocol.mReceivedframe.append(intent.getStringExtra(BluetoothLeService.EXTRA_DATA)) ;
-//            	System.out.print("mPlainProtocol.mReceivedframe:");
-//            	System.out.println(mPlainProtocol.mReceivedframe.toString());
 
 
             }
-            Log.e("SDSD", "" +  mConnectionState.toString());
+
         }
     };
 	

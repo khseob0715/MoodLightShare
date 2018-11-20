@@ -77,50 +77,51 @@ public class MainActivity extends BlunoLibrary{
 
     //bluno instance
 
-    public static boolean isColorChange = true;
+    public static boolean isColorChange = false;
+    public static boolean isLastSwitchOn = false;
+    private boolean oneTimeCall = true;
+    private boolean LightOneTime = true;
 
     private PlainProtocol mPlainProtocol = new PlainProtocol();
 
     public static final int LEDMode = 0;
     public static final int RockerMode = 1;
     public static final int KnobMode = 2;
-    private byte Modestates = LEDMode;
-
+    public static byte Modestates = LEDMode;
 
     public static int color_r = 255, color_b = 255, color_g = 255;
 
     private static Handler receivedHandler = new Handler();
 
-
-
-    private boolean isLastSwitchOn = false;
     private Runnable colorRunnable = new Runnable() {
 
         @Override
         public void run() {
-
             if (Modestates == LEDMode) {
-                //Log.e("colorRunnable", "Modestates == Led Mode");
-                if (true) {
-                  //  Log.e("colorRunnable", "is true");
-                    if (isColorChange || (isLastSwitchOn == false)) {
-                        Log.e("colorRunnable", "isColorChange = true || isLastSwitchOn = false");
-                        serialSend(mPlainProtocol.write(BleCmd.RGBLed,color_r,color_g,color_b));
-                    }
-                    isColorChange = false;
-                    isLastSwitchOn = true;
+                if(isLastSwitchOn){      // 전원이 켜지면, LED가 들어옴
+                    Log.e("TAG","isLastSwitchOn");
 
-                } else {
-                    if (isLastSwitchOn) {
-                        Log.e("colorRunnable", "isLastSwitchOn is true");
-                        serialSend(mPlainProtocol.write(BleCmd.RGBLed, 0, 0, 0));
+                    if(isColorChange){   // 색상을 선택하면 그 색이 나옴.
+                        Log.e("TAG","isColorChange");
+                        serialSend(mPlainProtocol.write(BleCmd.RGBLed, color_r, color_g, color_b));
+                        isColorChange = false;
+                    }else{
+                        serialSend(mPlainProtocol.write(BleCmd.RGBLed, 125, 125, 125));
                     }
-                    isLastSwitchOn = false;
+
+                }else{
+                    // 전원 버튼을 누르면 전원이 꺼짐.
+
+                        serialSend(mPlainProtocol.write(BleCmd.RGBLed, 0, 0, 0));
+
+
                 }
+            }else if(Modestates == RockerMode){
+                receivedHandler.removeCallbacks(colorRunnable);
+                serialSend(mPlainProtocol.write(BleCmd.RGBLed,0,0,0));
             }
 
             receivedHandler.postDelayed(colorRunnable, 50);
-            //Log.e("colorRunnable", "postdelay");
         }
     };
 
@@ -240,14 +241,8 @@ public class MainActivity extends BlunoLibrary{
 
 
     public static void colorChange(){
-//        Log.e("ColorChange","colorChange");
-//
-//        Log.e("Tlqkf", mConnectionState.toString());
+       // Modestates = LEDMode;
         isColorChange = true;
-
-//        receivedHandler.post(colorRunnable);
-//        receivedHandler.removeCallbacks(PotentiometerRunnable);
-        //serialSend(mPlainProtocol.write(BleCmd.RGBLed,color_r,color_g,color_b));
     }
 
 
@@ -322,72 +317,6 @@ public class MainActivity extends BlunoLibrary{
         return super.onOptionsItemSelected(item);
     }
 
-//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        switch (requestCode) {
-//            case REQUEST_CONNECT_DEVICE_SECURE:
-//                // When DeviceListActivity returns with a device to connect
-//                if (resultCode == Activity.RESULT_OK) {
-//                    if(log_print) {
-//                        Log.e(TAG, "onActivityResult resultCode Activity Result_OK");
-//                    }
-//                    connectDevice(data, true);
-//                }
-//                break;
-//            case REQUEST_CONNECT_DEVICE_INSECURE:
-//                // When DeviceListActivity returns with a device to connect
-//                if (resultCode == Activity.RESULT_OK) {
-//                    connectDevice(data, false);
-//                }
-//                break;
-//            case REQUEST_ENABLE_BT:
-//                // When the request to enable Bluetooth returns
-//                if (resultCode == Activity.RESULT_OK) {
-//                    // Bluetooth is now enabled, so set up a chat session
-//                     setupChat();
-//                } else {
-//                    // User did not enable Bluetooth or an error occurred
-//                    Toast.makeText(getApplicationContext(), R.string.bt_not_enabled_leaving,
-//                            Toast.LENGTH_SHORT).show();
-//                    this.finish();
-//                }
-//        }
-//    }
-//
-//    private void connectDevice(Intent data, boolean secure) {
-//        // Get the device MAC address
-//        String address = data.getExtras().getString(DeviceListActivity.EXTRA_DEVICE_ADDRESS);
-//        if(log_print) {
-//            Log.w(TAG, "connectDevice " + this.getComponentName() + address);
-//        }
-//        // Get the BluetoothDevice object
-//        BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
-//        // Attempt to connect to the device
-//        //mChatService.connect(device, secure);
-//        if(mBluetoothAdapter == null){
-//            if(log_print) {
-//                Log.e(TAG, "mBluetoothAdapter null");
-//            }
-//        }
-//
-//        setupChat();
-//        mChatService.connect(address);
-//    }
-//
-//
-//
-//    private void setupChat() {
-//        // Initialize the send button with a listener that for click events
-//        // 보낼 것 모으고
-//
-//
-//        // Initialize the BluetoothChatService to perform bluetooth connections
-//        // 보내기.
-//        mChatService = new BluetoothLeService();
-//
-//        // Initialize the buffer for outgoing messages
-//        // 보낸거 비우고
-//    }
-
     @Override
     public void onConectionStateChange(connectionStateEnum theConnectionState) {
 
@@ -399,6 +328,7 @@ public class MainActivity extends BlunoLibrary{
             case isConnected:
                 switch (Modestates) {
                     case LEDMode:
+                        Toast.makeText(this, "LedMode", Toast.LENGTH_SHORT).show();
                         receivedHandler.post(colorRunnable);
                         break;
                     case RockerMode:
@@ -414,12 +344,6 @@ public class MainActivity extends BlunoLibrary{
                 Toast.makeText(this, "isconnecting", Toast.LENGTH_SHORT).show();
                 break;
             case isToScan:
-           //     receivedHandler.removeCallbacks(colorRunnable);
-
-                Log.e("Tlqkf","adssdasdsssssssssssssssssss");
-
-                Log.e("Tlqkf", mConnectionState.toString());
-
                 Toast.makeText(this, "isToScan", Toast.LENGTH_SHORT).show();
                 break;
             default:
