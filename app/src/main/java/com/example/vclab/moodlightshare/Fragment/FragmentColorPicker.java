@@ -63,6 +63,7 @@ public class FragmentColorPicker extends Fragment {
     private AlphaTileView alphaTileView;
 
     private CircleImageView CircleImageView_Button01;
+    private CircleImageView CircleImageView_Button02;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,10 +87,26 @@ public class FragmentColorPicker extends Fragment {
 
                if(MainActivity.isLastSwitchOn){
                    CircleImageView_Button01.setImageResource(R.drawable.bulb);
+                   MainActivity.Modestates = 0; // Ledmode;
                }else{
                    CircleImageView_Button01.setImageResource(R.drawable.bulb_black);
                }
 
+            }
+        });
+
+        CircleImageView_Button02 = (CircleImageView)view.findViewById(R.id.circlebutton2);
+        CircleImageView_Button02.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                MainActivity.Modestates = 1; // RockerMode
+                if(MainActivity.isMusicOn){
+                    CircleImageView_Button02.setImageResource(R.drawable.music);
+                }else{
+                    CircleImageView_Button02.setImageResource(R.drawable.music_black);
+                }
+                MainActivity.isMusicOn = !MainActivity.isMusicOn;
             }
         });
 

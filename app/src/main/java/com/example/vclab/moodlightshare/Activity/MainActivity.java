@@ -79,6 +79,7 @@ public class MainActivity extends BlunoLibrary{
 
     public static boolean isColorChange = false;
     public static boolean isLastSwitchOn = false;
+    public static boolean isMusicOn = false;
     private boolean oneTimeCall = true;
     private boolean LightOneTime = true;
 
@@ -108,14 +109,11 @@ public class MainActivity extends BlunoLibrary{
                     }else{
                         serialSend(mPlainProtocol.write(BleCmd.RGBLed, 125, 125, 125));
                     }
-
                 }else{
                     // 전원 버튼을 누르면 전원이 꺼짐.
-
-                        serialSend(mPlainProtocol.write(BleCmd.RGBLed, 0, 0, 0));
-
-
+                    serialSend(mPlainProtocol.write(BleCmd.RGBLed, 0, 0, 0));
                 }
+
             }else if(Modestates == RockerMode){
                 receivedHandler.removeCallbacks(colorRunnable);
                 serialSend(mPlainProtocol.write(BleCmd.RGBLed,0,0,0));
@@ -328,11 +326,9 @@ public class MainActivity extends BlunoLibrary{
             case isConnected:
                 switch (Modestates) {
                     case LEDMode:
+                    case RockerMode:
                         Toast.makeText(this, "LedMode", Toast.LENGTH_SHORT).show();
                         receivedHandler.post(colorRunnable);
-                        break;
-                    case RockerMode:
-
                         break;
                     case KnobMode:
                         break;
