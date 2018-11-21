@@ -289,7 +289,7 @@ public abstract class BlunoLibrary extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
         	final String action = intent.getAction();
             System.out.println("mGattUpdateReceiver->onReceive->action="+action);
-            Log.e("TAG", "300 calling?");
+            Log.e("broadcastReceiver", "300 calling?");
 
             if (BluetoothLeService.ACTION_GATT_CONNECTED.equals(action)) {
                 mConnected = true;

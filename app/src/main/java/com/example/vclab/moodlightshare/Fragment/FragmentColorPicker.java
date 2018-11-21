@@ -101,12 +101,13 @@ public class FragmentColorPicker extends Fragment {
             public void onClick(View view) {
 
                 MainActivity.Modestates = 1; // RockerMode
+                MainActivity.isMusicOn = !MainActivity.isMusicOn;
                 if(MainActivity.isMusicOn){
                     CircleImageView_Button02.setImageResource(R.drawable.music);
                 }else{
                     CircleImageView_Button02.setImageResource(R.drawable.music_black);
                 }
-                MainActivity.isMusicOn = !MainActivity.isMusicOn;
+
             }
         });
 

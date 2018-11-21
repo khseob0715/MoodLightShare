@@ -115,15 +115,21 @@ public class MainActivity extends BlunoLibrary{
                 }
 
             }else if(Modestates == RockerMode){
+                Log.e("TAG","isRockerMode");
                 receivedHandler.removeCallbacks(colorRunnable);
-                serialSend(mPlainProtocol.write(BleCmd.RGBLed,0,0,0));
+                receivedHandler.post(soundRunnable);
             }
-
             receivedHandler.postDelayed(colorRunnable, 50);
         }
     };
 
-
+    private Runnable soundRunnable = new Runnable() {
+        @Override
+        public void run() {
+            Log.e("SoundRunnable","ssssssssssssssssssssssssssssssssssssssssssssssss");
+            serialSend(mPlainProtocol.write(BleCmd.Rocker,0,0,0));
+        }
+    };
 
     @Override
     public void onStart() {
@@ -326,9 +332,10 @@ public class MainActivity extends BlunoLibrary{
             case isConnected:
                 switch (Modestates) {
                     case LEDMode:
-                    case RockerMode:
                         Toast.makeText(this, "LedMode", Toast.LENGTH_SHORT).show();
                         receivedHandler.post(colorRunnable);
+                    case RockerMode:
+                        receivedHandler.post(soundRunnable);
                         break;
                     case KnobMode:
                         break;
