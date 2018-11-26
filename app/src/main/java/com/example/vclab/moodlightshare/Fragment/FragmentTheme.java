@@ -10,13 +10,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TabHost;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.vclab.moodlightshare.R;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentTheme extends Fragment {
+public class FragmentTheme extends Fragment implements View.OnClickListener{
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,4 +59,33 @@ public class FragmentTheme extends Fragment {
         return view;
     }
 
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.theme01:
+                Toast.makeText(getContext(),"Theme01", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.theme02:
+                Toast.makeText(getContext(),"Theme02", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.theme03:
+                Toast.makeText(getContext(),"Theme03", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.theme04:
+                Toast.makeText(getContext(),"Theme04", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.AnimationTheme01:
+                Toast.makeText(getContext(),"Theme04", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.AnimationTheme02:
+                Toast.makeText(getContext(),"Theme04", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.AnimationTheme03:
+                Toast.makeText(getContext(),"Theme04", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.AnimationTheme04:
+                Toast.makeText(getContext(),"Theme04", Toast.LENGTH_SHORT).show();
+                break;
+        }
+    }
 }
