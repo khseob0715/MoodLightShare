@@ -14,11 +14,15 @@ import android.widget.Toast;
 
 import com.example.vclab.moodlightshare.R;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 /**
  * A simple {@link Fragment} subclass.
  */
 public class FragmentTheme extends Fragment implements View.OnClickListener{
 
+    CircleImageView[] Theme;
+    CircleImageView[] AnimeTheme;
     TabHost tabHost1;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -33,6 +37,23 @@ public class FragmentTheme extends Fragment implements View.OnClickListener{
 
         View view = inflater.inflate(R.layout.fragment_theme,null);
 
+        Theme = new CircleImageView[4];
+        AnimeTheme = new CircleImageView[4];
+
+        Theme[0] = (CircleImageView)view.findViewById(R.id.theme01);
+        Theme[1] = (CircleImageView)view.findViewById(R.id.theme02);
+        Theme[2] = (CircleImageView)view.findViewById(R.id.theme03);
+        Theme[3] = (CircleImageView)view.findViewById(R.id.theme04);
+
+        AnimeTheme[0] = (CircleImageView)view.findViewById(R.id.AnimationTheme01);
+        AnimeTheme[1] = (CircleImageView)view.findViewById(R.id.AnimationTheme02);
+        AnimeTheme[2] = (CircleImageView)view.findViewById(R.id.AnimationTheme03);
+        AnimeTheme[3] = (CircleImageView)view.findViewById(R.id.AnimationTheme04);
+
+        for(int i = 0 ; i < 4; i++) {
+            Theme[i].setOnClickListener(this);
+            AnimeTheme[i].setOnClickListener(this);
+        }
         tabHost1 = (TabHost) view.findViewById(R.id.tabHost1) ;
 
 
@@ -57,7 +78,9 @@ public class FragmentTheme extends Fragment implements View.OnClickListener{
         TabHost.TabSpec ts2 = tabHost1.newTabSpec("Tab Spec 2") ;
         ts2.setContent(R.id.AnimationTheme) ;
         ts2.setIndicator("Animation Theme") ;
+
         tabHost1.addTab(ts2) ;
+
 
 
         for(int i=0;i<tabHost1.getTabWidget().getChildCount();i++)

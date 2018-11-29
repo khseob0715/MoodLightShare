@@ -195,8 +195,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
 
-                            <de.hdodenhof.circleimageview.CircleImageView
-                                xmlns:app="http://schemas.android.com/apk/res-auto"
+                            <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
                                 android:id="@+id/AnimationTheme01"
                                 android:layout_width="160dp"
                                 android:layout_height="160dp"
@@ -229,8 +228,7 @@
                             android:layout_height="wrap_content"
                             android:gravity="right">
 
-                            <de.hdodenhof.circleimageview.CircleImageView
-                                xmlns:app="http://schemas.android.com/apk/res-auto"
+                            <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
                                 android:id="@+id/AnimationTheme02"
                                 android:layout_width="160dp"
                                 android:layout_height="160dp"
