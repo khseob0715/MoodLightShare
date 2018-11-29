@@ -19,6 +19,7 @@ import com.example.vclab.moodlightshare.R;
  */
 public class FragmentTheme extends Fragment implements View.OnClickListener{
 
+    TabHost tabHost1;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,8 +33,17 @@ public class FragmentTheme extends Fragment implements View.OnClickListener{
 
         View view = inflater.inflate(R.layout.fragment_theme,null);
 
+        tabHost1 = (TabHost) view.findViewById(R.id.tabHost1) ;
 
-        TabHost tabHost1 = (TabHost) view.findViewById(R.id.tabHost1) ;
+
+        return view;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+
         tabHost1.setup() ;
 
         // 첫 번째 Tab. (탭 표시 텍스트:"TAB 1"), (페이지 뷰:"content1")
@@ -55,8 +65,6 @@ public class FragmentTheme extends Fragment implements View.OnClickListener{
             TextView tv = (TextView) tabHost1.getTabWidget().getChildAt(i).findViewById(android.R.id.title);
             tv.setTextColor(Color.parseColor("#ffffff"));
         }
-
-        return view;
     }
 
     @Override

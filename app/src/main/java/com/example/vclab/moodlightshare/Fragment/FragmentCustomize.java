@@ -167,37 +167,6 @@ public class FragmentCustomize extends Fragment {
             @Override
             public void onClick(View view) {
 
-//                AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
-//                dialog.setTitle(R.string.save);
-//
-//                final EditText input = new EditText(getContext());
-//                input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
-//                input.setHint(R.string.savename);
-//                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-//                params.setMarginStart(60);
-//                params.setMarginEnd(60);
-//                input.setLayoutParams(params);
-//                dialog.setView(input);
-//
-//                dialog.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        if (!TextUtils.isEmpty(input.getText())) {
-//                    //        Save save = new Save(input.getText().toString(), canvas.toString());
-//            //                mListener.onCanvasSaved(save);
-//                        } else {
-//                            Toast.makeText(getActivity(), R.string.invalidsavename, Toast.LENGTH_SHORT).show();
-//                        }
-//                    }
-//                });
-//                dialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        dialog.dismiss();
-//                    }
-//                });
-//                dialog.show();
-
                 ShareDialog customDialog = new ShareDialog(getContext());
 
                 // 커스텀 다이얼로그를 호출한다.

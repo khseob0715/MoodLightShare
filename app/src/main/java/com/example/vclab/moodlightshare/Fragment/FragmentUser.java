@@ -49,7 +49,6 @@ import gun0912.tedbottompicker.TedBottomPicker;
  */
 public class FragmentUser extends Fragment {
 
-
     private static final String TAG = "FragmentUser";
     RecyclerView mRecyclerView;
     DatabaseReference mDatabase;
@@ -71,6 +70,7 @@ public class FragmentUser extends Fragment {
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mStoragedRef = FirebaseStorage.getInstance().getReference();
         UserUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
 
     }
 

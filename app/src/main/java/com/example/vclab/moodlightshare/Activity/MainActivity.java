@@ -37,7 +37,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
 import java.io.IOException;
@@ -58,6 +57,7 @@ public class MainActivity extends BlunoLibrary{
     int Current_Fragment_Index = 1;
     int Select_Fragment_Index;
 
+    Fragment Fragment_picker, Fragment_theme, Fragment_share, Fragment_user, Fragment_custom;
 
     public static Uri profileUri;
 
@@ -79,7 +79,7 @@ public class MainActivity extends BlunoLibrary{
 
     public static boolean isColorChange = false;
     public static boolean isLastSwitchOn = false;
-    public static boolean isMusicOn = false;
+    public static boolean isMusicOn = true;
     private boolean oneTimeCall = true;
     private boolean LightOneTime = true;
 
@@ -126,7 +126,7 @@ public class MainActivity extends BlunoLibrary{
     private Runnable soundRunnable = new Runnable() {
         @Override
         public void run() {
-            Log.e("SoundRunnable","ssssssssssssssssssssssssssssssssssssssssssssssss");
+//            Log.e("SoundRunnable","ssssssssssssssssssssssssssssssssssssssssssssssss");
             serialSend(mPlainProtocol.write(BleCmd.Rocker,0,0,0));
         }
     };
@@ -140,6 +140,8 @@ public class MainActivity extends BlunoLibrary{
             Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
         }
+
+
     }
 
     @Override
@@ -151,6 +153,11 @@ public class MainActivity extends BlunoLibrary{
             // Marshmallow+ Permission APIs
             MarshMallow();
         }
+        Fragment_picker = new FragmentColorPicker();
+        Fragment_theme = new FragmentTheme();
+        Fragment_share = new FragmentShare();
+        Fragment_custom = new FragmentCustomize();
+        Fragment_user = new FragmentUser();
 
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
@@ -161,7 +168,7 @@ public class MainActivity extends BlunoLibrary{
         // fragment를 불러오는 소스코드.
         fragmentManager = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.content, new FragmentColorPicker());
+        fragmentTransaction.replace(R.id.content, Fragment_picker);
         fragmentTransaction.commit();
 
         mainButton = (ImageView)findViewById(R.id.mainButton);
@@ -175,7 +182,7 @@ public class MainActivity extends BlunoLibrary{
             public void onClick(View view) {
                 Select_Fragment_Index = 1;
                 Button_Image_Change(Current_Fragment_Index,Select_Fragment_Index);
-                Fragment_Change(new FragmentColorPicker());
+                Fragment_Change(Fragment_picker);
             }
         });
         themeButton.setOnClickListener(new View.OnClickListener() {
@@ -183,7 +190,7 @@ public class MainActivity extends BlunoLibrary{
             public void onClick(View view) {
                 Select_Fragment_Index = 2;
                 Button_Image_Change(Current_Fragment_Index,Select_Fragment_Index);
-                Fragment_Change(new FragmentTheme());
+                Fragment_Change(Fragment_theme);
             }
         });
         customizeButton.setOnClickListener(new View.OnClickListener() {
@@ -191,7 +198,7 @@ public class MainActivity extends BlunoLibrary{
             public void onClick(View view) {
                 Select_Fragment_Index = 3;
                 Button_Image_Change(Current_Fragment_Index,Select_Fragment_Index);
-                Fragment_Change(new FragmentCustomize());
+                Fragment_Change(Fragment_custom);
             }
         });
         shareButton.setOnClickListener(new View.OnClickListener() {
@@ -199,7 +206,7 @@ public class MainActivity extends BlunoLibrary{
             public void onClick(View view) {
                 Select_Fragment_Index = 4;
                 Button_Image_Change(Current_Fragment_Index,Select_Fragment_Index);
-                Fragment_Change(new FragmentShare());
+                Fragment_Change(Fragment_share);
             }
         });
         userButton.setOnClickListener(new View.OnClickListener() {
@@ -207,7 +214,7 @@ public class MainActivity extends BlunoLibrary{
             public void onClick(View view) {
                 Select_Fragment_Index = 5;
                 Button_Image_Change(Current_Fragment_Index,Select_Fragment_Index);
-                Fragment_Change(new FragmentUser());
+                Fragment_Change(Fragment_user);
             }
         });
 
@@ -347,7 +354,7 @@ public class MainActivity extends BlunoLibrary{
                 Toast.makeText(this, "isconnecting", Toast.LENGTH_SHORT).show();
                 break;
             case isToScan:
-                Toast.makeText(this, "isToScan", Toast.LENGTH_SHORT).show();
+              //  Toast.makeText(this, "isToScan", Toast.LENGTH_SHORT).show();
                 break;
             default:
                 break;

@@ -35,7 +35,7 @@
             android:layout_height="60dp"
             android:layout_margin="5dp"
             android:layout_weight="1"
-            app:srcCompat="@drawable/homeicon" />
+            app:srcCompat="@drawable/homeicon_on" />
 
         <ImageView
             android:id="@+id/themeButton"

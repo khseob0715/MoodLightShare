@@ -140,12 +140,6 @@ public class FragmentColorPicker extends Fragment {
         return view;
     }
 
-//    private int getColor(ImageView selectedImage,int evX, int evY){
-//        selectedImage.setDrawingCacheEnabled(true);
-//        Bitmap bitmap=Bitmap.createBitmap(selectedImage.getDrawingCache());
-//        selectedImage.setDrawingCacheEnabled(false);
-//        return bitmap.getPixel(evX,evY);
-//    }
 
     //
     private void setLayoutColor(ColorEnvelope envelope) {
