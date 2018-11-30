@@ -247,6 +247,7 @@ public class MainActivity extends BlunoLibrary{
                     }else{
                         Log.e("MainActivity","have not data");
                     }
+                    // 아래는 기본 프로필 이미지,
                     profileUri = Uri.parse("https://firebasestorage.googleapis.com/v0/b/moodlightshare.appspot.com/o/images%2Ficon01non.png?alt=media&token=db74f55c-ef39-482f-84c0-63cb8ef81496");
                 }
             }

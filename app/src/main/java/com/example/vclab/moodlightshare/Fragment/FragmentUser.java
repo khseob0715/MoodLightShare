@@ -3,6 +3,8 @@ package com.example.vclab.moodlightshare.Fragment;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -38,6 +40,10 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -113,7 +119,8 @@ public class FragmentUser extends Fragment {
                             @Override
                             public void onImageSelected(Uri uri) {
                                 profileImage.setImageURI(uri);
-                                Log.e("uri",uri.toString());
+                                // Log.e("uri",uri.toString());
+                                // 프로필 이미지 저장 중.
                                 StorageReference riversRef = mStoragedRef.child("images/" + UserUid + "/" +uri.getLastPathSegment());
 
                                 // Register observers to listen for when the download is done or if it fails
@@ -158,7 +165,6 @@ public class FragmentUser extends Fragment {
 
         List<LightModel> lightModels;
 
-
         public ShareRecyclerAdapter() {
             lightModels = new ArrayList<>();
             FirebaseDatabase.getInstance().getReference().child("recipe").addValueEventListener(new ValueEventListener() {
@@ -196,6 +202,10 @@ public class FragmentUser extends Fragment {
             // 해당 position 에 해당하는 데이터 결합
             ((ShareRecyclerAdapter.ItemViewHolder) holder).DescriptionText.setText(lightModels.get(position).ShareLightDescription);
             ((ShareRecyclerAdapter.ItemViewHolder) holder).DateText.setText(lightModels.get(position).ShareDate);
+            Uri url = Uri.parse(lightModels.get(position).LigthImageUrl);
+
+            Picasso.get().load(url).into(((ItemViewHolder) holder).LightImage);
+
             if(!lightModels.get(position).bShare){
                 ((ItemViewHolder) holder).ShareYesNO.setText("미 공유");
             }
@@ -246,6 +256,7 @@ public class FragmentUser extends Fragment {
             private TextView DateText;
             private ImageView DeleteLightButton;
             private TextView ShareYesNO;
+            private ImageView LightImage;
 
             public ItemViewHolder(@NonNull View itemView) {
                 super(itemView);
@@ -255,6 +266,7 @@ public class FragmentUser extends Fragment {
                 DeleteLightButton = (ImageView)itemView.findViewById(R.id.Delete_Light_button);
                 ShareYesNO = (TextView)itemView.findViewById(R.id.ShareYesNO);
 
+                LightImage = (ImageView)itemView.findViewById(R.id.User_LightImage);
             }
         }
     }

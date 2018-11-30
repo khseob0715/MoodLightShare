@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatDialog;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -38,7 +39,7 @@ public class ShareDialog {
     }
 
     // 호출할 다이얼로그 함수를 정의한다.
-    public void callFunction() {
+    public void callFunction(final String fileName) {
 
         // 커스텀 다이얼로그를 정의하기위해 Dialog클래스를 생성한다.
         final Dialog dlg = new Dialog(context);
@@ -81,11 +82,12 @@ public class ShareDialog {
                 Date date = new Date(tsLong);
                 String ts = tsLong.toString();
                 lightModel.timestamp  = ts;
-                SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
-                lightModel.ShareDate = f.format(date);
+                lightModel.ShareDate = dateFormat.format(date);
                 lightModel.ShareUserUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
                 lightModel.bShare = false;
+                lightModel.LigthImageUrl = fileName;
 
                 mDatabase.child("recipe").child(ts).setValue(lightModel); // 데이터 쓰기.
 
@@ -93,6 +95,7 @@ public class ShareDialog {
                 dlg.dismiss();
             }
         });
+
         shareButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -121,6 +124,7 @@ public class ShareDialog {
                 lightModel.ShareDate = f.format(date);
                 lightModel.ShareUserUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
                 lightModel.bShare = true;
+                lightModel.LigthImageUrl = fileName;
 
                 mDatabase.child("recipe").child(ts).setValue(lightModel); // 데이터 쓰기.
                 // FirebaseAuth.getInstance().getCurrentUser().getUid()  userId;
