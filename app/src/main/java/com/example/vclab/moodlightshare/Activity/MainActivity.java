@@ -87,7 +87,8 @@ public class MainActivity extends BlunoLibrary{
 
     public static final int LEDMode = 0;
     public static final int RockerMode = 1;
-    public static final int KnobMode = 2;
+    public static final int Theme = 2;
+    public static final int Custom = 3;
     public static byte Modestates = LEDMode;
 
     public static int color_r = 255, color_b = 255, color_g = 255;
@@ -126,8 +127,15 @@ public class MainActivity extends BlunoLibrary{
     private Runnable soundRunnable = new Runnable() {
         @Override
         public void run() {
-//            Log.e("SoundRunnable","ssssssssssssssssssssssssssssssssssssssssssssssss");
-            serialSend(mPlainProtocol.write(BleCmd.Rocker,0,0,0));
+            serialSend(mPlainProtocol.write(BleCmd.Rocker));
+        }
+    };
+
+
+    private Runnable ThemeRunnable = new Runnable() {
+        @Override
+        public void run() {
+            serialSend(mPlainProtocol.write(BleCmd.Theme,FragmentTheme.selected_theme));
         }
     };
 
@@ -339,12 +347,15 @@ public class MainActivity extends BlunoLibrary{
             case isConnected:
                 switch (Modestates) {
                     case LEDMode:
-                        Toast.makeText(this, "LedMode", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(this, "LedMode", Toast.LENGTH_SHORT).show();
                         receivedHandler.post(colorRunnable);
                     case RockerMode:
                         receivedHandler.post(soundRunnable);
                         break;
-                    case KnobMode:
+                    case Theme:
+                        receivedHandler.post(ThemeRunnable);
+                        break;
+                    case Custom:
                         break;
                     default:
                         break;
@@ -383,11 +394,11 @@ public class MainActivity extends BlunoLibrary{
                     Log.e(getLocalClassName(), "Unkown joystick state: " + mPlainProtocol.receivedContent[0]);
                 }
             }
-            else if(mPlainProtocol.receivedCommand.equals(BleCmd.Knob)){
-                System.out.println("received Knob");
-                float pgPos = mPlainProtocol.receivedContent[0] / 3.75f;//Adjust display value to the angle
-
-            }
+//            else if(mPlainProtocol.receivedCommand.equals(BleCmd.Knob)){
+//                System.out.println("received Knob");
+//                float pgPos = mPlainProtocol.receivedContent[0] / 3.75f;//Adjust display value to the angle
+//
+//            }
         }
     }
 

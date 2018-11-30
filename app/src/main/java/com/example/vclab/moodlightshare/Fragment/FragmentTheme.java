@@ -12,6 +12,7 @@ import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.vclab.moodlightshare.Activity.MainActivity;
 import com.example.vclab.moodlightshare.R;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -24,6 +25,8 @@ public class FragmentTheme extends Fragment implements View.OnClickListener{
     CircleImageView[] Theme;
     CircleImageView[] AnimeTheme;
     TabHost tabHost1;
+
+    public static int selected_theme;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,29 +97,38 @@ public class FragmentTheme extends Fragment implements View.OnClickListener{
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.theme01:
-                Toast.makeText(getContext(),"Theme01", Toast.LENGTH_SHORT).show();
+              //  Toast.makeText(getContext(),"Theme01", Toast.LENGTH_SHORT).show();
+                selected_theme = 101;
                 break;
             case R.id.theme02:
-                Toast.makeText(getContext(),"Theme02", Toast.LENGTH_SHORT).show();
+              //  Toast.makeText(getContext(),"Theme02", Toast.LENGTH_SHORT).show();
+                selected_theme = 102;
                 break;
             case R.id.theme03:
-                Toast.makeText(getContext(),"Theme03", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getContext(),"Theme03", Toast.LENGTH_SHORT).show();
+                selected_theme = 103;
                 break;
             case R.id.theme04:
-                Toast.makeText(getContext(),"Theme04", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getContext(),"Theme04", Toast.LENGTH_SHORT).show();
+                selected_theme = 104;
                 break;
             case R.id.AnimationTheme01:
-                Toast.makeText(getContext(),"Theme04", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getContext(),"AnimationTheme01", Toast.LENGTH_SHORT).show();
+                selected_theme = 201;
                 break;
             case R.id.AnimationTheme02:
-                Toast.makeText(getContext(),"Theme04", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getContext(),"Theme04", Toast.LENGTH_SHORT).show();
+                selected_theme = 202;
                 break;
             case R.id.AnimationTheme03:
-                Toast.makeText(getContext(),"Theme04", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getContext(),"Theme04", Toast.LENGTH_SHORT).show();
+                selected_theme = 203;
                 break;
             case R.id.AnimationTheme04:
-                Toast.makeText(getContext(),"Theme04", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getContext(),"Theme04", Toast.LENGTH_SHORT).show();
+                selected_theme = 204;
                 break;
         }
+        MainActivity.Modestates = 2; // Theme;
     }
 }

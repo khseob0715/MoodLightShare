@@ -23,7 +23,8 @@ Analyzer Audio = Analyzer(4,5,0); // Strobe->4 RST->5 Analog->0
 
 int State01=2;        //  버튼 누르면 바뀌는 것. // 처음에는 사운드 비주얼 라이제이션 효과 기능 // Rocker 
 
-int Red=10,Green=0,Blue=10,Number_Position_RGB=100;     
+int Red=10,Green=0,Blue=10,Number_Position_RGB=100;   
+int SeletedTheme = 0;  
 int FreqVal[7];//the spectrum value 
 int color[]={0xDC143C,0xFFA500,0xFFFF00, 0x32CD32,0x0000FF,0x2F4F4F,0x4B0082,0xDA70D6};
 
@@ -58,41 +59,70 @@ void loop()
     if(BLUNOPlainProtocol.receivedCommand=="RGBLED")  //get command 
     {
       Serial.print("call");
-      State01=3;
+      State01 = 3;
       Red  = BLUNOPlainProtocol.receivedContent[0];
       Green= BLUNOPlainProtocol.receivedContent[1];
       Blue = BLUNOPlainProtocol.receivedContent[2];
     }else if(BLUNOPlainProtocol.receivedCommand=="ROCKER"){
-      State01=2;
+      State01 = 2;
+    }else if(BLUNOPlainProtocol.receivedCommand=="THEME"){
+      State01 = 4; 
+      SeletedTheme = BLUNOPlainProtocol.receivedContent[0];
+    }else if(BLUNOPlainProtocol.receivedCommand=="CUSTOM"){
+      
     }
 
   }
 
   if (ledMetro.check() == 1)//time for metro
   {
-    if(State01==1)  // 전부 지우진 초기 상태 
-    {
-      clearLEDs();  // Turn off all LEDs
-      leds.show();
-    }
-    else if(State01==2)     // 사운드 비주얼라이제이션 효과 
-    {   
-        Rock_With_Song();   //leds.show();           
-    }
-    else if(State01==3)     // 내가 선택한 색상. 
-    {
-      for (int i=0;i<LED_COUNT;i++)
+      if(State01==1)  // 전부 지우진 초기 상태 
       {
-        if(i%7==0)
-          leds.setPixelColor(i,Red, Green, 0);//change the color
-        else if(i%3==0)
-          leds.setPixelColor(i,0, Green, Blue);//change the color
-        else if(i%2==0)
-          leds.setPixelColor(i,Red, Green, Blue);//change the color
-        else     
-          leds.setPixelColor(i,Red,0, Blue);//change the color
+        clearLEDs();  // Turn off all LEDs
+        leds.show();
       }
-      leds.show();
+      else if(State01==2)     // 사운드 비주얼라이제이션 효과 
+      {   
+          Rock_With_Song();   //leds.show();           
+      }
+      else if(State01==3)     // 내가 선택한 색상. 
+      {
+        for (int i=0;i<LED_COUNT;i++)
+        {
+          if(i%7==0)
+            leds.setPixelColor(i,Red, Green, 0);//change the color
+          else if(i%3==0)
+            leds.setPixelColor(i,0, Green, Blue);//change the color
+          else if(i%2==0)
+            leds.setPixelColor(i,Red, Green, Blue);//change the color
+          else     
+            leds.setPixelColor(i,Red,0, Blue);//change the color
+        }
+        leds.show();
+      }
+      else if(State01 == 4) // 테마
+      {
+        switch(SeletedTheme)
+        {
+          case 101:
+            break;
+          case 102:
+            break;
+            case 103:
+            break;
+            case 104:
+            break;
+            case 201:
+            break;
+            case 202:
+            break;
+            case 203:
+            break;
+            case 204:
+            break;
+            
+        }
+      }
     }
   }
 }
