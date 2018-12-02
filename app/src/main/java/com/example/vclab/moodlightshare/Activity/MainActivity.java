@@ -80,6 +80,8 @@ public class MainActivity extends BlunoLibrary{
     public static boolean isColorChange = false;
     public static boolean isLastSwitchOn = false;
     public static boolean isMusicOn = true;
+    public static boolean isSleepOn = false;
+
     private boolean oneTimeCall = true;
     private boolean LightOneTime = true;
 
@@ -89,6 +91,8 @@ public class MainActivity extends BlunoLibrary{
     public static final int RockerMode = 1;
     public static final int Theme = 2;
     public static final int Custom = 3;
+    public static final int Sleep = 4;
+
     public static byte Modestates = LEDMode;
 
     public static int color_r = 255, color_b = 255, color_g = 255;
