@@ -137,7 +137,7 @@ public class DrawFragment extends Fragment {
         } else {
 
             // inform people of secondary tools
-            Toast.makeText(getActivity(), R.string.toolsmessage, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getActivity(), R.string.toolsmessage, Toast.LENGTH_SHORT).show();
 
             body.post(new Runnable() {
                 @Override

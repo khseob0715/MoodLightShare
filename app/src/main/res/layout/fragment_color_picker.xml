@@ -148,7 +148,7 @@
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:layout_margin="5dp"
-            android:src="@drawable/music_black"
+            android:src="@drawable/music"
             app:civ_border_color="#ffffff"
             app:civ_border_width="1dp" />
 
@@ -158,8 +158,8 @@
             android:layout_height="70dp"
             android:layout_margin="5dp"
             android:layout_weight="0"
-            android:src="@drawable/theme01_image"
-            app:civ_border_color="#f7763f"
+            android:src="@drawable/sleep_black"
+            app:civ_border_color="#ffffff"
             app:civ_border_width="1dp" />
 
         <de.hdodenhof.circleimageview.CircleImageView
@@ -169,7 +169,7 @@
             android:layout_margin="5dp"
             android:layout_weight="0"
             android:src="@drawable/theme01_image"
-            app:civ_border_color="#f7763f"
+            app:civ_border_color="#ffffff"
             app:civ_border_width="1dp" />
 
     </LinearLayout>

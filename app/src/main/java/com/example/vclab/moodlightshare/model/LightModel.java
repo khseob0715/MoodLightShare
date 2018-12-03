@@ -9,12 +9,13 @@ public class LightModel {
     public String ShareDate;
     public String ShareUserUid;
     public String timestamp;
+    public String LigthImageUrl;
     public boolean bShare;
 
 
     public LightModel(){}
 
-    public LightModel(String ShareUserName, String ShareLightDescription, List<String> SharePixel, String ShareDate, String ShareUserUid, String timestamp, boolean bShare){
+    public LightModel(String ShareUserName, String ShareLightDescription, List<String> SharePixel, String ShareDate, String ShareUserUid, String timestamp, boolean bShare, String LigthImageUrl){
         this.ShareUserName = ShareUserName;
         this.ShareLightDescription = ShareLightDescription;
         this.SharePixel = SharePixel;
@@ -22,6 +23,7 @@ public class LightModel {
         this.ShareUserUid = ShareUserUid;
         this.timestamp = timestamp;
         this.bShare = bShare;
+        this.LigthImageUrl = LigthImageUrl;
     }
 
 }

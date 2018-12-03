@@ -1,6 +1,9 @@
 package com.example.vclab.moodlightshare.Fragment;
 
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -26,7 +29,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -117,7 +124,9 @@ public class FragmentShare extends Fragment {
             ((ShareRecyclerAdapter.ItemViewHolder) holder).NameText.setText(lightModels.get(position).ShareUserName);
             ((ShareRecyclerAdapter.ItemViewHolder) holder).DescriptionText.setText(lightModels.get(position).ShareLightDescription);
             ((ShareRecyclerAdapter.ItemViewHolder) holder).DateText.setText(lightModels.get(position).ShareDate);
+            Uri url = Uri.parse(lightModels.get(position).LigthImageUrl);
 
+            Picasso.get().load(url).into(((ShareRecyclerAdapter.ItemViewHolder) holder).LightImage);
 
             // 이벤트처리 : 생성된 List 중 선택된 목록번호를 Toast로 출력
             holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -140,6 +149,7 @@ public class FragmentShare extends Fragment {
             private TextView NameText;
             private TextView DateText;
             private ImageView starButton;
+            private ImageView LightImage;
             private boolean star = false;
 
             public ItemViewHolder(@NonNull View itemView) {
@@ -148,6 +158,7 @@ public class FragmentShare extends Fragment {
                 NameText = (TextView) itemView.findViewById(R.id.NameText);
                 DateText = (TextView) itemView.findViewById(R.id.DateText);
                 starButton = (ImageView)itemView.findViewById(R.id.starButton);
+                LightImage = (ImageView)itemView.findViewById(R.id.LightImage);
                 starButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {

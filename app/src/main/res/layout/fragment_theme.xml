@@ -48,7 +48,7 @@
                                 android:layout_margin="10dp"
                                 android:layout_gravity="center"
                                 android:src="@drawable/theme01_image"
-                                app:civ_border_color="#f7763f"
+                                app:civ_border_color="#716f6f"
                                 app:civ_border_width="2dp" />
 
 
@@ -82,7 +82,7 @@
                                 android:layout_margin="10dp"
                                 android:layout_gravity="center"
                                 android:src="@drawable/theme02_image"
-                                app:civ_border_color="#ffffff"
+                                app:civ_border_color="#716f6f"
                                 app:civ_border_width="2dp" />
 
 
@@ -116,7 +116,7 @@
                                 android:layout_margin="10dp"
                                 android:layout_gravity="center"
                                 android:src="@drawable/theme03_image"
-                                app:civ_border_color="#b614b0"
+                                app:civ_border_color="#716f6f"
                                 app:civ_border_width="3dp" />
 
 
@@ -152,7 +152,7 @@
                                 android:layout_margin="10dp"
                                 android:layout_gravity="center"
                                 android:src="@drawable/theme04_image"
-                                app:civ_border_color="#48ffff"
+                                app:civ_border_color="#716f6f"
                                 app:civ_border_width="3dp" />
 
 
@@ -195,15 +195,14 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
 
-                            <de.hdodenhof.circleimageview.CircleImageView
-                                xmlns:app="http://schemas.android.com/apk/res-auto"
+                            <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
                                 android:id="@+id/AnimationTheme01"
                                 android:layout_width="160dp"
                                 android:layout_height="160dp"
                                 android:layout_gravity="center"
                                 android:layout_margin="10dp"
                                 android:src="@drawable/animationtheme01_image"
-                                app:civ_border_color="#b614b0"
+                                app:civ_border_color="#716f6f"
                                 app:civ_border_width="3dp" />
 
 
@@ -217,7 +216,7 @@
                                 android:layout_gravity="center"
                                 android:gravity="center"
                                 android:padding="10dp"
-                                android:text="별"
+                                android:text="작은 별"
                                 android:textColor="@android:color/white"
                                 android:textSize="20dp"
                                 android:textStyle="bold" />
@@ -229,15 +228,14 @@
                             android:layout_height="wrap_content"
                             android:gravity="right">
 
-                            <de.hdodenhof.circleimageview.CircleImageView
-                                xmlns:app="http://schemas.android.com/apk/res-auto"
+                            <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
                                 android:id="@+id/AnimationTheme02"
                                 android:layout_width="160dp"
                                 android:layout_height="160dp"
                                 android:layout_gravity="center"
                                 android:layout_margin="10dp"
-                                android:src="@drawable/animationtheme01_image"
-                                app:civ_border_color="#b614b0"
+                                android:src="@drawable/animationtheme02_image"
+                                app:civ_border_color="#716f6f"
                                 app:civ_border_width="3dp" />
 
 
@@ -251,7 +249,7 @@
                                 android:layout_gravity="center"
                                 android:gravity="center"
                                 android:padding="10dp"
-                                android:text="적도의 석양"
+                                android:text="분수공원"
                                 android:textColor="@android:color/white"
                                 android:textSize="20dp"
                                 android:textStyle="bold" />
@@ -269,8 +267,8 @@
                                 android:layout_height="160dp"
                                 android:layout_gravity="center"
                                 android:layout_margin="10dp"
-                                android:src="@drawable/animationtheme01_image"
-                                app:civ_border_color="#b614b0"
+                                android:src="@drawable/animationtheme03_image"
+                                app:civ_border_color="#716f6f"
                                 app:civ_border_width="3dp" />
 
 
@@ -284,7 +282,7 @@
                                 android:layout_gravity="center"
                                 android:gravity="center"
                                 android:padding="10dp"
-                                android:text="적도의 석양"
+                                android:text="불꽃놀이"
                                 android:textColor="@android:color/white"
                                 android:textSize="20dp"
                                 android:textStyle="bold" />
@@ -303,8 +301,8 @@
                                 android:layout_height="160dp"
                                 android:layout_gravity="center"
                                 android:layout_margin="10dp"
-                                android:src="@drawable/animationtheme01_image"
-                                app:civ_border_color="#b614b0"
+                                android:src="@drawable/animationtheme04_image"
+                                app:civ_border_color="#716f6f"
                                 app:civ_border_width="3dp" />
 
 
@@ -318,8 +316,8 @@
                                 android:layout_gravity="center"
                                 android:gravity="center"
                                 android:padding="10dp"
-                                android:text="별"
-                                android:textColor="@android:color/white"
+                                android:text="클럽파티"
+                                android:textColor="#ffffff"
                                 android:textSize="20dp"
                                 android:textStyle="bold" />
 

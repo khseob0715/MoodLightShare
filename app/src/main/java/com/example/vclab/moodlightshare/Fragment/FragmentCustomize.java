@@ -3,8 +3,12 @@ package com.example.vclab.moodlightshare.Fragment;
 import android.content.DialogInterface;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -24,9 +28,20 @@ import android.widget.Toast;
 
 import com.example.vclab.moodlightshare.Dialog.ShareDialog;
 import com.example.vclab.moodlightshare.R;
+import com.example.vclab.moodlightshare.model.UserModel;
 import com.example.vclab.moodlightshare.views.CanvasView;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.sql.Date;
 import java.util.List;
 
 public class FragmentCustomize extends Fragment {
@@ -46,9 +61,17 @@ public class FragmentCustomize extends Fragment {
     DrawFragment drawFragment;
     CanvasView canvasView;
 
+
+    DatabaseReference mDatabase;
+
+    StorageReference mStoragedRef;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        mStoragedRef = FirebaseStorage.getInstance().getReference();
 
         drawFragment = new DrawFragment();
 
@@ -56,7 +79,6 @@ public class FragmentCustomize extends Fragment {
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.customize_framelayout, drawFragment);
         fragmentTransaction.commit();
-
 
     }
 
@@ -70,9 +92,6 @@ public class FragmentCustomize extends Fragment {
 
         for (int i = 0; i < buttonlist.getChildCount(); i++)
             buttonlist.getChildAt(i).setBackgroundTintList(ColorStateList.valueOf(-2414079));
-
-
-
 
         customize_selectedImage =view.findViewById(R.id.customzie_spectrum_image);
 
@@ -167,43 +186,56 @@ public class FragmentCustomize extends Fragment {
             @Override
             public void onClick(View view) {
 
-//                AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
-//                dialog.setTitle(R.string.save);
-//
-//                final EditText input = new EditText(getContext());
-//                input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
-//                input.setHint(R.string.savename);
-//                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-//                params.setMarginStart(60);
-//                params.setMarginEnd(60);
-//                input.setLayoutParams(params);
-//                dialog.setView(input);
-//
-//                dialog.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        if (!TextUtils.isEmpty(input.getText())) {
-//                    //        Save save = new Save(input.getText().toString(), canvas.toString());
-//            //                mListener.onCanvasSaved(save);
-//                        } else {
-//                            Toast.makeText(getActivity(), R.string.invalidsavename, Toast.LENGTH_SHORT).show();
-//                        }
-//                    }
-//                });
-//                dialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        dialog.dismiss();
-//                    }
-//                });
-//                dialog.show();
 
-                ShareDialog customDialog = new ShareDialog(getContext());
+                canvasView = drawFragment.getCanvas();
 
-                // 커스텀 다이얼로그를 호출한다.
-//                // 커스텀 다이얼로그의 결과를 출력할 TextView를 매개변수로 같이 넘겨준다.
-                customDialog.callFunction();
+                String path =  Environment.getExternalStorageDirectory().getAbsolutePath();
+                Bitmap b = Bitmap.createBitmap(canvasView.getWidth(), canvasView.getHeight(), Bitmap.Config.RGB_565);
 
+                if(b!=null){
+                    try {
+                        File f = new File(path+"/notes");
+                        f.mkdir();
+                        Long tsLong = System.currentTimeMillis();
+                        Date date = new Date(tsLong);
+                        String ts = tsLong.toString();
+                        final File f2 = new File(path + "/notes/"+ts+".png");
+
+                        Canvas c = new Canvas( b );
+                        canvasView.draw( c );
+
+                        FileOutputStream fos = new FileOutputStream(f2);
+
+                        if ( fos != null )
+                        {
+                            b.compress(Bitmap.CompressFormat.PNG, 100, fos );
+                            fos.close();
+                        }
+
+                        StorageReference riversRef = mStoragedRef.child("images/LigthImage" +  "/" + f2);
+
+                        riversRef.putFile(Uri.fromFile(f2)).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception exception) {
+                                // Handle unsuccessful uploads
+                            }
+                        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot task) {
+                                // 저장이 제대로 되었을 경우 다이얼로그 호출.
+                                ShareDialog customDialog = new ShareDialog(getContext());
+                                // 커스텀 다이얼로그를 호출한다.
+                                // 커스텀 다이얼로그의 결과를 출력할 TextView를 매개변수로 같이 넘겨준다.
+                         //       Toast.makeText(getContext(), ""+ task.getDownloadUrl().toString(),Toast.LENGTH_SHORT).show();
+                                customDialog.callFunction(task.getDownloadUrl().toString());
+
+                            }
+                        });
+                    } catch( Exception e ){
+                        Log.e("testSaveView", "Exception: " + e.toString() );
+                    }
+
+                }
             }
         });
 

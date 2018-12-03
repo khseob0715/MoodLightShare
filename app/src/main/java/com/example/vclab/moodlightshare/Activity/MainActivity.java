@@ -37,7 +37,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
 import java.io.IOException;
@@ -58,6 +57,7 @@ public class MainActivity extends BlunoLibrary{
     int Current_Fragment_Index = 1;
     int Select_Fragment_Index;
 
+    Fragment Fragment_picker, Fragment_theme, Fragment_share, Fragment_user, Fragment_custom;
 
     public static Uri profileUri;
 
@@ -79,7 +79,9 @@ public class MainActivity extends BlunoLibrary{
 
     public static boolean isColorChange = false;
     public static boolean isLastSwitchOn = false;
-    public static boolean isMusicOn = false;
+    public static boolean isMusicOn = true;
+    public static boolean isSleepOn = false;
+
     private boolean oneTimeCall = true;
     private boolean LightOneTime = true;
 
@@ -87,7 +89,10 @@ public class MainActivity extends BlunoLibrary{
 
     public static final int LEDMode = 0;
     public static final int RockerMode = 1;
-    public static final int KnobMode = 2;
+    public static final int Theme = 2;
+    public static final int Custom = 3;
+    public static final int Sleep = 4;
+
     public static byte Modestates = LEDMode;
 
     public static int color_r = 255, color_b = 255, color_g = 255;
@@ -126,8 +131,15 @@ public class MainActivity extends BlunoLibrary{
     private Runnable soundRunnable = new Runnable() {
         @Override
         public void run() {
-            Log.e("SoundRunnable","ssssssssssssssssssssssssssssssssssssssssssssssss");
-            serialSend(mPlainProtocol.write(BleCmd.Rocker,0,0,0));
+            serialSend(mPlainProtocol.write(BleCmd.Rocker));
+        }
+    };
+
+
+    private Runnable ThemeRunnable = new Runnable() {
+        @Override
+        public void run() {
+            serialSend(mPlainProtocol.write(BleCmd.Theme,FragmentTheme.selected_theme));
         }
     };
 
@@ -140,6 +152,8 @@ public class MainActivity extends BlunoLibrary{
             Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
         }
+
+
     }
 
     @Override
@@ -151,6 +165,11 @@ public class MainActivity extends BlunoLibrary{
             // Marshmallow+ Permission APIs
             MarshMallow();
         }
+        Fragment_picker = new FragmentColorPicker();
+        Fragment_theme = new FragmentTheme();
+        Fragment_share = new FragmentShare();
+        Fragment_custom = new FragmentCustomize();
+        Fragment_user = new FragmentUser();
 
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
@@ -161,7 +180,7 @@ public class MainActivity extends BlunoLibrary{
         // fragment를 불러오는 소스코드.
         fragmentManager = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.content, new FragmentColorPicker());
+        fragmentTransaction.replace(R.id.content, Fragment_picker);
         fragmentTransaction.commit();
 
         mainButton = (ImageView)findViewById(R.id.mainButton);
@@ -175,7 +194,7 @@ public class MainActivity extends BlunoLibrary{
             public void onClick(View view) {
                 Select_Fragment_Index = 1;
                 Button_Image_Change(Current_Fragment_Index,Select_Fragment_Index);
-                Fragment_Change(new FragmentColorPicker());
+                Fragment_Change(Fragment_picker);
             }
         });
         themeButton.setOnClickListener(new View.OnClickListener() {
@@ -183,7 +202,7 @@ public class MainActivity extends BlunoLibrary{
             public void onClick(View view) {
                 Select_Fragment_Index = 2;
                 Button_Image_Change(Current_Fragment_Index,Select_Fragment_Index);
-                Fragment_Change(new FragmentTheme());
+                Fragment_Change(Fragment_theme);
             }
         });
         customizeButton.setOnClickListener(new View.OnClickListener() {
@@ -191,7 +210,7 @@ public class MainActivity extends BlunoLibrary{
             public void onClick(View view) {
                 Select_Fragment_Index = 3;
                 Button_Image_Change(Current_Fragment_Index,Select_Fragment_Index);
-                Fragment_Change(new FragmentCustomize());
+                Fragment_Change(Fragment_custom);
             }
         });
         shareButton.setOnClickListener(new View.OnClickListener() {
@@ -199,7 +218,7 @@ public class MainActivity extends BlunoLibrary{
             public void onClick(View view) {
                 Select_Fragment_Index = 4;
                 Button_Image_Change(Current_Fragment_Index,Select_Fragment_Index);
-                Fragment_Change(new FragmentShare());
+                Fragment_Change(Fragment_share);
             }
         });
         userButton.setOnClickListener(new View.OnClickListener() {
@@ -207,7 +226,7 @@ public class MainActivity extends BlunoLibrary{
             public void onClick(View view) {
                 Select_Fragment_Index = 5;
                 Button_Image_Change(Current_Fragment_Index,Select_Fragment_Index);
-                Fragment_Change(new FragmentUser());
+                Fragment_Change(Fragment_user);
             }
         });
 
@@ -232,6 +251,7 @@ public class MainActivity extends BlunoLibrary{
                     }else{
                         Log.e("MainActivity","have not data");
                     }
+                    // 아래는 기본 프로필 이미지,
                     profileUri = Uri.parse("https://firebasestorage.googleapis.com/v0/b/moodlightshare.appspot.com/o/images%2Ficon01non.png?alt=media&token=db74f55c-ef39-482f-84c0-63cb8ef81496");
                 }
             }
@@ -332,12 +352,15 @@ public class MainActivity extends BlunoLibrary{
             case isConnected:
                 switch (Modestates) {
                     case LEDMode:
-                        Toast.makeText(this, "LedMode", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(this, "LedMode", Toast.LENGTH_SHORT).show();
                         receivedHandler.post(colorRunnable);
                     case RockerMode:
                         receivedHandler.post(soundRunnable);
                         break;
-                    case KnobMode:
+                    case Theme:
+                        receivedHandler.post(ThemeRunnable);
+                        break;
+                    case Custom:
                         break;
                     default:
                         break;
@@ -347,7 +370,7 @@ public class MainActivity extends BlunoLibrary{
                 Toast.makeText(this, "isconnecting", Toast.LENGTH_SHORT).show();
                 break;
             case isToScan:
-                Toast.makeText(this, "isToScan", Toast.LENGTH_SHORT).show();
+              //  Toast.makeText(this, "isToScan", Toast.LENGTH_SHORT).show();
                 break;
             default:
                 break;
@@ -376,11 +399,11 @@ public class MainActivity extends BlunoLibrary{
                     Log.e(getLocalClassName(), "Unkown joystick state: " + mPlainProtocol.receivedContent[0]);
                 }
             }
-            else if(mPlainProtocol.receivedCommand.equals(BleCmd.Knob)){
-                System.out.println("received Knob");
-                float pgPos = mPlainProtocol.receivedContent[0] / 3.75f;//Adjust display value to the angle
-
-            }
+//            else if(mPlainProtocol.receivedCommand.equals(BleCmd.Knob)){
+//                System.out.println("received Knob");
+//                float pgPos = mPlainProtocol.receivedContent[0] / 3.75f;//Adjust display value to the angle
+//
+//            }
         }
     }
 

@@ -64,6 +64,7 @@ public class FragmentColorPicker extends Fragment {
 
     private CircleImageView CircleImageView_Button01;
     private CircleImageView CircleImageView_Button02;
+    private CircleImageView CircleImageView_Button03;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -111,6 +112,23 @@ public class FragmentColorPicker extends Fragment {
             }
         });
 
+        CircleImageView_Button03 = (CircleImageView)view.findViewById(R.id.circlebutton3);
+        CircleImageView_Button03.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                MainActivity.Modestates = 4; // Sleep
+                MainActivity.isSleepOn = !MainActivity.isSleepOn;
+                if(MainActivity.isSleepOn){
+                    CircleImageView_Button03.setImageResource(R.drawable.sleep);
+                }else{
+                    CircleImageView_Button03.setImageResource(R.drawable.sleep_black);
+                }
+
+            }
+        });
+
+
         textView = view.findViewById(R.id.textView);
         alphaTileView = view.findViewById(R.id.alphaTileView);
 
@@ -140,12 +158,6 @@ public class FragmentColorPicker extends Fragment {
         return view;
     }
 
-//    private int getColor(ImageView selectedImage,int evX, int evY){
-//        selectedImage.setDrawingCacheEnabled(true);
-//        Bitmap bitmap=Bitmap.createBitmap(selectedImage.getDrawingCache());
-//        selectedImage.setDrawingCacheEnabled(false);
-//        return bitmap.getPixel(evX,evY);
-//    }
 
     //
     private void setLayoutColor(ColorEnvelope envelope) {
