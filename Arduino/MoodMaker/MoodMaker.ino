@@ -23,6 +23,11 @@ Analyzer Audio = Analyzer(4,5,0); // Strobe->4 RST->5 Analog->0
 
 int State01=2;        //  버튼 누르면 바뀌는 것. // 처음에는 사운드 비주얼 라이제이션 효과 기능 // Rocker 
 
+//적외선
+int inputPin = 7;           // 적외선 센서핀
+int val = 0;         // 센서 신호 변수
+int pirState = LOW;  // 센서 초기값은 low
+
 int Red=10,Green=0,Blue=10,Number_Position_RGB=100;   
 int SeletedTheme = 0;  
 int FreqVal[7];//the spectrum value 
@@ -40,6 +45,8 @@ void setup()
   leds.begin();  // Call this to start up the LED strip.
   clearLEDs();   // LED 조명 제거
   leds.show();   // LED 업데이트 
+
+   pinMode(inputPin, INPUT);  //센서 input
   
   Serial.begin(115200);
   
@@ -51,6 +58,24 @@ void setup()
 
 void loop()
 {
+
+  val = digitalRead(inputPin);
+
+  if(val == HIGH)
+  {
+    if(pirState == LOW){
+      Serial.println("welcome");
+      pirState = HIGH;
+      }
+  }
+  else 
+  { 
+    if(pirState == HIGH){
+      Serial.println("bhy");
+      pirState = LOW;
+      }
+    
+    }
 
   if (BLUNOPlainProtocol.available()) 
   {
