@@ -95,7 +95,7 @@ public class MainActivity extends BlunoLibrary{
     public static final int Sleep = 4;
     public static final int Speech = 5;
 
-    public static byte Modestates = LEDMode;
+    public static int Modestates = RockerMode;
 
     public static int color_r = 255, color_b = 255, color_g = 255;
 
@@ -105,53 +105,54 @@ public class MainActivity extends BlunoLibrary{
 
         @Override
         public void run() {
-            if (Modestates == LEDMode) {
-                if(isLastSwitchOn){      // 전원이 켜지면, LED가 들어옴
-                    Log.e("TAG","isLastSwitchOn");
+            Log.e("Modestates","Modestates : " + Modestates);
+            switch (Modestates) {
+                case LEDMode:
+                    Log.e("Modestates","LEDMode");
+                    if(isLastSwitchOn){      // 전원이 켜지면, LED가 들어옴
+                        Log.e("TAG","isLastSwitchOn");
 
-                    if(isColorChange){   // 색상을 선택하면 그 색이 나옴.
-                        Log.e("TAG","isColorChange");
-                        serialSend(mPlainProtocol.write(BleCmd.RGBLed, color_r, color_g, color_b));
-                        isColorChange = false;
+                        if(isColorChange){   // 색상을 선택하면 그 색이 나옴.
+                            Log.e("TAG","isColorChange");
+                            serialSend(mPlainProtocol.write(BleCmd.RGBLed, color_r, color_g, color_b));
+                            isColorChange = false;
+                        }else{
+                            // serialSend(mPlainProtocol.write(BleCmd.RGBLed, 125, 125, 125));
+                        }
                     }else{
-                       // serialSend(mPlainProtocol.write(BleCmd.RGBLed, 125, 125, 125));
+                        // 전원 버튼을 누르면 전원이 꺼짐.
+                        serialSend(mPlainProtocol.write(BleCmd.RGBLed, 0, 0, 0));
                     }
-                }else{
-                    // 전원 버튼을 누르면 전원이 꺼짐.
-                    serialSend(mPlainProtocol.write(BleCmd.RGBLed, 0, 0, 0));
-                }
-
-            }else if(Modestates == RockerMode){
-                Log.e("TAG","isRockerMode");
-                receivedHandler.removeCallbacks(colorRunnable);
-                receivedHandler.post(soundRunnable);
+                    break;
+                case RockerMode:
+                    Log.e("Modestates","RockerMode");
+                    if(isMusicOn){
+                        serialSend(mPlainProtocol.write(BleCmd.Rocker));
+                    }else{
+                        serialSend(mPlainProtocol.write(BleCmd.RGBLed, 0, 0, 0));
+                    }
+                    break;
+                case Theme:
+                    Log.e("Modestates","ThemeMode");
+                    serialSend(mPlainProtocol.write(BleCmd.Theme,FragmentTheme.selected_theme));
+                    break;
+                case Custom:
+                    Log.e("Modestates","CustomMode");
+                    break;
+                case Sleep:
+                    Log.e("Modestates","SleepMode");
+                    serialSend(mPlainProtocol.write(BleCmd.Sleep));
+                    break;
+                case Speech:
+                    Log.e("Modestates","SpeechMode");
+                    serialSend(mPlainProtocol.write(BleCmd.Speech, FragmentColorPicker.SPEECH_ON));
+                    break;
+                default:
+                    break;
             }
             receivedHandler.postDelayed(colorRunnable, 50);
         }
     };
-
-    private Runnable soundRunnable = new Runnable() {
-        @Override
-        public void run() {
-            serialSend(mPlainProtocol.write(BleCmd.Rocker));
-        }
-    };
-
-
-    private Runnable ThemeRunnable = new Runnable() {
-        @Override
-        public void run() {
-            serialSend(mPlainProtocol.write(BleCmd.Theme,FragmentTheme.selected_theme));
-        }
-    };
-
-    private Runnable SleepRunnable = new Runnable() {
-        @Override
-        public void run() {
-            serialSend(mPlainProtocol.write(BleCmd.Sleep));
-        }
-    };
-
 
     @Override
     public void onStart() {
@@ -275,7 +276,6 @@ public class MainActivity extends BlunoLibrary{
 
 
     public static void colorChange(){
-       // Modestates = LEDMode;
         isColorChange = true;
     }
 
@@ -360,29 +360,10 @@ public class MainActivity extends BlunoLibrary{
             case isScanning:
                 break;
             case isConnected:
-                switch (Modestates) {
-                    case LEDMode:
-                        //Toast.makeText(this, "LedMode", Toast.LENGTH_SHORT).show();
-                        receivedHandler.post(colorRunnable);
-                    case RockerMode:
-                        receivedHandler.post(soundRunnable);
-                        break;
-                    case Theme:
-                        receivedHandler.post(ThemeRunnable);
-                        break;
-                    case Custom:
-                        break;
-                    case Sleep:
-                        receivedHandler.post(SleepRunnable);
-                        break;
-                    case Speech:
-                        break;
-                    default:
-                        break;
-                }
+                receivedHandler.post(colorRunnable);
                 break;
             case isConnecting:
-                Toast.makeText(this, "isconnecting", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "무드등과 블루투스 연결이 완료되었습니다", Toast.LENGTH_SHORT).show();
                 break;
             case isToScan:
               //  Toast.makeText(this, "isToScan", Toast.LENGTH_SHORT).show();
@@ -414,11 +395,6 @@ public class MainActivity extends BlunoLibrary{
                     Log.e(getLocalClassName(), "Unkown joystick state: " + mPlainProtocol.receivedContent[0]);
                 }
             }
-//            else if(mPlainProtocol.receivedCommand.equals(BleCmd.Knob)){
-//                System.out.println("received Knob");
-//                float pgPos = mPlainProtocol.receivedContent[0] / 3.75f;//Adjust display value to the angle
-//
-//            }
         }
     }
 

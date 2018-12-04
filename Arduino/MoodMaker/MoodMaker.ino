@@ -30,6 +30,7 @@ int pirState = LOW;  // 센서 초기값은 low
 
 int Red = 10, Green = 0, Blue = 10, Number_Position_RGB = 100;
 int SeletedTheme = 0;
+int Speech_Flag = 0;
 int FreqVal[7];//the spectrum value
 int color[] = {0xDC143C, 0xFFA500, 0xFFFF00, 0x32CD32, 0x0000FF, 0x2F4F4F, 0x4B0082, 0xDA70D6};
 
@@ -54,15 +55,15 @@ void setup()
     TCCR1B |= (1 << CS11);
     TCCR2B &= ~((1 << CS12) | (1 << CS11) | (1 << CS10)); //Clock select: SYSCLK divde 8;
     TCCR2B |= (1 << CS11);
+
+    randomSeed(analogRead(A0));
 }
 
 void loop()
 {
 
     val = digitalRead(inputPin);
-  
-    
-  
+
     if (BLUNOPlainProtocol.available())
     {
       if (BLUNOPlainProtocol.receivedCommand == "RGBLED") //get command
@@ -78,10 +79,11 @@ void loop()
         SeletedTheme = BLUNOPlainProtocol.receivedContent[0];
       } else if (BLUNOPlainProtocol.receivedCommand == "CUSTOM") {
         State01 = 5;
-      } else if (BLUNOPlainProtocol.receivedCommand == "SELLP") {
+      } else if (BLUNOPlainProtocol.receivedCommand == "SLEEP") {
         State01 = 6;
       } else if (BLUNOPlainProtocol.receivedCommand == "SPEECH") {
         State01 = 7;
+        Speech_Flag = BLUNOPlainProtocol.receivedContent[0];
       }
   
     }
@@ -117,6 +119,7 @@ void loop()
         switch (SeletedTheme)
         {
           case 101:
+            theme01();
             break;
           case 102:
             break;
@@ -125,6 +128,7 @@ void loop()
           case 104:
             break;
           case 201:
+          smallStar();
             break;
           case 202:
             break;
@@ -137,10 +141,10 @@ void loop()
       }else if(State01 == 5){
         
       }else if(State01 == 6){  // 잠 잘때
-//        for(int i = 0 ; i < 25; i++){
-//          leds.setPixelColor(i, 0, 32, 0); //change the color
-//        }
-//        leds.show();
+        for(int i = 0 ; i < 25; i++){
+          leds.setPixelColor(i, 0, 32, 0); //change the color
+        }
+        leds.show();
           if (val == HIGH)
           {
               if (pirState == LOW) {
@@ -154,11 +158,56 @@ void loop()
               }
           }
       }else if(State01 == 7){
-        
+        switch(Speech_Flag){
+          case 0:  // 끄기
+            clearLEDs();  // Turn off all LEDs
+            leds.show();
+            break;
+          case 1:  // 키기
+            for(int i = 0 ; i < 180; i++){
+              leds.setPixelColor(i, 0xFFFF9301);
+            }
+            leds.show();
+            break;
+          case 2:  // 노래
+            Rock_With_Song();   //leds.show();
+            break;
+          case 3:  // 수면모드
+            break;
+        }
       }
     }
 }
-
+int theme01_color[] = {0xFE4C40, 0xFF3232, 0xFF0000, 0xFFD732, 0xFF607F, 0xFF8C0A, 0xB90000, 0xFF5050};
+void theme01(){
+  
+  for (int i = 0; i < LED_COUNT; i++)
+  {
+    if (i < LED_COUNT / 7)
+    {
+      leds.setPixelColor(i, theme01_color[random(8)]);
+    }
+    else if (i < (LED_COUNT / 7) * 2)   {
+      leds.setPixelColor(i, theme01_color[random(8)]);
+    }
+    else if (i < (LED_COUNT / 7) * 3)   {
+      leds.setPixelColor(i, theme01_color[random(8)]);
+    }
+    else if (i < (LED_COUNT / 7) * 4)   {
+     leds.setPixelColor(i, theme01_color[random(8)]);
+    }
+    else if (i < (LED_COUNT / 7) * 5)   {
+      leds.setPixelColor(i, theme01_color[random(8)]);
+    }
+    else if (i < (LED_COUNT / 7) * 6)   {
+      leds.setPixelColor(i, theme01_color[random(8)]);
+    }
+    else if (i < LED_COUNT)         {
+      leds.setPixelColor(i, theme01_color[random(8)]);
+    }
+  }
+  leds.show();
+}
 
 void clearLEDs()  // LED 전부 지우기
 {
@@ -335,5 +384,30 @@ void Display()
       leds.setPixelColor(i, color[Num_Color[6]]);
     }
   }
+  leds.show();
+}
+
+void smallStar(){
+  int index = (int)random(50);
+  int plus;
+  
+  for(int i = 0 ; i < 20; i++){
+    plus = (int)random(120);
+    leds.setPixelColor(index+plus, 0xFFFFFF);
+    leds.show();
+  }
+  
+  for(int bri = 10 ; bri < 250; bri+=10){
+    leds.setBrightness(bri);
+    leds.show();
+    delay(100);
+  }
+
+  for(int bri = 250 ; bri >= 0; bri -=10){
+    leds.setBrightness(bri);
+    leds.show();
+    delay(100);
+  }
+  
   leds.show();
 }

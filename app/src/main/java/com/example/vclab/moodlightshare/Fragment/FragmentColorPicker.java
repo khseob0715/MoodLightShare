@@ -75,6 +75,8 @@ public class FragmentColorPicker extends Fragment {
 
     TextToSpeech tts;
 
+    public static int SPEECH_ON = 0;
+
     private CircleImageView CircleImageView_Button01;
     private CircleImageView CircleImageView_Button02;
     private CircleImageView CircleImageView_Button03;
@@ -113,6 +115,12 @@ public class FragmentColorPicker extends Fragment {
                if(MainActivity.isLastSwitchOn){
                    CircleImageView_Button01.setImageResource(R.drawable.bulb);
                    MainActivity.Modestates = 0; // Ledmode;
+                   MainActivity.isMusicOn = false;
+                   MainActivity.isSpeechOn = false;
+                   MainActivity.isSleepOn = false;
+                   CircleImageView_Button02.setImageResource(R.drawable.music_black);
+                   CircleImageView_Button03.setImageResource(R.drawable.sleep_black);
+                   CircleImageView_Button04.setImageResource(R.drawable.speeh_black);
                }else{
                    CircleImageView_Button01.setImageResource(R.drawable.bulb_black);
                }
@@ -125,10 +133,16 @@ public class FragmentColorPicker extends Fragment {
             @Override
             public void onClick(View view) {
 
-                MainActivity.Modestates = 1; // RockerMode
                 MainActivity.isMusicOn = !MainActivity.isMusicOn;
                 if(MainActivity.isMusicOn){
                     CircleImageView_Button02.setImageResource(R.drawable.music);
+                    MainActivity.Modestates = 1; // RockerMode
+                    MainActivity.isLastSwitchOn = false;
+                    MainActivity.isSleepOn = false;
+                    MainActivity.isSpeechOn = false;
+                    CircleImageView_Button01.setImageResource(R.drawable.bulb_black);
+                    CircleImageView_Button03.setImageResource(R.drawable.sleep_black);
+                    CircleImageView_Button04.setImageResource(R.drawable.speeh_black);
                 }else{
                     CircleImageView_Button02.setImageResource(R.drawable.music_black);
                 }
@@ -141,10 +155,17 @@ public class FragmentColorPicker extends Fragment {
             @Override
             public void onClick(View view) {
 
-                MainActivity.Modestates = 4; // Sleep
+
                 MainActivity.isSleepOn = !MainActivity.isSleepOn;
                 if(MainActivity.isSleepOn){
                     CircleImageView_Button03.setImageResource(R.drawable.sleep);
+                    MainActivity.Modestates = 4; // Sleep
+                    MainActivity.isLastSwitchOn = false;
+                    MainActivity.isMusicOn = false;
+                    MainActivity.isSpeechOn = false;
+                    CircleImageView_Button01.setImageResource(R.drawable.bulb_black);
+                    CircleImageView_Button02.setImageResource(R.drawable.music_black);
+                    CircleImageView_Button04.setImageResource(R.drawable.speeh_black);
                 }else{
                     CircleImageView_Button03.setImageResource(R.drawable.sleep_black);
                 }
@@ -156,12 +177,19 @@ public class FragmentColorPicker extends Fragment {
         CircleImageView_Button04.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                inputVoice();
 
-                MainActivity.Modestates = 5; // Speech
                 MainActivity.isSpeechOn = !MainActivity.isSpeechOn;
                 if(MainActivity.isSpeechOn){
                     CircleImageView_Button04.setImageResource(R.drawable.speech);
+                    MainActivity.Modestates = 5; // Speech
+                    MainActivity.isLastSwitchOn = false;
+                    MainActivity.isMusicOn = false;
+                    MainActivity.isSleepOn = false;
+                    CircleImageView_Button01.setImageResource(R.drawable.bulb_black);
+                    CircleImageView_Button02.setImageResource(R.drawable.music_black);
+                    CircleImageView_Button03.setImageResource(R.drawable.sleep_black);
+                    inputVoice();
+
                 }else{
                     CircleImageView_Button04.setImageResource(R.drawable.speeh_black);
                 }
@@ -230,14 +258,11 @@ public class FragmentColorPicker extends Fragment {
                 @Override
                 public void onEndOfSpeech() {
 
-
                 }
 
                 @Override
                 public void onError(int error) {
-
                     stt.destroy();
-
                 }
 
                 //음성결과 넘어오는부분
@@ -266,18 +291,22 @@ public class FragmentColorPicker extends Fragment {
     }
 
     private void replyAnswer(String input){
-        if(input.equals("안녕하세요")){
-
+        if(input.equals("켜줘") || input.equals("켜 줘") || input.equals("켜")){
+            SPEECH_ON = 1;
         }
-        else{
-
+        else if(input.equals("노래")){
+            Toast.makeText(getContext(),input.toString(),Toast.LENGTH_SHORT).show();
+            SPEECH_ON = 2;
+        }else if(input.equals("꺼줘") || input.equals("꺼 줘") || input.equals("꺼")){
+            SPEECH_ON = 0;
+        }else if(input.equals("수면모드")){
+            SPEECH_ON = 3;
         }
+
 
     }
 
-    //
     private void setLayoutColor(ColorEnvelope envelope) {
-
         textView.setText("#" + envelope.getHexCode());
         alphaTileView.setPaintColor(envelope.getColor());
     }
