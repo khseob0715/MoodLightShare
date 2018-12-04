@@ -1,8 +1,16 @@
 package com.example.vclab.moodlightshare.Fragment;
 
+import android.Manifest;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.speech.RecognitionListener;
+import android.speech.RecognizerIntent;
+import android.speech.SpeechRecognizer;
+import android.speech.tts.TextToSpeech;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -25,6 +33,9 @@ import com.skydoves.colorpickerview.ColorPickerView;
 import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener;
 import com.skydoves.colorpickerview.sliders.AlphaSlideBar;
 import com.skydoves.colorpickerview.sliders.BrightnessSlideBar;
+
+import java.util.ArrayList;
+import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -62,12 +73,25 @@ public class FragmentColorPicker extends Fragment {
     private TextView textView;
     private AlphaTileView alphaTileView;
 
+    TextToSpeech tts;
+
     private CircleImageView CircleImageView_Button01;
     private CircleImageView CircleImageView_Button02;
     private CircleImageView CircleImageView_Button03;
+    private CircleImageView CircleImageView_Button04;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(ContextCompat.checkSelfPermission(getContext(), Manifest.permission.RECORD_AUDIO)!= PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.RECORD_AUDIO},5);
+        }
+
+        tts=new TextToSpeech(getContext(), new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                tts.setLanguage(Locale.KOREAN);
+            }
+        });
     }
 
 
@@ -128,6 +152,23 @@ public class FragmentColorPicker extends Fragment {
             }
         });
 
+        CircleImageView_Button04 = (CircleImageView)view.findViewById(R.id.circlebutton4);
+        CircleImageView_Button04.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                inputVoice();
+
+                MainActivity.Modestates = 5; // Speech
+                MainActivity.isSpeechOn = !MainActivity.isSpeechOn;
+                if(MainActivity.isSpeechOn){
+                    CircleImageView_Button04.setImageResource(R.drawable.speech);
+                }else{
+                    CircleImageView_Button04.setImageResource(R.drawable.speeh_black);
+                }
+
+            }
+        });
+
 
         textView = view.findViewById(R.id.textView);
         alphaTileView = view.findViewById(R.id.alphaTileView);
@@ -158,6 +199,81 @@ public class FragmentColorPicker extends Fragment {
         return view;
     }
 
+
+    public void inputVoice() {
+        try{
+            Intent intent=new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+            intent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE,getContext().getPackageName());
+            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE,"ko-KR");
+            final SpeechRecognizer stt=SpeechRecognizer.createSpeechRecognizer(getContext());
+            stt.setRecognitionListener(new RecognitionListener() {
+                @Override
+                public void onReadyForSpeech(Bundle params) {
+
+                }
+
+                @Override
+                public void onBeginningOfSpeech() {
+
+                }
+
+                @Override
+                public void onRmsChanged(float rmsdB) {
+
+                }
+
+                @Override
+                public void onBufferReceived(byte[] buffer) {
+
+                }
+
+                @Override
+                public void onEndOfSpeech() {
+
+
+                }
+
+                @Override
+                public void onError(int error) {
+
+                    stt.destroy();
+
+                }
+
+                //음성결과 넘어오는부분
+                @Override
+                public void onResults(Bundle results) {
+                    ArrayList<String> result=(ArrayList<String>)results.get(SpeechRecognizer.RESULTS_RECOGNITION);
+                  //  txt.append(result.get(0)+"\n");
+                    replyAnswer(result.get(0));
+                    stt.destroy();
+                }
+
+                @Override
+                public void onPartialResults(Bundle partialResults) {
+
+                }
+
+                @Override
+                public void onEvent(int eventType, Bundle params) {
+
+                }
+            });
+            stt.startListening(intent);
+        }catch (Exception e){
+            Log.e("AI","exception");
+        }
+    }
+
+    private void replyAnswer(String input){
+        if(input.equals("안녕하세요")){
+
+        }
+        else{
+
+        }
+
+    }
 
     //
     private void setLayoutColor(ColorEnvelope envelope) {

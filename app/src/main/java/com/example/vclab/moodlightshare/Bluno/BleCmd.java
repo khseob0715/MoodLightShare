@@ -8,4 +8,6 @@ public class BleCmd {
 
 	public static final String Theme = "THEME";
 	public static final String Custom = "CUSTOM";
+	public static final String Sleep = "SLEEP";
+	public static final String Speech = "SPEECH";
 }

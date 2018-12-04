@@ -81,6 +81,7 @@ public class MainActivity extends BlunoLibrary{
     public static boolean isLastSwitchOn = false;
     public static boolean isMusicOn = true;
     public static boolean isSleepOn = false;
+    public static boolean isSpeechOn = false;
 
     private boolean oneTimeCall = true;
     private boolean LightOneTime = true;
@@ -92,6 +93,7 @@ public class MainActivity extends BlunoLibrary{
     public static final int Theme = 2;
     public static final int Custom = 3;
     public static final int Sleep = 4;
+    public static final int Speech = 5;
 
     public static byte Modestates = LEDMode;
 
@@ -112,7 +114,7 @@ public class MainActivity extends BlunoLibrary{
                         serialSend(mPlainProtocol.write(BleCmd.RGBLed, color_r, color_g, color_b));
                         isColorChange = false;
                     }else{
-                        serialSend(mPlainProtocol.write(BleCmd.RGBLed, 125, 125, 125));
+                       // serialSend(mPlainProtocol.write(BleCmd.RGBLed, 125, 125, 125));
                     }
                 }else{
                     // 전원 버튼을 누르면 전원이 꺼짐.
@@ -142,6 +144,14 @@ public class MainActivity extends BlunoLibrary{
             serialSend(mPlainProtocol.write(BleCmd.Theme,FragmentTheme.selected_theme));
         }
     };
+
+    private Runnable SleepRunnable = new Runnable() {
+        @Override
+        public void run() {
+            serialSend(mPlainProtocol.write(BleCmd.Sleep));
+        }
+    };
+
 
     @Override
     public void onStart() {
@@ -361,6 +371,11 @@ public class MainActivity extends BlunoLibrary{
                         receivedHandler.post(ThemeRunnable);
                         break;
                     case Custom:
+                        break;
+                    case Sleep:
+                        receivedHandler.post(SleepRunnable);
+                        break;
+                    case Speech:
                         break;
                     default:
                         break;
