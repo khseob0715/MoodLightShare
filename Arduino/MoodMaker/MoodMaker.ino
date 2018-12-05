@@ -21,6 +21,8 @@ Adafruit_NeoPixel leds = Adafruit_NeoPixel(LED_COUNT, PIN, NEO_GRB + NEO_KHZ400)
 Metro ledMetro = Metro(18);      // Metro for data receive in a regular time
 Analyzer Audio = Analyzer(4, 5, 0); // Strobe->4 RST->5 Analog->0
 
+
+
 int State01 = 2;      //  버튼 누르면 바뀌는 것. // 처음에는 사운드 비주얼 라이제이션 효과 기능 // Rocker
 
 //적외선
@@ -33,6 +35,7 @@ int SeletedTheme = 0;
 int Speech_Flag = 0;
 int FreqVal[7];//the spectrum value
 int color[] = {0xDC143C, 0xFFA500, 0xFFFF00, 0x32CD32, 0x0000FF, 0x2F4F4F, 0x4B0082, 0xDA70D6};
+int Led_arr[11] = {0,17,33,50,66,83,99,116,132,148,165};
 
 int Num_Channel = 0, Buff_Channel = 0;
 int Num_Color[7], Buff_Num_Color[7];
@@ -61,6 +64,18 @@ void setup()
 
 void loop()
 {
+    /* half */
+//    for(int i = 0 ; i < 11; i++){
+//        for(int j = Led_arr[i]+8 ; j < Led_arr[i]+17; j++){
+//          leds.setPixelColor(j,0, 125, 125);//change the color
+//        }
+//      }
+//      
+//      for(int i = 0 ; i < 11; i++){
+//        for(int j = Led_arr[i] ; j < Led_arr[i]+8; j++){
+//          leds.setPixelColor(j,55, 55, 0);//change the color
+//        }
+//      }
 
     val = digitalRead(inputPin);
 
@@ -128,13 +143,15 @@ void loop()
           case 104:
             break;
           case 201:
-          smallStar();
+          Anime_theme01();
             break;
           case 202:
             break;
           case 203:
+          Anime_theme03();
             break;
           case 204:
+          Anime_theme04();
             break;
   
         }
@@ -178,36 +195,38 @@ void loop()
       }
     }
 }
-int theme01_color[] = {0xFE4C40, 0xFF3232, 0xFF0000, 0xFFD732, 0xFF607F, 0xFF8C0A, 0xB90000, 0xFF5050};
+
 void theme01(){
   
   for (int i = 0; i < LED_COUNT; i++)
   {
     if (i < LED_COUNT / 7)
     {
-      leds.setPixelColor(i, theme01_color[random(8)]);
+      leds.setPixelColor(i, 0xff471a);
     }
     else if (i < (LED_COUNT / 7) * 2)   {
-      leds.setPixelColor(i, theme01_color[random(8)]);
+      leds.setPixelColor(i, 0xff3300);
     }
     else if (i < (LED_COUNT / 7) * 3)   {
-      leds.setPixelColor(i, theme01_color[random(8)]);
+      leds.setPixelColor(i, 0xff4500);
     }
     else if (i < (LED_COUNT / 7) * 4)   {
-     leds.setPixelColor(i, theme01_color[random(8)]);
+     leds.setPixelColor(i, 0x992900);
     }
     else if (i < (LED_COUNT / 7) * 5)   {
-      leds.setPixelColor(i, theme01_color[random(8)]);
+      leds.setPixelColor(i, 0xff4500);
     }
     else if (i < (LED_COUNT / 7) * 6)   {
-      leds.setPixelColor(i, theme01_color[random(8)]);
+      leds.setPixelColor(i, 0xff3300);
     }
     else if (i < LED_COUNT)         {
-      leds.setPixelColor(i, theme01_color[random(8)]);
+      leds.setPixelColor(i, 0xff471a);
     }
   }
   leds.show();
 }
+
+
 
 void clearLEDs()  // LED 전부 지우기
 {
@@ -387,27 +406,106 @@ void Display()
   leds.show();
 }
 
-void smallStar(){
+Metro AniTheme01_Metro = Metro(100);
+void Anime_theme01(){
   int index = (int)random(50);
   int plus;
-  
+  clearLEDs();   // LED 조명 제거
+  leds.show();
+  leds.setBrightness(10);
   for(int i = 0 ; i < 20; i++){
     plus = (int)random(120);
-    leds.setPixelColor(index+plus, 0xFFFFFF);
+    leds.setPixelColor(index+plus, 0xFED85D);
     leds.show();
   }
   
   for(int bri = 10 ; bri < 250; bri+=10){
-    leds.setBrightness(bri);
-    leds.show();
-    delay(100);
+    if(AniTheme01_Metro.check()){
+        leds.setBrightness(bri);
+        leds.show();
+    }
   }
 
-  for(int bri = 250 ; bri >= 0; bri -=10){
-    leds.setBrightness(bri);
-    leds.show();
-    delay(100);
+  for(int bri = 250 ; bri > 0; bri -=10){
+    if(AniTheme01_Metro.check()){
+        leds.setBrightness(bri);
+        leds.show();
+    }
   }
+  leds.setBrightness(255);
+}
+
+
+int theme03_led_arr[] = {138, 136, 134, 132, 130, 128, 126, 124};
+int minus = 17;
+int last;
+Metro AniTheme03_Metro = Metro(1000);
+void Anime_theme03(){
+    for(int i = 180; i > 140 ; i--){
+        leds.setPixelColor(i, 0x00b3b3);
+    }
+
+    last = theme03_led_arr[0];
+    for(int i = 0; i < 8; i++){
+        leds.setPixelColor(theme03_led_arr[i], 0x80ffff);
+        theme03_led_arr[i] -= minus; 
+    }
+
+    if(minus == 17){
+        minus -= 2;
+    }else{
+        minus += 2;
+    }
+    
+    if(theme03_led_arr[0] > 0){
+        if(AniTheme03_Metro.check()){
+          for(int i = 140 ; i > last ; i--){
+              leds.setPixelColor(i, 0x000000);        
+          }
+          leds.show();
+        }
+        //delay(1000);
+    }else{
+       for(int i = 40 ; i > 0 ; i--){
+            leds.setPixelColor(i, 0x000000);        
+        }
+        leds.show();
+        int init = 138;
+        for(int i = 0 ; i < 8; i++){
+            theme03_led_arr[i] = init;
+            init -= 2;
+        }
+    }
+    leds.show();
+}
+
+int Ani_theme04_color[] = {0xff0000, 0xff00bf, 0x4000ff, 0x00ff40, 0xffff00, 0xff8000, 0xff0000, 0x6600ff};
+void Anime_theme04(){  // 클럽파티 
   
+  for (int i = 0; i < LED_COUNT; i++)
+  {
+    if (i < LED_COUNT / 7)
+    {
+      leds.setPixelColor(i, Ani_theme04_color[random(8)]);
+    }
+    else if (i < (LED_COUNT / 7) * 2)   {
+      leds.setPixelColor(i, Ani_theme04_color[random(8)]);
+    }
+    else if (i < (LED_COUNT / 7) * 3)   {
+      leds.setPixelColor(i, Ani_theme04_color[random(8)]);
+    }
+    else if (i < (LED_COUNT / 7) * 4)   {
+     leds.setPixelColor(i, Ani_theme04_color[random(8)]);
+    }
+    else if (i < (LED_COUNT / 7) * 5)   {
+      leds.setPixelColor(i, Ani_theme04_color[random(8)]);
+    }
+    else if (i < (LED_COUNT / 7) * 6)   {
+      leds.setPixelColor(i, Ani_theme04_color[random(8)]);
+    }
+    else if (i < LED_COUNT)         {
+      leds.setPixelColor(i, Ani_theme04_color[random(8)]);
+    }
+  }
   leds.show();
 }
