@@ -186,11 +186,11 @@ public class FragmentCustomize extends Fragment {
             @Override
             public void onClick(View view) {
 
-
                 canvasView = drawFragment.getCanvas();
 
                 String path =  Environment.getExternalStorageDirectory().getAbsolutePath();
                 Bitmap b = Bitmap.createBitmap(canvasView.getWidth(), canvasView.getHeight(), Bitmap.Config.RGB_565);
+
 
                 if(b!=null){
                     try {
@@ -226,8 +226,8 @@ public class FragmentCustomize extends Fragment {
                                 ShareDialog customDialog = new ShareDialog(getContext());
                                 // 커스텀 다이얼로그를 호출한다.
                                 // 커스텀 다이얼로그의 결과를 출력할 TextView를 매개변수로 같이 넘겨준다.
-                         //       Toast.makeText(getContext(), ""+ task.getDownloadUrl().toString(),Toast.LENGTH_SHORT).show();
-                                customDialog.callFunction(task.getDownloadUrl().toString());
+
+                                customDialog.callFunction(task.getDownloadUrl().toString(), canvasView);
 
                             }
                         });

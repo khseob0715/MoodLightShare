@@ -2,9 +2,11 @@ package com.example.vclab.moodlightshare.Dialog;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatDialog;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -16,6 +18,7 @@ import android.widget.Toast;
 
 import com.example.vclab.moodlightshare.R;
 import com.example.vclab.moodlightshare.model.LightModel;
+import com.example.vclab.moodlightshare.views.CanvasView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -30,7 +33,7 @@ public class ShareDialog {
 
     private Context context;
 
-
+    final Integer[] integers = new Integer[100];
     private DatabaseReference mDatabase;
 
     public ShareDialog(Context context) {
@@ -39,7 +42,7 @@ public class ShareDialog {
     }
 
     // 호출할 다이얼로그 함수를 정의한다.
-    public void callFunction(final String fileName) {
+    public void callFunction(final String fileName, final CanvasView canvasView) {
 
         // 커스텀 다이얼로그를 정의하기위해 Dialog클래스를 생성한다.
         final Dialog dlg = new Dialog(context);
@@ -59,6 +62,15 @@ public class ShareDialog {
         final Button shareButton = (Button) dlg.findViewById(R.id.dialog_shareButton);
         final Button cancelButton = (Button) dlg.findViewById(R.id.cancelButton);
 
+        String pixelString = canvasView.toString();
+
+        String[] strs = pixelString.split(",");
+        int len = strs.length;
+
+        for(int i = 0 ; i < len ; i++){
+            integers[i] = Integer.parseInt(strs[i]);
+        }
+
         okButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -72,10 +84,11 @@ public class ShareDialog {
                     lightModel.ShareLightDescription = message.getText().toString();
                 }
 
-                String[] strs = {"1/2/24", "3/25/23", "43/42/16"};
+
+
                 // 1번 조명   2번 조명  3번 조명 -------->?
 
-                List<String> list = Arrays.asList(strs);
+                List<Integer> list = Arrays.asList(integers);
                 lightModel.SharePixel = list;
 
                 Long tsLong = System.currentTimeMillis();
@@ -109,10 +122,10 @@ public class ShareDialog {
                     lightModel.ShareLightDescription = message.getText().toString();
                 }
 
-                String[] strs = {"1/2/24", "3/25/23", "43/42/16"};
+
                 // 1번 조명   2번 조명  3번 조명 -------->?
 
-                List<String> list = Arrays.asList(strs);
+                List<Integer> list = Arrays.asList(integers);
                 lightModel.SharePixel = list;
 
                 Long tsLong = System.currentTimeMillis();

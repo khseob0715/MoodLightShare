@@ -176,7 +176,7 @@ public class DrawFragment extends Fragment {
 
             // add checkbox
             final CheckBox checkbox = new CheckBox(getContext());
-         //   checkbox.setText(R.string.frontcamera);
+
             checkbox.setLayoutParams(params);
             ll.addView(checkbox);
 

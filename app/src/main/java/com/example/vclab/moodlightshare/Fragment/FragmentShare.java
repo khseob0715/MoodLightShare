@@ -21,6 +21,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.vclab.moodlightshare.Activity.MainActivity;
+import com.example.vclab.moodlightshare.Bluno.BleCmd;
 import com.example.vclab.moodlightshare.R;
 import com.example.vclab.moodlightshare.ShareFunc;
 import com.example.vclab.moodlightshare.model.LightModel;
@@ -51,6 +53,8 @@ public class FragmentShare extends Fragment {
 
     public static int Once = 0;
 
+    public static int CustomPixel[] = new int[100];
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,7 +68,6 @@ public class FragmentShare extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
         View view = inflater.inflate(R.layout.fragment_share, null);
 
         mProgressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
@@ -102,7 +105,6 @@ public class FragmentShare extends Fragment {
                     mProgressBar.setVisibility(View.GONE);
 
                     Once = 1;
-
                 }
 
                 @Override
@@ -132,7 +134,13 @@ public class FragmentShare extends Fragment {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(getContext(), String.format("%d 선택 %s", position + 1, lightModels.get(position).SharePixel.get(0)), Toast.LENGTH_LONG).show();
+                   // Toast.makeText(getContext(), String.format("%d 선택 %s", position + 1, lightModels.get(position).SharePixel.get(0)), Toast.LENGTH_LONG).show();
+                    MainActivity.Modestates = 3; // CustomMode;
+                    int len = lightModels.get(position).SharePixel.size();
+                    for(int i = 0 ; i < len; i++) {
+                        CustomPixel[i] = lightModels.get(position).SharePixel.get(i);
+                    }
+                    MainActivity.Modestates = 10;
                 }
 
                 // lightModels.get(position).pixelColor[lightModels.get(position).index - 1].getG_color(),

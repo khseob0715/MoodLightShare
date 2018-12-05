@@ -138,6 +138,7 @@ public class MainActivity extends BlunoLibrary{
                     break;
                 case Custom:
                     Log.e("Modestates","CustomMode");
+                    serialSend(mPlainProtocol.write(BleCmd.Custom, FragmentShare.CustomPixel));
                     break;
                 case Sleep:
                     Log.e("Modestates","SleepMode");

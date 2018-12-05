@@ -43,6 +43,9 @@ boolean Dis_En = false;
 int Num_First_Color = 0, Buf_Max = 0;
 int Num_Shark02_High = 0, Number_Shark02_LOW = 0;
 
+int CustomPixel[100];
+
+int pixel_index;
 void setup()
 {
     Audio.Init();  //Init module
@@ -64,6 +67,7 @@ void setup()
 
 void loop()
 {
+  
     /* half */
 //    for(int i = 0 ; i < 11; i++){
 //        for(int j = Led_arr[i]+8 ; j < Led_arr[i]+17; j++){
@@ -94,6 +98,11 @@ void loop()
         SeletedTheme = BLUNOPlainProtocol.receivedContent[0];
       } else if (BLUNOPlainProtocol.receivedCommand == "CUSTOM") {
         State01 = 5;
+        Serial.println("CUSTOM");
+        for(pixel_index = 0 ; pixel_index < 100; pixel_index++){
+          CustomPixel[pixel_index] = BLUNOPlainProtocol.receivedContent[pixel_index];
+        }
+        
       } else if (BLUNOPlainProtocol.receivedCommand == "SLEEP") {
         State01 = 6;
       } else if (BLUNOPlainProtocol.receivedCommand == "SPEECH") {
@@ -143,6 +152,7 @@ void loop()
           case 104:
             break;
           case 201:
+          leds.setBrightness(10);
           Anime_theme01();
             break;
           case 202:
@@ -156,12 +166,19 @@ void loop()
   
         }
       }else if(State01 == 5){
+        Serial.print("s");
+        for(int i = 0 ; i < 100 ; i++){
+          leds.setPixelColor(i, CustomPixel[i]); //change the color
+          Serial.print("s");
+        }
+        leds.show();
         
       }else if(State01 == 6){  // 잠 잘때
         for(int i = 0 ; i < 25; i++){
           leds.setPixelColor(i, 0, 32, 0); //change the color
         }
         leds.show();
+        
           if (val == HIGH)
           {
               if (pirState == LOW) {
@@ -174,6 +191,7 @@ void loop()
                 pirState = LOW;
               }
           }
+          
       }else if(State01 == 7){
         switch(Speech_Flag){
           case 0:  // 끄기
@@ -412,13 +430,13 @@ void Anime_theme01(){
   int plus;
   clearLEDs();   // LED 조명 제거
   leds.show();
-  leds.setBrightness(10);
+  
   for(int i = 0 ; i < 20; i++){
     plus = (int)random(120);
     leds.setPixelColor(index+plus, 0xFED85D);
     leds.show();
   }
-  
+ 
   for(int bri = 10 ; bri < 250; bri+=10){
     if(AniTheme01_Metro.check()){
         leds.setBrightness(bri);
@@ -426,12 +444,6 @@ void Anime_theme01(){
     }
   }
 
-  for(int bri = 250 ; bri > 0; bri -=10){
-    if(AniTheme01_Metro.check()){
-        leds.setBrightness(bri);
-        leds.show();
-    }
-  }
   leds.setBrightness(255);
 }
 
@@ -439,44 +451,46 @@ void Anime_theme01(){
 int theme03_led_arr[] = {138, 136, 134, 132, 130, 128, 126, 124};
 int minus = 17;
 int last;
-Metro AniTheme03_Metro = Metro(1000);
+
+Metro AniTheme03_Metro(1000);
+
 void Anime_theme03(){
     for(int i = 180; i > 140 ; i--){
         leds.setPixelColor(i, 0x00b3b3);
     }
 
-    last = theme03_led_arr[0];
-    for(int i = 0; i < 8; i++){
-        leds.setPixelColor(theme03_led_arr[i], 0x80ffff);
-        theme03_led_arr[i] -= minus; 
-    }
-
-    if(minus == 17){
-        minus -= 2;
-    }else{
-        minus += 2;
-    }
-    
-    if(theme03_led_arr[0] > 0){
-        if(AniTheme03_Metro.check()){
-          for(int i = 140 ; i > last ; i--){
+    if(AniTheme03_Metro.check()){
+      last = theme03_led_arr[0];
+      for(int i = 0; i < 8; i++){
+          leds.setPixelColor(theme03_led_arr[i], 0x80ffff);
+          theme03_led_arr[i] -= minus; 
+      }
+  
+      if(minus == 17){
+          minus -= 2;
+      }else{
+          minus += 2;
+      }
+      
+      if(theme03_led_arr[0] > 0){
+            for(int i = 140 ; i > last ; i--){            
+                leds.setPixelColor(i, 0x000000);           
+            }     
+            leds.show();
+      }else{
+         for(int i = 40 ; i > 0 ; i--){
               leds.setPixelColor(i, 0x000000);        
           }
           leds.show();
-        }
-        //delay(1000);
-    }else{
-       for(int i = 40 ; i > 0 ; i--){
-            leds.setPixelColor(i, 0x000000);        
-        }
-        leds.show();
-        int init = 138;
-        for(int i = 0 ; i < 8; i++){
-            theme03_led_arr[i] = init;
-            init -= 2;
-        }
+          int init = 138;
+          for(int i = 0 ; i < 8; i++){
+              theme03_led_arr[i] = init;
+              init -= 2;
+          }
+      }
     }
     leds.show();
+    
 }
 
 int Ani_theme04_color[] = {0xff0000, 0xff00bf, 0x4000ff, 0x00ff40, 0xffff00, 0xff8000, 0xff0000, 0x6600ff};

@@ -117,26 +117,26 @@ public class ShareFunc extends AppCompatActivity implements View.OnClickListener
     @Override
     public void onClick(View view) {
         switch (view.getId()){
-            case R.id.MainActivity_ShareButton:
-                LightModel lightModel = new LightModel();
-
-                lightModel.ShareUserName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
-                lightModel.ShareLightDescription = TestDescription;
-
-                String[] strs = {"1/2/24", "3/25/23", "43/42/16"};
-                // 1번 조명   2번 조명  3번 조명 -------->?
-
-                List<String> list = Arrays.asList(strs);
-                lightModel.SharePixel = list;
-
-                Long tsLong = System.currentTimeMillis()/1000;
-                String ts = tsLong.toString();
-
-                mDatabase.child("recipe").child(ts).setValue(lightModel); // 데이터 쓰기.
-                // FirebaseAuth.getInstance().getCurrentUser().getUid()  userId;
-
-                Toast.makeText(getApplicationContext(),"공유",Toast.LENGTH_SHORT).show();
-                break;
+//            case R.id.MainActivity_ShareButton:
+//                LightModel lightModel = new LightModel();
+//
+//                lightModel.ShareUserName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
+//                lightModel.ShareLightDescription = TestDescription;
+//
+//                String[] strs = {"1/2/24", "3/25/23", "43/42/16"};
+//                // 1번 조명   2번 조명  3번 조명 -------->?
+//
+//                List<String> list = Arrays.asList(strs);
+//                lightModel.SharePixel = list;
+//
+//                Long tsLong = System.currentTimeMillis()/1000;
+//                String ts = tsLong.toString();
+//
+//                mDatabase.child("recipe").child(ts).setValue(lightModel); // 데이터 쓰기.
+//                // FirebaseAuth.getInstance().getCurrentUser().getUid()  userId;
+//
+//                Toast.makeText(getApplicationContext(),"공유",Toast.LENGTH_SHORT).show();
+//                break;
         }
     }
 }
